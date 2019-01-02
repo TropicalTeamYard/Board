@@ -1,0 +1,137 @@
+package xyz.qscftyjm.board;
+
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity {
+
+    private BottomNavigationView bottomNavigationView;
+    MainMsgFragment mainMsgFragment;
+    MainChatFragment mainChatFragment;
+    MainUserFragment mainUserFragment;
+
+    ArrayList<Fragment> mainFragList;
+    ViewPager mainViewPager;
+    private static String TAG = "Board";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        bottomNavigationView=findViewById(R.id.main_bottom_navigation);
+        mainViewPager=findViewById(R.id.main_parent_frag);
+
+        mainMsgFragment=new MainMsgFragment();
+        mainChatFragment=new MainChatFragment();
+        mainUserFragment=new MainUserFragment();
+        mainFragList = new ArrayList<>();
+        mainFragList.add(mainMsgFragment);
+        mainFragList.add(mainChatFragment);
+        mainFragList.add(mainUserFragment);
+
+        MainFragmentpagerAdapter fragmentAdapter = new MainFragmentpagerAdapter(getSupportFragmentManager(), mainFragList);
+        mainViewPager.setAdapter(fragmentAdapter);
+        mainViewPager.setCurrentItem(0);
+        setListener();
+
+//        FloatingActionButton fab = findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setListener() {
+        mainViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 0:
+                        bottomNavigationView.setSelectedItemId(R.id.tab_msg);
+                        break;
+                    case 1:
+                        bottomNavigationView.setSelectedItemId(R.id.tab_chat);
+                        break;
+                    case 2:
+                        bottomNavigationView.setSelectedItemId(R.id.tab_user);
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.tab_msg:
+                        mainViewPager.setCurrentItem(0);
+                        setTitle("留言板");
+                        Log.d(TAG, "MSG");
+                        break;
+                    case R.id.tab_chat:
+                        mainViewPager.setCurrentItem(1);
+                        setTitle("对话");
+                        Log.d(TAG, "CHAT");
+                        break;
+                    case R.id.tab_user:
+                        mainViewPager.setCurrentItem(2);
+                        setTitle("个人中心");
+                        Log.d(TAG, "USER");
+                        break;
+                }
+                return true;
+            }
+        });
+
+    }
+
+}
