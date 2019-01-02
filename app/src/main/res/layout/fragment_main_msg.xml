@@ -5,8 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".MainMsgFragment">
 
-
-    
+    <ListView
+        android:id="@+id/msg_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ListView>
 
 
 </FrameLayout>
