@@ -100,6 +100,6 @@ class Msg {
 
     public void setPicture(Bitmap[] picture) {
         this.picture = picture;
-        this.hasPic = (picture==null);
+        this.hasPic = (picture!=null);
     }
 }
