@@ -1,0 +1,34 @@
+create database board;
+
+create table user(
+   _id int not null AUTO_INCREMENT,
+   userid text not null,
+   nickname text not null,
+   priority int not null,
+   password text not null,
+   email text not null,
+   portrait blob,
+   token text,
+   registertime text,
+   PRIMARY KEY (_id)
+);
+
+create table msg(
+   _id int not null AUTO_INCREMENT,
+   userid text not null,
+   content text not null,
+   time text not null,
+   haspics int not null,
+   pics MediumBlob,
+   PRIMARY KEY (_id)
+);
+
+select * from user;
+select * from msg;
+
+insert into user (userid,nickname,priority,password,email,registertime) values (10001,'wcf',2,'E10ADC3949BA59ABBE56E057F20F883E','1533144693@qq.com','2019-01-05 10:49');
+insert into user (userid,nickname,priority,password,email,registertime) values (10002,'cht',2,'E10ADC3949BA59ABBE56E057F20F883E','t1542462994@outlook.com','2019-01-05 10:53');
+
+insert into msg (userid,content,time,haspics) values (10001,'helloworld','2019-01-05 10:53',0);
+
+
