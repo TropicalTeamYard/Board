@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 class Msg {
 
     private int id;
+    private String userid;
     private String nickname;
     private String time;
     private String content;
@@ -12,8 +13,11 @@ class Msg {
     private boolean hasPic;
     private Bitmap[] picture=null;
 
-    public Msg(int id, String nickname, String time, String content, Bitmap portrait, boolean hasPic, Bitmap[] picture) {
+    final static int DEFAULT_PORTRAIT = R.drawable.user;
+
+    public Msg(int id, String userid, String nickname, String time, String content, Bitmap portrait, boolean hasPic, Bitmap[] picture) {
         this.id = id;
+        this.userid=userid;
         this.nickname = nickname;
         this.time = time;
         this.content = content;
@@ -22,8 +26,9 @@ class Msg {
         this.picture = picture;
     }
 
-    public Msg(int id, String nickname, String time, String content, Bitmap portrait) {
+    public Msg(int id, String userid, String nickname, String time, String content, Bitmap portrait) {
         this.id = id;
+        this.userid=userid;
         this.nickname = nickname;
         this.time = time;
         this.content = content;
@@ -31,7 +36,8 @@ class Msg {
         this.hasPic = false;
     }
 
-    public Msg(String nickname, String time, String content, Bitmap portrait) {
+    public Msg(String userid, String nickname, String time, String content, Bitmap portrait) {
+        this.userid=userid;
         this.nickname = nickname;
         this.time = time;
         this.content = content;
@@ -39,7 +45,8 @@ class Msg {
         this.hasPic = false;
     }
 
-    public Msg(String nickname, String time, String content) {
+    public Msg(String userid, String nickname, String time, String content) {
+        this.userid=userid;
         this.nickname = nickname;
         this.time = time;
         this.content = content;
@@ -101,5 +108,13 @@ class Msg {
     public void setPicture(Bitmap[] picture) {
         this.picture = picture;
         this.hasPic = (picture!=null);
+    }
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
     }
 }

@@ -1,5 +1,6 @@
 package xyz.qscftyjm.board;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -22,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<Fragment> mainFragList;
     ViewPager mainViewPager;
+
+    BoardDBHelper boardDBHelper;
+    SQLiteDatabase database;
     private static String TAG = "Board";
 
     @Override
@@ -30,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        boardDBHelper=BoardDBHelper.getMsgDBHelper(this);
+        database=boardDBHelper.getReadableDatabase();
 
         bottomNavigationView=findViewById(R.id.main_bottom_navigation);
         mainViewPager=findViewById(R.id.main_parent_frag);
