@@ -14,6 +14,9 @@ import android.view.MenuItem;
 
 import java.util.ArrayList;
 
+import postutil.AsynTaskUtil;
+import tools.ConstString;
+
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
@@ -60,6 +63,13 @@ public class MainActivity extends AppCompatActivity {
 //            public void onClick(View view) {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
+//            }
+//        });
+
+//        AsynTaskUtil.AsynNetUtils.post(ConstString.getServer(), "key= ", new AsynTaskUtil.AsynNetUtils.Callback() {
+//            @Override
+//            public void onResponse(String response) {
+//                Log.d(TAG,response);
 //            }
 //        });
 
