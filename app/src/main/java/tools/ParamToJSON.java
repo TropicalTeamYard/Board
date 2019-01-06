@@ -7,40 +7,16 @@ import org.json.JSONObject;
 
 public class ParamToJSON {
 
-    public static String formLoginJson(String account, String password) {
-        String result=null;
-
-        Map<String, Object> LoginInfo=new HashMap<String, Object>();
-        LoginInfo.put("Type", "user");
-        LoginInfo.put("Method", "login");
-        Map<String, Object> Data=new HashMap<String, Object>();
-        Data.put("Account", account);
-        Data.put("PassWord", password);
-        Data.put("ID", -1);
-        Data.put("UserName", "");
-        Data.put("Priority", 0);
-        LoginInfo.put("Data", Data);
-        result="json="+new JSONObject(LoginInfo).toString();
+    public static String formLoginJson(String userid, String password) {
+        String result="method=login"+"&username="+userid+"&password="+password+"&devicetype=mobile";
 
         return result;
 
     }
 
-    public static String formRegisterJson(String username, String password) {
+    public static String formRegisterJson(String nickname, String password) {
 
-        String result=null;
-        Map<String, Object> RegInfo=new HashMap<String, Object>();
-        RegInfo.put("Type", "user");
-        RegInfo.put("Method", "register");
-        Map<String, Object> Data=new HashMap<String, Object>();
-        Data.put("ID", -1);
-        Data.put("UserName", username);
-        Data.put("Priority", 0);
-        Data.put("PassWord", password);
-        Data.put("Account", null);
-        RegInfo.put("Data", Data);
-        result="json="+new JSONObject(RegInfo).toString();
-
+        String result="method=register2"+"&nickname="+nickname+"&password="+password;
         return result;
 
     }

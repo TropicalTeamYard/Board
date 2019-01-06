@@ -46,7 +46,7 @@ public class MainUserFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.user_bt_login_info:
-                startActivity(new Intent(this.getActivity(),RegisterActivity.class));
+                startActivity(new Intent(this.getActivity(),LoginActivity.class));
                 break;
 
                 default:
