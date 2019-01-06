@@ -3,13 +3,70 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainUserFragment">
 
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="48sp"
-        android:text="USER" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" android:layout_marginBottom="54dp">
+
+        <LinearLayout
+            android:id="@+id/user_user_info_title"
+            android:layout_width="match_parent" android:layout_height="100dp" android:orientation="horizontal"
+            android:background="#7ACFA6" android:layout_alignParentTop="true">
+            <ImageView
+                android:id="@+id/user_img_portrait"
+                android:layout_width="72dp"
+                android:layout_height="72dp" android:padding="4dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:src="@drawable/user"
+                android:scaleType="fitXY"
+                android:layout_marginRight="16dp"/>
+            <LinearLayout
+                android:layout_width="0dp" android:layout_weight="5"
+                android:layout_height="80dp" android:orientation="vertical"
+                android:layout_gravity="center_vertical">
+                <TextView
+                    android:id="@+id/user_username"
+                    android:layout_width="wrap_content" android:maxWidth="120dp"
+                    android:singleLine="true" android:ellipsize="end"
+                    android:textSize="24sp" android:text="Hi, wcf"
+                    android:layout_gravity="center_vertical" android:gravity="center_vertical"
+                    android:textColor="#ffffff" android:textStyle="bold"
+                    android:layout_height="40dp"/>
+                <TextView
+                    android:id="@+id/user_user_id"
+                    android:layout_width="wrap_content" android:maxWidth="180dp"
+                    android:singleLine="true" android:ellipsize="end"
+                    android:textSize="18sp" android:text="ID : 10001"
+                    android:textColor="#ffffff" android:gravity="center_vertical"
+                    android:layout_height="40dp" android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp" android:layout_weight="5"
+                android:layout_height="80dp" android:orientation="vertical"
+                android:layout_gravity="center_vertical" android:layout_marginRight="20dp">
+                <Button android:id="@+id/user_bt_more"
+                    android:layout_width="32dp" android:background="@drawable/more" android:layout_gravity="right"
+                    android:layout_height="32dp" android:layout_marginTop="24dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="360dp"
+            android:layout_below="@+id/user_user_info_title" android:orientation="vertical"
+            android:layout_above="@id/user_bt_login_info">
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/user_bt_login_info"
+            android:layout_width="match_parent"
+            android:background="@drawable/button_e15153_radius_background" style="@style/Widget.AppCompat.Button.Borderless"
+            android:text="登录/注册账号" android:textColor="#ffffff"
+            android:layout_height="42dp" android:layout_margin="16dp" android:layout_alignParentBottom="true" android:textSize="20sp"/>
+
+    </RelativeLayout>
 </FrameLayout>

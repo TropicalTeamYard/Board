@@ -23,7 +23,7 @@
 
         <LinearLayout
             android:layout_width="60dp" android:layout_weight="1" android:layout_marginLeft="16dp"
-            android:layout_height="wrap_content" android:orientation="vertical">
+            android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/radius">
             <TextView android:id="@+id/msg_nickname"
                 android:layout_width="match_parent" android:textSize="18sp" android:ellipsize="end" android:maxLines="1"
                 android:layout_height="30dp" android:text="helloworld" />
