@@ -76,10 +76,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                                         } else if(code!=-1) {
 
-                                            JSONObject data = jsonObj.optJSONObject("data");
-                                            if(data!=null){
-                                                Toast.makeText(RegisterActivity.this,data.optString("msg"),Toast.LENGTH_LONG).show();
-                                            }
+                                            Toast.makeText(RegisterActivity.this,jsonObj.optString("msg"),Toast.LENGTH_LONG).show();
+
 
                                         } else {
                                             Toast.makeText(RegisterActivity.this, "网络或服务器错误，请稍后再试", Toast.LENGTH_SHORT).show();

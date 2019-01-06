@@ -16,9 +16,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import postutil.AsynTaskUtil;
-import tools.MD5Util;
 import tools.ParamToJSON;
 import tools.StringCollector;
+import tools.TimeUtil;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -58,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             String result=response;
+                            Log.d(TAG,result);
                             //Toast.makeText(LoginActivity.this, result, Toast.LENGTH_SHORT).show();
                             JSONObject jsonObj;
                             if(response!=null) {
@@ -73,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                                             BoardDBHelper sqLiteHelper=BoardDBHelper.getMsgDBHelper(LoginActivity.this);
                                             SQLiteDatabase database=sqLiteHelper.getWritableDatabase();
                                             boolean isExist=false;
-                                            Cursor cursor = database.query("userinfo", new String[] {"id","username","account"}, "account = ?", new String[] { account }, null, null, null, null);
+                                            Cursor cursor = database.query("userinfo", new String[] {"userid","nickname"}, "userid = ?", new String[] { account }, null, null, null, null);
                                             int count;
                                             if(cursor.moveToFirst()) {
                                                 count=cursor.getCount();
@@ -82,8 +83,9 @@ public class LoginActivity extends AppCompatActivity {
                                                     isExist=true;
                                                     ContentValues values=new ContentValues();
                                                     values.put("token", data.optString("credit","null"));
-                                                    values.put("userid", data.optString("username","null"));
-                                                    database.update("logininfo", values, "account = ?", new String[] { account });
+                                                    values.put("nickname",data.optString("nickname","null"));
+                                                    values.put("checktime", TimeUtil.getTime());
+                                                    database.update("userinfo", values, "userid = ?", new String[] { account });
                                                     Log.d(TAG, "更新账号数据 "+account);
 
                                                 }
@@ -93,8 +95,10 @@ public class LoginActivity extends AppCompatActivity {
                                                 //插入数据
                                                 ContentValues values = new ContentValues();
                                                 values.put("userid",account);
-                                                values.put("nickname",data.optString("UserName","null"));
-                                                database.insert("logininfo",null,values);
+                                                values.put("nickname",data.optString("nickname","null"));
+                                                values.put("token",data.optString("credit","null"));
+                                                values.put("checktime", TimeUtil.getTime());
+                                                database.insert("userinfo",null,values);
 
                                                 Log.d("Calendar", "添加账号数据 "+account);
                                             }
@@ -104,9 +108,9 @@ public class LoginActivity extends AppCompatActivity {
                                             finish();
                                         }else if(code!=-1) {
                                             JSONObject data = jsonObj.optJSONObject("data");
-                                            if(data!=null){
-                                                Toast.makeText(LoginActivity.this,jsonObj.optString("msg"),Toast.LENGTH_LONG).show();
-                                            }
+
+                                            Toast.makeText(LoginActivity.this,jsonObj.optString("msg"),Toast.LENGTH_LONG).show();
+
                                         }else {
                                             Toast.makeText(LoginActivity.this, "未知错误1，请稍后再试", Toast.LENGTH_SHORT).show();
                                         }
