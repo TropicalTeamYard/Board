@@ -14,6 +14,9 @@ import android.view.MenuItem;
 
 import java.util.ArrayList;
 
+import postutil.AsynTaskUtil;
+import tools.StringCollector;
+
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
@@ -63,10 +66,10 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-//        AsynTaskUtil.AsynNetUtils.post(StringCollector.getServer(), "key= ", new AsynTaskUtil.AsynNetUtils.Callback() {
+//        AsynTaskUtil.AsynNetUtils.post(StringCollector.LOCAL_USER, "", new AsynTaskUtil.AsynNetUtils.Callback() {
 //            @Override
 //            public void onResponse(String response) {
-//                Log.d(TAG,response);
+//                if(response!=null){Log.d(TAG,response);}
 //            }
 //        });
 

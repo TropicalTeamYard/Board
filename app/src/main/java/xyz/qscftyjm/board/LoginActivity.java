@@ -57,11 +57,12 @@ public class LoginActivity extends AppCompatActivity {
 
                         @Override
                         public void onResponse(String response) {
-                            String result=response;
-                            Log.d(TAG,result);
+
                             //Toast.makeText(LoginActivity.this, result, Toast.LENGTH_SHORT).show();
                             JSONObject jsonObj;
                             if(response!=null) {
+                                String result=response;
+                                Log.d(TAG,result);
                                 try {
                                     jsonObj=new JSONObject(response);
                                     if(result!=null) {
@@ -73,25 +74,25 @@ public class LoginActivity extends AppCompatActivity {
                                             Toast.makeText(LoginActivity.this, "欢迎 "+data.optString("nickname")+" ！正在跳转到主界面......", Toast.LENGTH_SHORT).show();
                                             BoardDBHelper sqLiteHelper=BoardDBHelper.getMsgDBHelper(LoginActivity.this);
                                             SQLiteDatabase database=sqLiteHelper.getWritableDatabase();
-                                            boolean isExist=false;
-                                            Cursor cursor = database.query("userinfo", new String[] {"userid","nickname"}, "userid = ?", new String[] { account }, null, null, null, null);
-                                            int count;
-                                            if(cursor.moveToFirst()) {
-                                                count=cursor.getCount();
-                                                if(count>0) {
-                                                    //更新数据
-                                                    isExist=true;
-                                                    ContentValues values=new ContentValues();
-                                                    values.put("token", data.optString("credit","null"));
-                                                    values.put("nickname",data.optString("nickname","null"));
-                                                    values.put("checktime", TimeUtil.getTime());
-                                                    database.update("userinfo", values, "userid = ?", new String[] { account });
-                                                    Log.d(TAG, "更新账号数据 "+account);
-
-                                                }
-                                            }
-                                            cursor.close();
-                                            if(!isExist) {
+//                                            boolean isExist=false;
+//                                            Cursor cursor = database.query("userinfo", new String[] {"userid","nickname"}, "userid = ?", new String[] { account }, null, null, null, null);
+//                                            int count;
+//                                            if(cursor.moveToFirst()) {
+//                                                count=cursor.getCount();
+//                                                if(count>0) {
+//                                                    //更新数据
+//                                                    isExist=true;
+//                                                    ContentValues values=new ContentValues();
+//                                                    values.put("token", data.optString("credit","null"));
+//                                                    values.put("nickname",data.optString("nickname","null"));
+//                                                    values.put("checktime", TimeUtil.getTime());
+//                                                    database.update("userinfo", values, "userid = ?", new String[] { account });
+//                                                    Log.d(TAG, "更新账号数据 "+account);
+//
+//                                                }
+//                                            }
+//                                            cursor.close();
+//                                            if(!isExist) {
                                                 //插入数据
                                                 ContentValues values = new ContentValues();
                                                 values.put("userid",account);
@@ -100,8 +101,8 @@ public class LoginActivity extends AppCompatActivity {
                                                 values.put("checktime", TimeUtil.getTime());
                                                 database.insert("userinfo",null,values);
 
-                                                Log.d("Calendar", "添加账号数据 "+account);
-                                            }
+                                                Log.d(TAG, "添加账号数据 "+account);
+//                                            }
 
                                             Intent intent=new Intent(LoginActivity.this, MainActivity.class);
                                             startActivity(intent);
