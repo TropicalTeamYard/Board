@@ -1,5 +1,7 @@
 create database board;
 
+use board;
+
 create table user(
    _id int not null AUTO_INCREMENT,
    userid text not null,

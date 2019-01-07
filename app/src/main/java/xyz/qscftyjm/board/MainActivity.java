@@ -66,12 +66,12 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-//        AsynTaskUtil.AsynNetUtils.post(StringCollector.LOCAL_USER, "", new AsynTaskUtil.AsynNetUtils.Callback() {
-//            @Override
-//            public void onResponse(String response) {
-//                if(response!=null){Log.d(TAG,response);}
-//            }
-//        });
+        AsynTaskUtil.AsynNetUtils.post(StringCollector.LOCAL_USER, "method=login", new AsynTaskUtil.AsynNetUtils.Callback() {
+            @Override
+            public void onResponse(String response) {
+                if(response!=null){Log.d(TAG,response);}
+            }
+        });
 
     }
 
