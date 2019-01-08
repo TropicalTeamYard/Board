@@ -1,0 +1,3 @@
+http://localhost:8080/board/user?method=login&userid=10001&password=E10ADC3949BA59ABBE56E057F20F883E
+http://localhost:8080/board/user?method=autologin&userid=10001&token=02bdf3327cd94f2bace333f35e11fd04
+http://localhost:8080/board/user?method=register&nickname=10001&password=E10ADC3949BA59ABBE56E057F20F883E
