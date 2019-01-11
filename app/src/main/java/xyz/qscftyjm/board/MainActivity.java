@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-        AsynTaskUtil.AsynNetUtils.post(StringCollector.LOCAL_USER, "method=getpublicinfo&userids=['10001','10002','10003']", new AsynTaskUtil.AsynNetUtils.Callback() {
+        AsynTaskUtil.AsynNetUtils.post(StringCollector.LOCAL_USER, "method=getpublicinfo&userids=['10001','10002','100']", new AsynTaskUtil.AsynNetUtils.Callback() {
             @Override
             public void onResponse(String response) {
                 if(response!=null){Log.d(TAG,response);}
