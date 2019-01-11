@@ -1,5 +1,6 @@
 package xyz.qscftyjm.board;
 
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -66,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
+        startActivity(new Intent(MainActivity.this,MsgDetailActivity.class));
+
         /**
          * http://localhost:8080/board/user?method=login&userid=10001&password=E10ADC3949BA59ABBE56E057F20F883E
          * http://localhost:8080/board/user?method=autologin&userid=10001&token=02bdf3327cd94f2bace333f35e11fd04
@@ -75,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
          * http://localhost:8080/board/user?method=getpublicinfo&userids=['10001','10002','100']
          * http://localhost:8080/board/user?method=getuserinfo&userid=10001&token=f0956e4857564917ba13008debcd6432
          */
+
         AsynTaskUtil.AsynNetUtils.post(StringCollector.LOCAL_USER, "method=getpublicinfo&userids=['10001','10002','100']", new AsynTaskUtil.AsynNetUtils.Callback() {
             @Override
             public void onResponse(String response) {
