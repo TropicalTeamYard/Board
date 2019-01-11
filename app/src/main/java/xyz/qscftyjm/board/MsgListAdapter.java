@@ -40,7 +40,7 @@ public class MsgListAdapter extends BaseAdapter {
 
         if (convertView == null) {
 
-            convertView = LayoutInflater.from(context).inflate(R.layout.msg_item, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.msg_card, null);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
