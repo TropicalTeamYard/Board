@@ -5,3 +5,53 @@ http://localhost:8080/board/user?method=changeinfo&userid=10001&token=270cc92204
 http://localhost:8080/board/user?method=changepassword&userid=10003&password=1222211221212121&newpassword=E10ADC3949BA59ABBE56E057F20F883E
 http://localhost:8080/board/user?method=getpublicinfo&userids=['10001','10002','100']
 http://localhost:8080/board/user?method=getuserinfo&userid=10001&token=f0956e4857564917ba13008debcd6432
+
+
+
+http://localhost:8080/user?method=login&userid=10001&password=E10ADC3949BA59ABBE56E057F20F883E
+
+{'code':-100,'msg':'invalid request : null userid or passowrd'}
+{"msg":"login failed, userid and password not match","code":-101}
+{"msg":"login succeed","code":0,"nickname":"wcf","priority":0,"portrait":"00000000","userid":"10001","email":"1533144693@qq.com","token":"6a0de215360a4a2ea4b9b7546d71028c"}
+
+
+http://localhost:8080/user?method=autologin&userid=10001&token=f2b03e3a64c142519fd1066714fa217b
+
+{"msg":"check failed, token invalid","code":-102}
+{'code':-100,'msg':'invalid request : null userid or token'}
+{"msg":"check succeed","code":0,"token":"686979b08a384285975bc0dc1534880c"}
+
+
+http://localhost:8080/user?method=register&nickname=test&password=E10ADC3949BA59ABBE56E057F20F883E
+
+{'code':-100,'msg':'invalid request : null nickname or passowrd'}
+{"msg":"register successful","code":0,"nickname":"test","userid":"10041"}
+
+
+http://localhost:8080/user?method=changepassword&userid=10003&password=1222211221212121&newpassword=E10ADC3949BA59ABBE56E057F20F883E
+
+{"msg":"update failed, userid and password not match","code":-107}
+{'code':-100,'msg':'invalid request : null userid or passowrd or newpassword'}
+{"msg":"change password succeed","code":0}
+
+
+http://localhost:8080/user?method=getpublicinfo&userids=['10001','10041','100']
+
+{'code':-100,'msg':'invalid request : null userids'}
+{"msg":"get user info succeed","code":0,"users":[{"nickname":"wcf","portrait":"00000000","userid":"10001"},{"nickname":"test","portrait":"00000000","userid":"10041"},null]}
+
+
+http://localhost:8080/user?method=getuserinfo&userid=10001&token=f0956e4857564917ba13008debcd6432
+
+{"msg":"get info failed, userid and token not match","code":-105}
+{"msg":"get info succeed","code":0,"registertime":"2019-01-10 21:43","nickname":"wcf","priority":0,"portrait":"00000000","userid":"10001","email":"1533144693@qq.com","token":"76b46b07c5424c2d871d2d1279c31104"}
+
+
+http://localhost:8080/user?method=changeinfo&userid=10001&token=270cc92204de4bb48d11e137695e6604&portrait=00000000
+http://localhost:8080/user?method=changeinfo&userid=10036&token=ffe2e588c0d34cceb82044acb6532f12&nickname=test10036&portrait=00000000&email=123456@gmail.com
+
+{"msg":"update failed, userid and token not match","code":-104}
+{"msg":"update succeed","code":0,"nickname":"test10036","portrait":"00000000","email":"123456@gmail.com","token":"aba361ebd5864132b7de11d6c39657c9"}
+
+
+
