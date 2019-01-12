@@ -1,5 +1,7 @@
 package tools;
 
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +11,13 @@ public class ParamToJSON {
 
     public static String formLoginJson(String userid, String password) {
         String result="method=login"+"&username="+userid+"&password="+password+"&devicetype=mobile";
+
+        return result;
+
+    }
+
+    public static String formAutoLoginJson(String token) {
+        String result="method=autologin"+"&credit="+token;
 
         return result;
 
@@ -51,13 +60,9 @@ public class ParamToJSON {
 
     }
 
-    public static String formGetGlobalMsgJson(int lastId) {
-        String result=null;
-        Map<String, Object> map=new HashMap<String, Object>();
-        map.put("Type", "message");
-        map.put("Method", "globalget");
-        map.put("Data", lastId);
-        result="json="+new JSONObject(map).toString();
+    public static String formGetMsgJson(String token,String time) {
+        String result="method=update"+"&credit="+token+"&time="+time;
+        Log.d("Board",result);
         return result;
     }
 

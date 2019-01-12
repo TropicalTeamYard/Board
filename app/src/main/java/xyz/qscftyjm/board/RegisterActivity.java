@@ -57,7 +57,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                         Toast.makeText(RegisterActivity.this, password, Toast.LENGTH_SHORT).show();
 
-                        AsynTaskUtil.AsynNetUtils.post(StringCollector.getUserServer(), ParamToJSON.formRegisterJson(nickname, password), new AsynTaskUtil.AsynNetUtils.Callback() {
+                        AsynTaskUtil.AsynNetUtils.post(StringCollector.getUserServer(), ParamToJSON.formRegisterJson(nickname, MD5Util.getMd5(password)), new AsynTaskUtil.AsynNetUtils.Callback() {
 
                             @Override
                             public void onResponse(String response) {

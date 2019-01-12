@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import postutil.AsynTaskUtil;
+import tools.MD5Util;
 import tools.ParamToJSON;
 import tools.StringCollector;
 import tools.TimeUtil;
@@ -53,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
                     final String password=input_password;
 
 
-                    AsynTaskUtil.AsynNetUtils.post(StringCollector.getUserServer(), ParamToJSON.formLoginJson(account, password), new AsynTaskUtil.AsynNetUtils.Callback() {
+                    AsynTaskUtil.AsynNetUtils.post(StringCollector.getUserServer(), ParamToJSON.formLoginJson(account, MD5Util.getMd5(password)), new AsynTaskUtil.AsynNetUtils.Callback() {
 
                         @Override
                         public void onResponse(String response) {

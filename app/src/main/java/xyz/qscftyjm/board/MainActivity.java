@@ -1,6 +1,8 @@
 package xyz.qscftyjm.board;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,11 +14,18 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import postutil.AsynTaskUtil;
+import tools.ParamToJSON;
 import tools.StringCollector;
+import tools.TimeUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,8 +37,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Fragment> mainFragList;
     ViewPager mainViewPager;
 
-    BoardDBHelper boardDBHelper;
-    SQLiteDatabase database;
+
     private static String TAG = "Board";
 
     @Override
@@ -39,8 +47,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        boardDBHelper=BoardDBHelper.getMsgDBHelper(this);
-        database=boardDBHelper.getReadableDatabase();
+
 
         bottomNavigationView=findViewById(R.id.main_bottom_navigation);
         mainViewPager=findViewById(R.id.main_parent_frag);
@@ -67,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-        startActivity(new Intent(MainActivity.this,MsgDetailActivity.class));
+        //startActivity(new Intent(MainActivity.this,MsgDetailActivity.class));
 
         /**
          * http://localhost:8080/board/user?method=login&userid=10001&password=E10ADC3949BA59ABBE56E057F20F883E
@@ -79,12 +86,12 @@ public class MainActivity extends AppCompatActivity {
          * http://localhost:8080/board/user?method=getuserinfo&userid=10001&token=f0956e4857564917ba13008debcd6432
          */
 
-        AsynTaskUtil.AsynNetUtils.post(StringCollector.LOCAL_USER, "method=getpublicinfo&userids=['10001','10002','100']", new AsynTaskUtil.AsynNetUtils.Callback() {
-            @Override
-            public void onResponse(String response) {
-                if(response!=null){Log.d(TAG,response);}
-            }
-        });
+//        AsynTaskUtil.AsynNetUtils.post(StringCollector.getUserServer(), "method=autologin&userids=['10001','10002','100']", new AsynTaskUtil.AsynNetUtils.Callback() {
+//            @Override
+//            public void onResponse(String response) {
+//                if(response!=null){Log.d(TAG,response);}
+//            }
+//        });
 
     }
 

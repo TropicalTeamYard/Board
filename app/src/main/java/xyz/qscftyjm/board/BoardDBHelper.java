@@ -8,7 +8,7 @@ public class BoardDBHelper extends SQLiteOpenHelper {
 
     final static String dbname = "board.db";
     final static String CREATE_TABLE_MSG = "create table msg(_id INTEGER PRIMARY KEY AUTOINCREMENT,userid text,time text,content text,picture BLOB)";
-    final static String CREATE_TABLE_USER_INFO = "create table userinfo(userid text,nickname text,portrait BLOB,email text,checktime text,statue integer,token text,data BLOB)";
+    final static String CREATE_TABLE_USER_INFO = "create table userinfo(id INTEGER primary key autoincrement,userid text,nickname text,portrait BLOB,email text,checktime text,statue integer,token text,data BLOB)";
 
     final static int DB_VERSION = 1;
 
@@ -54,7 +54,7 @@ public class BoardDBHelper extends SQLiteOpenHelper {
     }
 
     private void upgradeToVersion2(SQLiteDatabase db) {
-//        String sql1 = "ALTER TABLE message ADD COLUMN msgid INTEGER";
+//        String sql1 = "ALTER TABLE userinfo ADD COLUMN id INTEGER";
 //        db.execSQL(sql1);
     }
 

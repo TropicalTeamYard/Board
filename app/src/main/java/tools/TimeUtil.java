@@ -11,7 +11,7 @@ public class TimeUtil {
     public static String getTime(){
         String time = null;
         Date date=new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         time=sdf.format(date);
         System.out.println(time);
 
@@ -23,7 +23,7 @@ public class TimeUtil {
         boolean flag=true;
 
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Date lastdate = sdf.parse(lastchecketime);
             Date nowdate=new Date();
             long delta=nowdate.getTime()-lastdate.getTime();
