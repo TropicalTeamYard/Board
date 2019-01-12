@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-        startActivity(new Intent(MainActivity.this,MsgDetailActivity.class));
+        //startActivity(new Intent(MainActivity.this,MsgDetailActivity.class));
 
         /**
          * http://localhost:8080/board/user?method=login&userid=10001&password=E10ADC3949BA59ABBE56E057F20F883E

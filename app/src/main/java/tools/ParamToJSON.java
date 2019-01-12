@@ -7,24 +7,22 @@ import org.json.JSONObject;
 
 public class ParamToJSON {
 
-    public static String formLoginJson(String userid, String password) {
-        String result="method=login"+"&username="+userid+"&password="+password+"&devicetype=mobile";
-
+    public static String formLogin(String userid, String password) {
+        String result="method=login"+"&userid="+userid+"&password="+MD5Util.getMd5(password);
         return result;
 
     }
 
-    public static String formRegisterJson(String nickname, String password) {
-
-        String result="method=register2"+"&nickname="+nickname+"&password="+password;
+    public static String formRegister(String nickname, String password) {
+        String result="method=register"+"&nickname="+nickname+"&password="+MD5Util.getMd5(password);
         return result;
 
     }
 
-    public static String formCangePasswordJson(String account, String oldPassword, String newPassword) {
+    public static String formChangePasswordJson(String account, String oldPassword, String newPassword) {
         String result=null;
 
-        Map<String, Object> UserInfo=new HashMap<String, Object>();
+        Map<String, Object> UserInfo= new HashMap<>();
         UserInfo.put("Type", "user");
         UserInfo.put("Method", "changepassword");
         Map<String, Object> Data=new HashMap<String, Object>();
