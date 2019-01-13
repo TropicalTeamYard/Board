@@ -23,7 +23,7 @@
             android:layout_width="1dp" android:background="#999999"
             android:layout_height="match_parent"/>
         <TextView android:id="@+id/user_info_userid"
-            android:layout_width="match_parent"
+            android:layout_width="match_parent" android:textIsSelectable="true"
             android:layout_height="match_parent" android:paddingRight="8dp"
             android:text="请登录账号" android:maxLines="1" android:ellipsize="end"
             android:textSize="20sp" android:gravity="center_vertical|right"/>
@@ -38,7 +38,7 @@
             android:layout_width="1dp" android:background="#999999"
             android:layout_height="match_parent"/>
         <TextView android:id="@+id/user_info_nickname"
-            android:layout_width="match_parent"
+            android:layout_width="match_parent" android:textIsSelectable="true"
             android:layout_height="match_parent" android:paddingRight="8dp"
             android:text="请登录账号" android:maxLines="1" android:ellipsize="end"
             android:textSize="20sp" android:gravity="center_vertical|right"/>
@@ -54,7 +54,7 @@
             android:layout_width="1dp" android:background="#999999"
             android:layout_height="match_parent"/>
         <TextView android:id="@+id/user_info_email"
-            android:layout_width="match_parent"
+            android:layout_width="match_parent" android:textIsSelectable="true"
             android:layout_height="match_parent" android:paddingRight="8dp"
             android:text="请登录账号" android:maxLines="1" android:ellipsize="end"
             android:textSize="20sp" android:gravity="center_vertical|right"/>
