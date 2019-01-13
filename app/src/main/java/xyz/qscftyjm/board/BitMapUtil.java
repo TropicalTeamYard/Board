@@ -10,7 +10,7 @@ public class BitMapUtil {
 
     public static Bitmap getDefaultPortrait(Context context){
 
-        Bitmap bmp= BitmapFactory.decodeResource(context.getResources(), R.drawable.user);
+        Bitmap bmp= BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_huaji);
         return bmp;
     }
 

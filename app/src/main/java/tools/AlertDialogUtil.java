@@ -1,18 +1,36 @@
-package xyz.qscftyjm.board;
+package tools;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.Map;
+
+import xyz.qscftyjm.board.LoginActivity;
+import xyz.qscftyjm.board.R;
+
+import static android.support.v4.app.ActivityCompat.startActivityForResult;
+
 public class AlertDialogUtil {
+
+    private static int RESULT_LOAD_IMAGE=10;
 
     public static void makeRegisterResultDialog(final Context context, String userid, String nickname){
 
@@ -57,5 +75,51 @@ public class AlertDialogUtil {
         return clickItem;
 
     }
+
+    public static void makeChangeUserInfoDialog(final Context context){
+
+        Bitmap bitmap;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View view = View.inflate(context, R.layout.change_info_layout, null);
+        builder.setView(view);
+
+        builder.setCancelable(true);
+
+
+        ImageView img_portrait=view.findViewById(R.id.change_info_portrait);
+        TextView tv_userid=view.findViewById(R.id.change_info_userid);
+        EditText ed_nickname=view.findViewById(R.id.change_info_nickname);
+        EditText ed_email=view.findViewById(R.id.change_info_email);
+        Button submit=view.findViewById(R.id.change_info_submit);
+        Map<String, Object> userInfo=UserUtil.getUserInfo(context);
+        img_portrait.setImageBitmap((Bitmap) userInfo.get("portrait"));
+        tv_userid.setText((String) userInfo.get("userid"));
+        ed_nickname.setText((String) userInfo.get("nickname"));
+        ed_email.setText((String) userInfo.get("email"));
+        final AlertDialog dialog = builder.create();
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Board","Submit change info");
+                dialog.dismiss();
+            }
+        });
+
+        img_portrait.setOnClickListener(new View.OnClickListener() {
+
+
+            @Override
+            public void onClick(View v) {
+                Log.d("Board","Pick image");
+                Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult((Activity)context,intent, RESULT_LOAD_IMAGE,null);
+            }
+        });
+
+        dialog.show();
+    }
+
+
 
 }
