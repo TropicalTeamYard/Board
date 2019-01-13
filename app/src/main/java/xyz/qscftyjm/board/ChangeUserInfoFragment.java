@@ -1,27 +1,17 @@
 package xyz.qscftyjm.board;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,7 +25,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +32,6 @@ import java.util.Map;
 import pub.devrel.easypermissions.EasyPermissions;
 import tools.UserUtil;
 
-import static android.support.v4.app.ActivityCompat.startActivityForResult;
 
 public class ChangeUserInfoFragment extends DialogFragment implements EasyPermissions.PermissionCallbacks {
     private static int RESULT_LOAD_IMAGE=10;
@@ -57,7 +45,7 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
 //    private Uri imageUri = Uri.parse(IMAGE_FILE_LOCATION);
     String imagePath;
     private Uri imageUri; File temp_portrait;
-    private String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
     public ChangeUserInfoFragment() {
         super();
@@ -130,27 +118,21 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
             bitmap= BitmapFactory.decodeFile(imagePath);
             img_portrait.setImageBitmap(bitmap);
             getCropImage(data.getData());
-
             c.close();
 
         } else if(requestCode==1&&resultCode==Activity.RESULT_OK){
-//            Log.d("Board",data.getData().toString());
-            try {
-                bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(getImageContentUri(getActivity(),temp_portrait)));
+            bitmap = BitmapFactory.decodeFile(temp_portrait.getPath());
+            Log.d("Board","URI: "+temp_portrait.toString());
 
-            } catch (FileNotFoundException e) {
-                Toast.makeText(getActivity(),"文件存储权限未打开",Toast.LENGTH_LONG).show();
-                bitmap=BitMapUtil.getDefaultPortrait(getActivity());
-                e.printStackTrace();
-            }
-//            Bundle bundle = data.getExtras();
+            //            Bundle bundle = data.getExtras();
 //
 //            if (bundle != null) {
 //                //在这里获得了剪裁后的Bitmap对象，可以用于上传
 //                Bitmap image = bundle.getParcelable("data");
 //            }
 //
-//            img_portrait.setImageBitmap(bitmap);
+
+            img_portrait.setImageBitmap(bitmap);
         } else {
             Log.d("Board","requestCode: "+requestCode+" resultCode: "+resultCode);
         }
@@ -166,16 +148,17 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
         intent.putExtra("scale", true);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); //添加这一句表示对目标应用临时授权该Uri所代表的文件
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
 
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
 
-        intent.putExtra("outputX", 128);
-        intent.putExtra("outputY", 128);
+        intent.putExtra("outputX", 256);
+        intent.putExtra("outputY", 256);
 
 //        intent.putExtra("return-data", true);
+
         intent.putExtra("return-data", false);
         IMAGE_FILE_LOCATION_DIR = getActivity().getExternalCacheDir()+ "/xyz.qscftyjm.board/";
         File temp_dir=new File(IMAGE_FILE_LOCATION_DIR);
@@ -191,9 +174,8 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //imageUri = getImageContentUri(getActivity(),temp_portrait);
 
-        imageUri = getImageContentUri(getActivity(),temp_portrait);
+//        imageUri = getImageContentUri(getActivity(),temp_portrait);
 //
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 //            imageUri = FileProvider.getUriForFile(getActivity(),
@@ -201,6 +183,8 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
 //        } else {
 //            imageUri = Uri.fromFile(temp_portrait);
 //        }
+
+        imageUri=Uri.parse("file://"+IMAGE_FILE_LOCATION_DIR+"temp_portrait.jpg");
         Log.d("Board","PICURI: "+imageUri.toString());
 
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
@@ -210,59 +194,52 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
         startActivityForResult(intent, 1);
     }
 
-    public static Uri getImageContentUri(Context context, File imageFile) {
-        String filePath = imageFile.getAbsolutePath();
-        Cursor cursor = context.getContentResolver().query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                new String[]{MediaStore.Images.Media._ID},
-                MediaStore.Images.Media.DATA + "=? ",
-                new String[]{filePath}, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            int id = cursor.getInt(cursor
-                    .getColumnIndex(MediaStore.MediaColumns._ID));
-            Uri baseUri = Uri.parse("content://media/external/images/media");
-            return Uri.withAppendedPath(baseUri, "" + id);
-        } else {
-            if (imageFile.exists()) {
-                ContentValues values = new ContentValues();
-                values.put(MediaStore.Images.Media.DATA, filePath);
-                return context.getContentResolver().insert(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-            } else {
-                return null;
-            }
-        }
-    }
+//    public static Uri getImageContentUri(Context context, File imageFile) {
+//        String filePath = imageFile.getAbsolutePath();
+//        Cursor cursor = context.getContentResolver().query(
+//                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+//                new String[]{MediaStore.Images.Media._ID},
+//                MediaStore.Images.Media.DATA + "=? ",
+//                new String[]{filePath}, null);
+//        if (cursor != null && cursor.moveToFirst()) {
+//            int id = cursor.getInt(cursor
+//                    .getColumnIndex(MediaStore.MediaColumns._ID));
+//            Uri baseUri = Uri.parse("content://media/external/images/media");
+//            return Uri.withAppendedPath(baseUri, "" + id);
+//        } else {
+//            if (imageFile.exists()) {
+//                ContentValues values = new ContentValues();
+//                values.put(MediaStore.Images.Media.DATA, filePath);
+//                return context.getContentResolver().insert(
+//                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+//            } else {
+//                return null;
+//            }
+//        }
+//    }
 
     private void getPermission() {
         if (EasyPermissions.hasPermissions(getActivity(), permissions)) {
-            //已经打开权限
-            Toast.makeText(getActivity(), "已经申请相关权限", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "已经申请相关权限", Toast.LENGTH_SHORT).show();
         } else {
-            //没有打开相关权限、申请权限
-            EasyPermissions.requestPermissions(this, "需要获取您的相册、照相使用权限", 1, permissions);
+            EasyPermissions.requestPermissions(this, "我们需要获取您的相册使用权限", 1, permissions);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        //框架要求必须这么写
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
-
-    //成功打开权限
     @Override
     public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
-
-        Toast.makeText(getActivity(), "相关权限获取成功", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "相关权限获取成功", Toast.LENGTH_SHORT).show();
     }
 
-    //用户未同意权限
     @Override
     public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
-        Toast.makeText(getActivity(), "请同意相关权限，否则功能无法使用", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "请同意相关权限，否则无法选择图片", Toast.LENGTH_SHORT).show();
     }
 
     @Override
