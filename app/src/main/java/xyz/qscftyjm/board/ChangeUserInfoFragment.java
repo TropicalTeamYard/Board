@@ -3,8 +3,10 @@ package xyz.qscftyjm.board;
 import android.Manifest;
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -24,12 +26,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import postutil.AsynTaskUtil;
 import pub.devrel.easypermissions.EasyPermissions;
+import tools.AlertDialogUtil;
+import tools.ParamToString;
+import tools.StringCollector;
+import tools.TimeUtil;
 import tools.UserUtil;
 
 
@@ -77,7 +89,102 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Board","Submit change info");
+                Log.d("Board", "Submit change info");
+                SQLiteDatabase database = BoardDBHelper.getMsgDBHelper(getActivity()).getWritableDatabase();
+                Cursor cursor = database.query("userinfo", new String[]{"id", "userid", "nickname", "portrait", "email", "priority", "token"}, null, null, null, null, "id desc", "0,1");
+                String token = null, userid = null;
+                int id = 0;
+                if (cursor.moveToFirst()) {
+                    if (cursor.getCount() > 0) {
+                        Map<String,String> changeInfo=new HashMap<>();
+                        do {
+                            id = cursor.getInt(0);
+                            userid = cursor.getString(1);
+                            token = cursor.getString(6);
+                        } while (cursor.moveToNext());
+
+                        cursor.close();
+                        final int finalId = id;
+
+                        ContentValues values = new ContentValues();
+                        if(ed_nickname.getText().toString().length()>=2&&ed_nickname.getText().toString().length()<=15){
+                            values.put("nickname", ed_nickname.getText().toString());
+                            changeInfo.put("nickname",ed_nickname.getText().toString());
+                        } else {
+                            Toast.makeText(getActivity(),"Nickname 长度应在2~15个字符",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if(ed_email.getText().toString().length()>=6&&ed_email.getText().toString().length()<=30){
+                            values.put("email", ed_email.getText().toString());
+                            changeInfo.put("email",ed_email.getText().toString());
+                        } else {
+                            Toast.makeText(getActivity(),"Email 长度应在6~30个字符",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+
+                        if(bitmap!=null){
+                            byte[] temp_pic=BitMapUtil.Bitmap2Bytes(bitmap);
+                            values.put("portrait", BitMapUtil.Bitmap2Bytes(bitmap));
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                            changeInfo.put("portrait",BitmapIOUtils.byte2Base64StringFun(baos.toByteArray()));
+                        }
+
+                        AsynTaskUtil.AsynNetUtils.post(StringCollector.getUserServer(), ParamToString.formChangeUserInfo(userid, token, changeInfo), new AsynTaskUtil.AsynNetUtils.Callback() {
+                            @Override
+                            public void onResponse(String response) {
+                                String result=response;
+                                Log.d("Board",response);
+                                JSONObject jsonObj;
+                                if(response!=null) {
+                                    try {
+                                        jsonObj=new JSONObject(result);
+                                        int code=jsonObj.optInt("code", -1);
+                                        if(code==0) {
+
+                                            //Toast.makeText(getActivity(), "用户数据修改成功", Toast.LENGTH_SHORT).show();
+
+                                            SQLiteDatabase database = BoardDBHelper.getMsgDBHelper(getActivity()).getWritableDatabase();
+                                            Cursor cursor = database.query("userinfo", new String[]{"id", "userid", "nickname", "portrait", "email", "priority", "token"}, null, null, null, null, "id desc", "0,1");
+                                            String token = null;//, userid = null;
+                                            int id = 0;
+                                            if (cursor.moveToFirst()) {
+                                                if (cursor.getCount() > 0) {
+                                                    Map<String, String> changeInfo = new HashMap<>();
+                                                    do {
+                                                        id = cursor.getInt(0);
+                                                        //userid = cursor.getString(1);
+                                                        //token = cursor.getString(6);
+                                                    } while (cursor.moveToNext());
+
+                                                    cursor.close();
+                                                    final int finalId = id;
+                                                    ContentValues values = new ContentValues();
+                                                    token = jsonObj.optString("token", "00000000000000000000000000000000");
+                                                    values.put("token", token);
+
+                                                    database.update("userinfo", values, "id=?", new String[]{String.valueOf(finalId)});
+                                                    //finish();
+                                                }
+                                            }
+
+                                        } else if(code<0) {
+                                            Toast.makeText(getActivity(),jsonObj.optString("msg","未知错误"),Toast.LENGTH_LONG).show();
+                                        }
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    Toast.makeText(getActivity(), "网络错误，请稍后再试", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                        database.update("userinfo", values, "id=?", new String[]{String.valueOf(finalId)});
+                    }
+                }
                 dismiss();
             }
         });
@@ -245,5 +352,6 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
     @Override
     public void dismiss() {
         super.dismiss();
+        startActivity(new Intent(getActivity(),MoreInfoActivity.class));
     }
 }

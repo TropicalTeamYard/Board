@@ -54,7 +54,7 @@ public class MoreInfoActivity extends AppCompatActivity {
                     //AlertDialogUtil.makeChangeUserInfoDialog(MoreInfoActivity.this);
                     ChangeUserInfoFragment fragment=new ChangeUserInfoFragment();
                     fragment.show(getFragmentManager(),"changeinfo");
-                    setUserInfo(tv_userid,tv_nickname,tv_email,img_portrait);
+                    //setUserInfo(tv_userid,tv_nickname,tv_email,img_portrait);
                 } else {
                     Toast.makeText(MoreInfoActivity.this,"请登录账号",Toast.LENGTH_LONG).show();
                 }

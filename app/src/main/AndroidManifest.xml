@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MoreInfoActivity" android:label="用户信息" android:launchMode="standard"></activity>
+        <activity android:name=".MoreInfoActivity" android:label="用户信息" android:launchMode="singleTask"></activity>
         <activity android:name=".MsgDetailActivity" android:label="详细内容" android:launchMode="singleTask" />
         <activity android:name=".LoginActivity" android:label="登录" android:launchMode="singleTask" />
         <activity
