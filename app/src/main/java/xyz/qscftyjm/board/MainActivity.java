@@ -93,6 +93,10 @@ public class MainActivity extends AppCompatActivity {
 //                if(response!=null){Log.d(TAG,response);}
 //            }
 //        });
+
+        /**
+         * Check the account
+         */
         Cursor cursor=database.query("userinfo",new String[]{"id","userid","nickname","portrait","email","priority","token"},null,null,null,null,"id desc","0,1");
         String token=null,userid=null;int id=0;
         if(cursor.moveToFirst()){
@@ -143,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this,"请登录您的账号",Toast.LENGTH_SHORT).show();
         }
 
-
+        
 
 
 

@@ -45,8 +45,8 @@ public class RegisterActivity extends AppCompatActivity {
                 String confirm=confirm_password.getText().toString();
                 if(!nickname.equals("")&&!password.equals("")&&!confirm.equals("")) {
                     if(password.equals(confirm)) {
-                        if(nickname.length()<4||nickname.length()>15) {
-                            Toast.makeText(RegisterActivity.this, "用户名长度应该在4~15位，请重新修改用户名长度", Toast.LENGTH_SHORT).show();
+                        if(nickname.length()<2||nickname.length()>15) {
+                            Toast.makeText(RegisterActivity.this, "用户名长度应该在2~15位，请重新修改用户名长度", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         if(password.length()<6||password.length()>18) {

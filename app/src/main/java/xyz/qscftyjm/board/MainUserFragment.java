@@ -81,7 +81,8 @@ public class MainUserFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.user_bt_more:
                 Log.d(TAG,"MORE");
-
+                Intent intent=new Intent(getActivity(),MoreInfoActivity.class);
+                startActivity(intent);
                 break;
                 default:
                     Log.d(TAG,"Button Not Defined");
@@ -108,8 +109,8 @@ public class MainUserFragment extends Fragment implements View.OnClickListener {
                     tv_nickname.setText("Hi, "+this.nickname);
 
                     byte[] byte_portrait=cursor.getBlob(2);
-                    this.bitmap_portrait = BitmapFactory.decodeByteArray(byte_portrait, 0, byte_portrait.length);
-                    img_portrait.setImageBitmap(bitmap_portrait);
+//                    this.bitmap_portrait = BitmapFactory.decodeByteArray(byte_portrait, 0, byte_portrait.length);
+                    img_portrait.setImageBitmap(BitMapUtil.getBitmap(getActivity(),byte_portrait));
 
 
                     this.email=cursor.getString(3);
