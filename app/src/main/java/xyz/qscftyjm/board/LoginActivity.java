@@ -2,7 +2,6 @@ package xyz.qscftyjm.board;
 
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,10 +14,8 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Blob;
-
 import postutil.AsynTaskUtil;
-import tools.ParamToJSON;
+import tools.ParamToString;
 import tools.StringCollector;
 import tools.TimeUtil;
 
@@ -61,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                     final String password=input_password;
 
 
-                    AsynTaskUtil.AsynNetUtils.post(StringCollector.getUserServer(), ParamToJSON.formLogin(account, password), new AsynTaskUtil.AsynNetUtils.Callback() {
+                    AsynTaskUtil.AsynNetUtils.post(StringCollector.getUserServer(), ParamToString.formLogin(account, password), new AsynTaskUtil.AsynNetUtils.Callback() {
 
                         @Override
                         public void onResponse(String response) {
@@ -95,7 +92,6 @@ public class LoginActivity extends AppCompatActivity {
                                         startActivity(intent);
                                         finish();
                                     }else if(code<0) {
-                                        JSONObject data = jsonObj.optJSONObject("data");
                                         Toast.makeText(LoginActivity.this,jsonObj.optString("msg","未知错误"),Toast.LENGTH_LONG).show();
                                     }
 

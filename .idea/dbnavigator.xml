@@ -23,20 +23,15 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes>
-      <connection connection-id="d551f0ad-bb94-4ef6-9be8-ec088d9ac69c">
-        <schema name="main" object-types="table, view" />
-      </connection>
-    </loaded-nodes>
+    <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="4dc7fadc-2fc4-4557-a9ad-633adc9b4e1a">
-      <console name="Connection" type="STANDARD" schema="main" session="Main">select * from userinfo;
-select * from msg;</console>
+      <console name="Connection" type="STANDARD" schema="main" session="Main"><![CDATA[select * from userinfo;
+select * from msg;]]></console>
     </connection>
     <connection id="d551f0ad-bb94-4ef6-9be8-ec088d9ac69c">
-      <console name="Connection 1" type="STANDARD" schema="main" session="Main">select * from userinfo;
-select * from msg;</console>
+      <console name="Connection 1" type="STANDARD" schema="main" session="Main" />
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">

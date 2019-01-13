@@ -16,6 +16,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import postutil.AsynTaskUtil;
+import tools.ParamToString;
+import tools.StringCollector;
 
 
 /**
@@ -81,11 +89,18 @@ public class MainUserFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setUserInfo(tv_userid,tv_nickname,img_head_portrait,bt_login_info,database);
+    }
+
     public void setUserInfo(TextView tv_userid, TextView tv_nickname, ImageView img_portrait, Button login_info, SQLiteDatabase db){
-        Cursor cursor=db.query("userinfo",new String[]{"userid","nickname","portrait","email","priority"},null,null,null,null,"id desc","0,1");
+        Cursor cursor=db.query("userinfo",new String[]{"userid","nickname","portrait","email","priority","token"},null,null,null,null,"id desc","0,1");
+        String token;
         if(cursor.moveToFirst()){
             if(cursor.getCount()>0){
-                // TODO check account
+
                 do{
                     this.userid=cursor.getString(0);
                     tv_userid.setText("ID : "+this.userid);
@@ -100,9 +115,11 @@ public class MainUserFragment extends Fragment implements View.OnClickListener {
                     this.email=cursor.getString(3);
                     this.priority=cursor.getInt(4);
 
+                    token=cursor.getString(5);
                 }while (cursor.moveToNext());
 
                 cursor.close();
+
             }
         }
     }

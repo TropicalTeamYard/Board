@@ -12,8 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import postutil.AsynTaskUtil;
-import tools.MD5Util;
-import tools.ParamToJSON;
+import tools.ParamToString;
 import tools.StringCollector;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -56,7 +55,7 @@ public class RegisterActivity extends AppCompatActivity {
                         }
 
                         Toast.makeText(RegisterActivity.this, password, Toast.LENGTH_SHORT).show();
-                        AsynTaskUtil.AsynNetUtils.post(StringCollector.getUserServer(), ParamToJSON.formRegister(nickname, password), new AsynTaskUtil.AsynNetUtils.Callback() {
+                        AsynTaskUtil.AsynNetUtils.post(StringCollector.getUserServer(), ParamToString.formRegister(nickname, password), new AsynTaskUtil.AsynNetUtils.Callback() {
 
                             @Override
                             public void onResponse(String response) {

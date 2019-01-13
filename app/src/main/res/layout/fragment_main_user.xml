@@ -64,7 +64,7 @@
             android:id="@+id/user_bt_login_info"
             android:layout_width="match_parent"
             android:background="@drawable/button_e15153_radius_background" style="@style/Widget.AppCompat.Button.Borderless"
-            android:text="登录/注册账号" android:textColor="#ffffff"
+            android:text="登录/切换账号" android:textColor="#ffffff"
             android:layout_height="42dp" android:layout_margin="16dp" android:layout_alignParentBottom="true" android:textSize="20sp"/>
 
     </RelativeLayout>
