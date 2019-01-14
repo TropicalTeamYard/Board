@@ -9,7 +9,7 @@ create table user(
    priority int not null,
    password text not null,
    email text not null,
-   portrait blob not null,
+   portrait MediumBlob not null,
    token text not null,
    registertime text not null,
    PRIMARY KEY (_id)
@@ -36,6 +36,7 @@ insert into msg (userid,content,time,haspics) values (10001,'helloworld','2019-0
 //更改字段类型
 alter table user modify column email text;
 alter table user modify column portrait blob not null;
+alter table user modify column portrait Mediumblob not null;
 //更新数据
 UPDATE user SET token='018ccf2254aa419faede1f7678c1360d' WHERE userid='10001';
 //获取倒数第一条记录

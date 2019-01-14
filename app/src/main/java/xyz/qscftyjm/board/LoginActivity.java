@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import postutil.AsynTaskUtil;
+import tools.BoardDBHelper;
 import tools.ParamToString;
 import tools.StringCollector;
 import tools.TimeUtil;

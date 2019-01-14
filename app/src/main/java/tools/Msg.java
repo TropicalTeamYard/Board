@@ -1,6 +1,8 @@
-package xyz.qscftyjm.board;
+package tools;
 
 import android.graphics.Bitmap;
+
+import xyz.qscftyjm.board.R;
 
 class Msg {
 

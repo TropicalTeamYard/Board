@@ -1,4 +1,4 @@
-package xyz.qscftyjm.board;
+package tools;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;

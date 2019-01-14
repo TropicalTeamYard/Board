@@ -1,4 +1,4 @@
-package xyz.qscftyjm.board;
+package tools;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

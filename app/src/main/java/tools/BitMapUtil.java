@@ -1,4 +1,4 @@
-package xyz.qscftyjm.board;
+package tools;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -7,6 +7,8 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
+
+import xyz.qscftyjm.board.R;
 
 public class BitMapUtil {
     static Resources res;
