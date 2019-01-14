@@ -55,6 +55,13 @@ public class ParamToString {
         return result;
     }
 
+    public static String formGetPublicInfo(String userids) {
+        //method=getpublicinfo&userids=['10001','10041','100']
+        Log.d("Board","userids: "+userids);
+        String result="method=getpublicinfo&userids="+userids;
+        return result;
+    }
+
     public static String formGetUSerInfo(String userid, String token) {
         //method=getuserinfo&userid=10001&token=f0956e4857564917ba13008debcd6432
         String result="method=getuserinfo&userid="+userid+"&token="+token;

@@ -9,17 +9,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import xyz.qscftyjm.board.R;
 
 public class MsgListAdapter extends BaseAdapter {
 
     ArrayList<Msg> msgList;
+    Map<String, PublicUserInfo> userInfoMap;
     Context context;
     ViewHolder viewHolder;
 
-    public MsgListAdapter(ArrayList<Msg> msgList, Context context){
-        this.context=context;this.msgList=msgList;
+    public MsgListAdapter(ArrayList<Msg> msgList,Map<String, PublicUserInfo> userInfoMap, Context context){
+        this.context=context;this.msgList=msgList;this.userInfoMap=userInfoMap;
     }
 
     @Override
@@ -49,9 +51,13 @@ public class MsgListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.portrait.setImageBitmap(msgList.get(position).getPortrait());
+        if(userInfoMap.containsKey(msgList.get(position).getUserid())){
+            viewHolder.portrait.setImageBitmap(userInfoMap.get(msgList.get(position).getUserid()).portrait);
+            viewHolder.nickname.setText(userInfoMap.get(msgList.get(position).getUserid()).nickname);
+        }
+
         viewHolder.time.setText(msgList.get(position).getTime());
-        viewHolder.nickname.setText(msgList.get(position).getNickname());
+
         viewHolder.content.setText(msgList.get(position).getContent());
         if(msgList.get(position).getHasPic()>0){
             viewHolder.picture.setVisibility(View.VISIBLE);

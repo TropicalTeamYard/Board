@@ -12,10 +12,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import tools.Msg;
 import tools.MsgDataOperator;
 import tools.MsgListAdapter;
+import tools.PublicUserInfo;
 
 public class MainMsgFragment extends Fragment implements View.OnClickListener,MsgReceiver.Message {
 
@@ -28,7 +31,7 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener,Ms
     MsgReceiver msgReceiver;
 
     ArrayList<Msg> msgData;
-    LocalBroadcastManager broadcastManager;
+    Map<String, PublicUserInfo> userInfoMap;
 
     public MainMsgFragment() {
         // Required empty public constructor
@@ -40,8 +43,8 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener,Ms
         // Inflate the layout for this fragment
         view=inflater.inflate(R.layout.fragment_main_msg, container, false);
 
-        broadcastManager=LocalBroadcastManager.getInstance(getActivity());
         msgData=new ArrayList<>();
+        userInfoMap=new HashMap<>();
 
         msgReceiver=new MsgReceiver();
         IntentFilter intentFilter = new IntentFilter();
@@ -50,8 +53,8 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener,Ms
         msgReceiver.setMessage(this);
 
         lv_msg=view.findViewById(R.id.msg_list);
-        MsgDataOperator.getMsgData(getActivity(),msgData);
-        adapter=new MsgListAdapter(msgData,getActivity());
+        MsgDataOperator.getMsgData(getActivity(),msgData,userInfoMap);
+        adapter=new MsgListAdapter(msgData,userInfoMap,getActivity());
         lv_msg.setAdapter(adapter);
 
         lv_msg.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -82,7 +85,7 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener,Ms
 
     @Override
     public void getMsg(String str) {
-        MsgDataOperator.getMsgData(getActivity(),msgData);
+        MsgDataOperator.getMsgData(getActivity(),msgData,userInfoMap);
         Logd("get broadcast: "+str);
         adapter.notifyDataSetChanged();
     }

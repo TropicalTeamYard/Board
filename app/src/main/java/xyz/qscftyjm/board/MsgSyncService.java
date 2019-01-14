@@ -90,7 +90,7 @@ public class MsgSyncService extends Service {
                                     if(delArr!=null&&delArr.length()>0){
                                         for (int i=0;i<delArr.length();i++){
                                             int num=database.delete("msg","id=?",new String[]{String.valueOf(delArr.optInt(i,-1))});
-                                            Log.d("Service","num: "+num+" "+delArr.optInt(i,-1));
+                                            //Log.d("Service","num: "+num+" "+delArr.optInt(i,-1));
                                         }
                                     }
                                     JSONArray msgArr=jsonObj.optJSONArray("msgs");
@@ -127,6 +127,8 @@ public class MsgSyncService extends Service {
                                         Log.d("Service Msg","No new msg");
                                     }
 
+                                } else {
+                                    Log.d("Service",jsonObj.optString("msg","未知错误"));
                                 }
                             } catch (JSONException | NullPointerException e) {
                                 e.printStackTrace();

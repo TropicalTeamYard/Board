@@ -28,6 +28,8 @@ create table msg(
 );
 
 select * from user;
+select userid,token,nickname from user;
+
 select * from msg;
 
 insert into user (userid,nickname,priority,password,email,registertime) values (10001,'wcf',2,'E10ADC3949BA59ABBE56E057F20F883E','1533144693@qq.com','2019-01-05 10:49');
