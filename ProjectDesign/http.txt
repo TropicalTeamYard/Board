@@ -6,8 +6,19 @@ http://localhost:8080/board/user?method=changepassword&userid=10003&password=122
 http://localhost:8080/board/user?method=getpublicinfo&userids=['10001','10002','100']
 http://localhost:8080/board/user?method=getuserinfo&userid=10001&token=f0956e4857564917ba13008debcd6432
 
-http://localhost:8080/board/msg?method=add&&userid=10000&content=70370192370912&haspics=12&token=76cdd82b06c3409da603a4ae064a9b2c
+http://localhost:8080/board/msg?method=add&userid=10000&content=70370192370912&haspics=12&token=76cdd82b06c3409da603a4ae064a9b2c
 
+{"msg":"add msg succeed","code":0}
+
+
+http://localhost:8080/board/msg?method=deletemsg&userid=10036&token=6137381bee8f4b1280a9de53dcc45c72&msgid=5
+
+{"msg":"delete msg succeed","code":0}
+
+
+http://localhost:8080/board/msg?method=checknew&userid=10000&token=76cdd82b06c3409da603a4ae064a9b2c&msgid=0
+
+{"msg":"check succeed","msgs":[{"comment":"{'comment':'null'}","content":"helloworld","hasPics":0,"id":2,"pics":[],"time":"2019-01-05 10:53","userid":"10000"},{"comment":"{'comment':'null'}","content":"helloworld","hasPics":0,"id":3,"pics":[],"time":"2019-01-05 10:53","userid":"10000"},{"comment":"{'comment':'null'}","content":"helloworld","hasPics":0,"id":4,"pics":[],"time":"2019-01-05 10:53","userid":"10000"},{"comment":"{'comment':'null'}","content":"helloworld","hasPics":0,"id":5,"pics":[],"time":"2019-01-05 10:53","userid":"10000"},{"comment":"{'comment':null}","content":"70370192370912","hasPics":0,"id":7,"pics":[],"time":"2019/01/14 17:39","userid":"10000"}],"code":0,"delete":[1,6]}
 
 
 http://localhost:8080/user?method=login&userid=10001&password=E10ADC3949BA59ABBE56E057F20F883E

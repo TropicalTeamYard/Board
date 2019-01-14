@@ -61,8 +61,9 @@ public class ParamToString {
         return result;
     }
 
-    public static String formGetMsg(String token,String time) {
-        String result=null;
+    public static String formGetMsg(String userid, String token,String id) {
+        String result="method=checknew&userid="+userid+"&token="+token+"&msgid="+id;
+        Log.d("Board",result);
         return result;
     }
 

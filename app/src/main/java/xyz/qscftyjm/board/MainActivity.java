@@ -1,8 +1,11 @@
 package xyz.qscftyjm.board;
 
 import android.content.ContentValues;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -26,7 +29,7 @@ import tools.MainFragmentpagerAdapter;
 import tools.ParamToString;
 import tools.StringCollector;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MsgReceiver.Message {
 
     private BottomNavigationView bottomNavigationView;
     MainMsgFragment mainMsgFragment;
@@ -38,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
 
     BoardDBHelper boardDBHelper;
     SQLiteDatabase database;
+    MsgSyncService msgSyncService;
+    MsgReceiver msgReceiver;
+
     private static String TAG = "Board";
 
     @Override
@@ -65,6 +71,15 @@ public class MainActivity extends AppCompatActivity {
         mainViewPager.setAdapter(fragmentAdapter);
         mainViewPager.setCurrentItem(0);
         setListener();
+
+//        msgReceiver=new MsgReceiver();
+//        IntentFilter intentFilter = new IntentFilter();
+//        intentFilter.addAction("xyz.qscftyjm.board.HAS_NEW_MSG");
+//        registerReceiver(msgReceiver, intentFilter);
+//        msgReceiver.setMessage(MainActivity.this);
+//
+//        Intent startMsgSyncService=new Intent(MainActivity.this, MsgSyncService.class);
+//        startService(startMsgSyncService);
 
 //        FloatingActionButton fab = findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +142,19 @@ public class MainActivity extends AppCompatActivity {
                                     values.put("token",newToken);
                                     database.update("userinfo",values,"id=?",new String[]{String.valueOf(finalId)});
                                     //Toast.makeText(MainActivity.this,"自动登录成功",Toast.LENGTH_SHORT).show();
+                                    msgReceiver=new MsgReceiver();
+                                    IntentFilter intentFilter = new IntentFilter();
+                                    intentFilter.addAction("xyz.qscftyjm.board.HAS_NEW_MSG");
+                                    registerReceiver(msgReceiver, intentFilter);
+                                    msgReceiver.setMessage(MainActivity.this);
+
+                                    Intent startMsgSyncService=new Intent(MainActivity.this, MsgSyncService.class);
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                        startForegroundService(startMsgSyncService);
+                                    }else{
+                                        startService(startMsgSyncService);
+                                    }
+
                                 } else if (code < 0) {
                                     Toast.makeText(MainActivity.this,jsonObj.optString("msg","未知错误"),Toast.LENGTH_LONG).show();
                                     // TODO 不同error code的处理
@@ -229,4 +257,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void getMsg(String str) {
+
+    }
 }

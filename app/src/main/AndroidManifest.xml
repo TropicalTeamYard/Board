@@ -13,12 +13,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MoreInfoActivity" android:label="用户信息" android:launchMode="singleTask"></activity>
-        <activity android:name=".MsgDetailActivity" android:label="详细内容" android:launchMode="singleTask" />
-        <activity android:name=".LoginActivity" android:label="登录" android:launchMode="singleTask" />
+        <service
+            android:name=".MsgSyncService"
+            android:enabled="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="false"></service>
+
+        <receiver
+            android:name=".MsgReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
         <activity
-            android:name=".RegisterActivity" android:launchMode="singleTask"
-            android:label="注册账号以进一步使用留言板" />
+            android:name=".MoreInfoActivity"
+            android:label="用户信息"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".MsgDetailActivity"
+            android:label="详细内容"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".LoginActivity"
+            android:label="登录"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".RegisterActivity"
+            android:label="注册账号以进一步使用留言板"
+            android:launchMode="singleTask" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -30,6 +51,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="xyz.qscftyjm.board"
@@ -37,7 +59,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
     </application>
 
