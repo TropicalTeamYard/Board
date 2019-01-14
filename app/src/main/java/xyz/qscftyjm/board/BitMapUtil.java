@@ -38,18 +38,6 @@ public class BitMapUtil {
 //        return bitmap;
 //    }
 
-    public static Bitmap getBase64Bitmap(Context context,byte[] bytes){
-        Bitmap bitmap;
-        if(bytes.length<128){
-            bitmap = getDefaultPortrait(context);
-        } else {
-            byte[] b=BitmapIOUtils.base64String2ByteFun(new String(bytes).replace(' ','+'));
-            bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
-        }
-
-
-        return bitmap;
-    }
 
     public static Bitmap getHexBitmap(Context context,String hexStr){
         Bitmap bitmap;

@@ -3,16 +3,12 @@ package tools;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import xyz.qscftyjm.board.BitMapUtil;
 import xyz.qscftyjm.board.BoardDBHelper;
-import xyz.qscftyjm.board.MoreInfoActivity;
 
 public class UserUtil {
     public static Map<String, Object> getUserInfo(Context context){

@@ -52,8 +52,6 @@ public class LoginActivity extends AppCompatActivity {
                 String input_password=password_et.getText().toString();
                 if(!input_account.equals("")&&!input_password.equals("")) {
 
-                    //input_password= MD5Util.getMd5(input_password);
-                    //Toast.makeText(LoginActivity.this, "Account : "+input_account+" Password : "+input_password, Toast.LENGTH_SHORT).show();
                     final String account =input_account;
                     final String password=input_password;
 
@@ -63,7 +61,6 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
 
-                            //Toast.makeText(LoginActivity.this, result, Toast.LENGTH_SHORT).show();
                             JSONObject jsonObj;
                             if(response!=null) {
                                 String result=response;
@@ -71,7 +68,6 @@ public class LoginActivity extends AppCompatActivity {
                                 try {
                                     jsonObj=new JSONObject(response);
                                     int code=jsonObj.optInt("code",-1);
-                                    //Toast.makeText(LoginActivity.this, String.valueOf(status), Toast.LENGTH_SHORT).show();
                                     if(code==0) {
                                         Toast.makeText(LoginActivity.this, "欢迎 "+jsonObj.optString("nickname")+" ！正在跳转到主界面......", Toast.LENGTH_SHORT).show();
                                         BoardDBHelper sqLiteHelper=BoardDBHelper.getMsgDBHelper(LoginActivity.this);
@@ -115,7 +111,6 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                //Toast.makeText(LoginActivity.this, "注册账号-正在跳转...", Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }

@@ -1,7 +1,6 @@
 package xyz.qscftyjm.board;
 
 import android.graphics.Bitmap;
-import android.util.Base64;
 import android.util.Log;
 
 
@@ -28,14 +27,14 @@ public class BitmapIOUtils {
         return bitmaps;
     }
 
-    public static byte[] base64String2ByteFun(String base64Str){
-        return Base64.decode(base64Str.toString(),Base64.DEFAULT);
-    }
-
-    public static String byte2Base64StringFun(byte[] b){
-        Log.d("Board",Base64.encodeToString(b, Base64.DEFAULT));
-        return Base64.encodeToString(b, Base64.DEFAULT);
-    }
+//    public static byte[] base64tring2ByteFun(String base64Str){
+//        return Base64.decode(base64Str.toString(),Base64.DEFAULT);
+//    }
+//
+//    public static String byte2Base64StringFun(byte[] b){
+//        Log.d("Board",Base64.encodeToString(b, Base64.DEFAULT));
+//        return Base64.encodeToString(b, Base64.DEFAULT);
+//    }
 
     public static String bytesToHexString(byte[] bytes){
         StringBuilder stringBuilder = new StringBuilder("");
@@ -62,7 +61,7 @@ public class BitmapIOUtils {
                         + Character.digit(str.charAt(i+1), 16));
             }
         } catch (Exception e) {
-            //Log.d("", "Argument(s) for hexStringToByteArray(String s)"+ "was not a hex string");
+            Log.d("", "Argument(s) for hexStringToByteArray(String s)"+ "was not a hex string");
         }
         return data;
     }

@@ -88,7 +88,6 @@ public class MainUserFragment extends Fragment implements View.OnClickListener {
 
     public void setUserInfo(TextView tv_userid, TextView tv_nickname, ImageView img_portrait, Button login_info, SQLiteDatabase db){
         Cursor cursor=db.query("userinfo",new String[]{"userid","nickname","portrait","email","priority","token"},null,null,null,null,"id desc","0,1");
-        String token;
         if(cursor.moveToFirst()){
             if(cursor.getCount()>0){
 
@@ -98,15 +97,11 @@ public class MainUserFragment extends Fragment implements View.OnClickListener {
                     this.nickname=cursor.getString(1);
                     tv_nickname.setText("Hi, "+this.nickname);
 
-                    byte[] byte_portrait=cursor.getBlob(2);
-//                    this.bitmap_portrait = BitmapFactory.decodeByteArray(byte_portrait, 0, byte_portrait.length);
-                    img_portrait.setImageBitmap(BitMapUtil.getHexBitmap(getActivity(),new String(byte_portrait)));
-
+                    img_portrait.setImageBitmap(BitMapUtil.getHexBitmap(getActivity(),new String(cursor.getBlob(2))));
 
                     this.email=cursor.getString(3);
                     this.priority=cursor.getInt(4);
 
-                    token=cursor.getString(5);
                 }while (cursor.moveToNext());
 
                 cursor.close();
