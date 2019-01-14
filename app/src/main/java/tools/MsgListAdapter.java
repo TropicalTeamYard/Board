@@ -53,7 +53,7 @@ public class MsgListAdapter extends BaseAdapter {
         viewHolder.time.setText(msgList.get(position).getTime());
         viewHolder.nickname.setText(msgList.get(position).getNickname());
         viewHolder.content.setText(msgList.get(position).getContent());
-        if(msgList.get(position).isHasPic()){
+        if(msgList.get(position).getHasPic()>0){
             viewHolder.picture.setVisibility(View.VISIBLE);
             viewHolder.picture.setImageBitmap(msgList.get(position).getPicture()[0]);
         }

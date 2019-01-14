@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 
 import xyz.qscftyjm.board.R;
 
-class Msg {
+public class Msg {
 
     private int id;
     private String userid;
@@ -12,12 +12,16 @@ class Msg {
     private String time;
     private String content;
     private Bitmap portrait;
-    private boolean hasPic;
+    private int hasPic;
     private Bitmap[] picture=null;
 
     final static int DEFAULT_PORTRAIT = R.drawable.user;
 
-    public Msg(int id, String userid, String nickname, String time, String content, Bitmap portrait, boolean hasPic, Bitmap[] picture) {
+    public Msg(){
+        this.hasPic=0;
+    }
+
+    public Msg(int id, String userid, String nickname, String time, String content, Bitmap portrait, int hasPic, Bitmap[] picture) {
         this.id = id;
         this.userid=userid;
         this.nickname = nickname;
@@ -35,7 +39,7 @@ class Msg {
         this.time = time;
         this.content = content;
         this.portrait = portrait;
-        this.hasPic = false;
+        this.hasPic = 0;
     }
 
     public Msg(String userid, String nickname, String time, String content, Bitmap portrait) {
@@ -44,7 +48,7 @@ class Msg {
         this.time = time;
         this.content = content;
         this.portrait = portrait;
-        this.hasPic = false;
+        this.hasPic = 0;
     }
 
     public Msg(String userid, String nickname, String time, String content) {
@@ -52,7 +56,7 @@ class Msg {
         this.nickname = nickname;
         this.time = time;
         this.content = content;
-        this.hasPic = false;
+        this.hasPic = 0;
     }
 
     public int getId() {
@@ -95,11 +99,11 @@ class Msg {
         this.portrait = portrait;
     }
 
-    public boolean isHasPic() {
+    public int getHasPic() {
         return hasPic;
     }
 
-    public void setHasPic(boolean hasPic) {
+    public void setHasPic(int hasPic) {
         this.hasPic = hasPic;
     }
 
@@ -109,7 +113,7 @@ class Msg {
 
     public void setPicture(Bitmap[] picture) {
         this.picture = picture;
-        this.hasPic = (picture!=null);
+        this.hasPic = (picture!=null)?picture.length:0;
     }
 
     public String getUserid() {

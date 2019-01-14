@@ -259,6 +259,6 @@ public class MainActivity extends AppCompatActivity implements MsgReceiver.Messa
 
     @Override
     public void getMsg(String str) {
-
+        Log.d("MainA","get broadcast");
     }
 }
