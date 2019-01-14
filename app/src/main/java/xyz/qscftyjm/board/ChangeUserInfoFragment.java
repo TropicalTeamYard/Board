@@ -38,6 +38,9 @@ import java.util.Map;
 
 import postutil.AsynTaskUtil;
 import pub.devrel.easypermissions.EasyPermissions;
+import tools.BitMapUtil;
+import tools.BitmapIOUtils;
+import tools.BoardDBHelper;
 import tools.ParamToString;
 import tools.StringCollector;
 import tools.UserUtil;
@@ -165,6 +168,7 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
 
                                         } else if(code<0) {
                                             //Toast.makeText(getActivity(),jsonObj.optString("msg","未知错误"),Toast.LENGTH_LONG).show();
+                                            // TODO 验证失败时的处理
                                             Log.d("Board",jsonObj.optString("msg","未知错误"));
                                         }
 

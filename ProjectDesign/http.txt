@@ -6,6 +6,8 @@ http://localhost:8080/board/user?method=changepassword&userid=10003&password=122
 http://localhost:8080/board/user?method=getpublicinfo&userids=['10001','10002','100']
 http://localhost:8080/board/user?method=getuserinfo&userid=10001&token=f0956e4857564917ba13008debcd6432
 
+http://localhost:8080/board/msg?method=add&&userid=10000&content=70370192370912&haspics=12&token=76cdd82b06c3409da603a4ae064a9b2c
+
 
 
 http://localhost:8080/user?method=login&userid=10001&password=E10ADC3949BA59ABBE56E057F20F883E

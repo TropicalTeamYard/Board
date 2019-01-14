@@ -15,6 +15,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import tools.BitMapUtil;
+import tools.BoardDBHelper;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,7 +48,7 @@ public class MainUserFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_main_user, container, false);
 
-        database=BoardDBHelper.getMsgDBHelper(getActivity()).getWritableDatabase();
+        database= BoardDBHelper.getMsgDBHelper(getActivity()).getWritableDatabase();
 
         bt_login_info=view.findViewById(R.id.user_bt_login_info);
         bt_user_info=view.findViewById(R.id.user_bt_more);

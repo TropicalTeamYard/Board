@@ -7,9 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.HashMap;
 import java.util.Map;
 
-import xyz.qscftyjm.board.BitMapUtil;
-import xyz.qscftyjm.board.BoardDBHelper;
-
 public class UserUtil {
     public static Map<String, Object> getUserInfo(Context context){
         Map<String, Object> userInfo=new HashMap<>();

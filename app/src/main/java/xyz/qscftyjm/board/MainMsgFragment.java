@@ -2,10 +2,15 @@ package xyz.qscftyjm.board;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+
+import tools.MsgDataOperator;
+import tools.MsgListAdapter;
 
 public class MainMsgFragment extends Fragment implements View.OnClickListener {
 
@@ -28,6 +33,12 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener {
         MsgListAdapter adapter=new MsgListAdapter(MsgDataOperator.getTestMsgData(getContext()),getContext());
         lv_msg.setAdapter(adapter);
 
+        lv_msg.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Logd("ItemClick: "+position);
+            }
+        });
 
         return  view;
     }
@@ -36,5 +47,9 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
+    }
+
+    void Logd(String msg){
+        Log.d("MainMsgFragment",msg);
     }
 }

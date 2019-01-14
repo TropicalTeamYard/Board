@@ -20,14 +20,18 @@ public class MsgDataOperator {
         return msgs;
     }
 
-    public static ArrayList<Msg> getMsgData(Context context){
+    public static ArrayList<Msg> getMsgData(Context context,ArrayList<Msg> msgData){
         ArrayList<Msg> msgs=new ArrayList<>();
         SQLiteDatabase database=BoardDBHelper.getMsgDBHelper(context).getWritableDatabase();
+        if(msgData==null){
+            msgData=new ArrayList<>();
+        }
 //        Msg(int id, String userid, String nickname, String time, String content, Bitmap portrait, boolean hasPic, Bitmap[] picture)
 //        for(int i=0;i<10;i++){
 //            msgs.add(new Msg(i,"10001"+i,"wcf","2019-01-01 19:0"+i,"3132165136513213"+i,BitMapUtil.getDefaultPortrait(context),true,BitMapUtil.getDefaultPics(context)));
 //        }
 
+        //database.query("msg",)
 
 
         return msgs;

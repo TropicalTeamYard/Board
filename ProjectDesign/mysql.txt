@@ -22,6 +22,8 @@ create table msg(
    time text not null,
    haspics int not null,
    pics MediumBlob,
+   comment mediumblob not null;
+   isdel int not null default 0;
    PRIMARY KEY (_id)
 );
 
@@ -32,15 +34,22 @@ insert into user (userid,nickname,priority,password,email,registertime) values (
 insert into user (userid,nickname,priority,password,email,registertime) values (10002,'cht',2,'E10ADC3949BA59ABBE56E057F20F883E','t1542462994@outlook.com','2019-01-05 10:53');
 
 insert into msg (userid,content,time,haspics) values (10001,'helloworld','2019-01-05 10:53',0);
+insert into msg (userid,content,time,haspics,comment) values (10001,'helloworld','2019-01-05 10:53',0,'{''comment'':''null''}');
 
 //更改字段类型
 alter table user modify column email text;
 alter table user modify column portrait blob not null;
 alter table user modify column portrait Mediumblob not null;
+//增加字段
+alter table msg add column isdel int not null default 0;
+alter table msg add column comment mediumblob not null;
 //更新数据
 UPDATE user SET token='018ccf2254aa419faede1f7678c1360d' WHERE userid='10001';
+//删除字段
+alter table user drop isdel;
 //获取倒数第一条记录
 select * from user order by _id DESC limit 1；
 //删除记录
 delete from user where password='21435423';
+
 

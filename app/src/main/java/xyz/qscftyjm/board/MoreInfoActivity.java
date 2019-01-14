@@ -11,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import tools.BitMapUtil;
+import tools.BoardDBHelper;
+
 public class MoreInfoActivity extends AppCompatActivity {
 
     public final static String TAG = "Board";
@@ -48,7 +51,7 @@ public class MoreInfoActivity extends AppCompatActivity {
     }
 
     public int setUserInfo(TextView tv_userid, TextView tv_nickname,TextView tv_email, ImageView img_portrait){
-        SQLiteDatabase db=BoardDBHelper.getMsgDBHelper(MoreInfoActivity.this).getWritableDatabase();
+        SQLiteDatabase db= BoardDBHelper.getMsgDBHelper(MoreInfoActivity.this).getWritableDatabase();
         Cursor cursor=db.query("userinfo",new String[]{"userid","nickname","portrait","email","priority","token"},null,null,null,null,"id desc","0,1");
         String token;int count=0;
         if(cursor.moveToFirst()){
