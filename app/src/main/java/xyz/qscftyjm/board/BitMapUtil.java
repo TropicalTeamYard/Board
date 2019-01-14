@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 
@@ -25,12 +26,41 @@ public class BitMapUtil {
         return bitmaps;
     }
 
-    public static Bitmap getBitmap(Context context,byte[] bytes){
+//    public static Bitmap getBitmap(Context context,byte[] bytes){
+//        Bitmap bitmap;
+//        if(bytes.length<32){
+//            bitmap = getDefaultPortrait(context);
+//        } else {
+//            bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+//        }
+//
+//
+//        return bitmap;
+//    }
+
+    public static Bitmap getBase64Bitmap(Context context,byte[] bytes){
         Bitmap bitmap;
-        if(bytes.length<32){
+        if(bytes.length<128){
             bitmap = getDefaultPortrait(context);
         } else {
-            bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            byte[] b=BitmapIOUtils.base64String2ByteFun(new String(bytes).replace(' ','+'));
+            bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
+        }
+
+
+        return bitmap;
+    }
+
+    public static Bitmap getHexBitmap(Context context,String hexStr){
+        Bitmap bitmap;
+        if(hexStr.length()<128){
+            bitmap = getDefaultPortrait(context);
+        } else {
+            Log.d("Board","PicByte: "+hexStr);
+
+            byte[] b=BitmapIOUtils.hexStringToByteArray(hexStr);
+
+            bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
         }
 
 

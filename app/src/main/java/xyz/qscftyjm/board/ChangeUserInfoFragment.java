@@ -38,10 +38,8 @@ import java.util.Map;
 
 import postutil.AsynTaskUtil;
 import pub.devrel.easypermissions.EasyPermissions;
-import tools.AlertDialogUtil;
 import tools.ParamToString;
 import tools.StringCollector;
-import tools.TimeUtil;
 import tools.UserUtil;
 
 
@@ -54,10 +52,10 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
     Map<String, Object> userInfo;
     Bitmap bitmap;
     private String IMAGE_FILE_LOCATION_DIR;
-//    private Uri imageUri = Uri.parse(IMAGE_FILE_LOCATION);
     String imagePath;
     private Uri imageUri; File temp_portrait;
     private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    SQLiteDatabase database;
 
     public ChangeUserInfoFragment() {
         super();
@@ -76,6 +74,8 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         View view = inflater.inflate(R.layout.change_info_layout, container);
 
+        database = BoardDBHelper.getMsgDBHelper(getActivity()).getWritableDatabase();
+
         img_portrait=view.findViewById(R.id.change_info_portrait);
         tv_userid=view.findViewById(R.id.change_info_userid);
         ed_nickname=view.findViewById(R.id.change_info_nickname);
@@ -90,7 +90,6 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
             @Override
             public void onClick(View v) {
                 Log.d("Board", "Submit change info");
-                SQLiteDatabase database = BoardDBHelper.getMsgDBHelper(getActivity()).getWritableDatabase();
                 Cursor cursor = database.query("userinfo", new String[]{"id", "userid", "nickname", "portrait", "email", "priority", "token"}, null, null, null, null, "id desc", "0,1");
                 String token = null, userid = null;
                 int id = 0;
@@ -124,11 +123,10 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
 
 
                         if(bitmap!=null){
-                            byte[] temp_pic=BitMapUtil.Bitmap2Bytes(bitmap);
-                            values.put("portrait", BitMapUtil.Bitmap2Bytes(bitmap));
+                            values.put("portrait", BitmapIOUtils.bytesToHexString(BitMapUtil.Bitmap2Bytes(bitmap)));
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
                             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                            changeInfo.put("portrait",BitmapIOUtils.byte2Base64StringFun(baos.toByteArray()));
+                            changeInfo.put("portrait",BitmapIOUtils.bytesToHexString(baos.toByteArray()));
                         }
 
                         AsynTaskUtil.AsynNetUtils.post(StringCollector.getUserServer(), ParamToString.formChangeUserInfo(userid, token, changeInfo), new AsynTaskUtil.AsynNetUtils.Callback() {
@@ -143,19 +141,16 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
                                         int code=jsonObj.optInt("code", -1);
                                         if(code==0) {
 
-                                            //Toast.makeText(getActivity(), "用户数据修改成功", Toast.LENGTH_SHORT).show();
+                                            Log.d("Board","用户数据修改成功");
 
-                                            SQLiteDatabase database = BoardDBHelper.getMsgDBHelper(getActivity()).getWritableDatabase();
                                             Cursor cursor = database.query("userinfo", new String[]{"id", "userid", "nickname", "portrait", "email", "priority", "token"}, null, null, null, null, "id desc", "0,1");
-                                            String token = null;//, userid = null;
+                                            String token = null;
                                             int id = 0;
                                             if (cursor.moveToFirst()) {
                                                 if (cursor.getCount() > 0) {
                                                     Map<String, String> changeInfo = new HashMap<>();
                                                     do {
                                                         id = cursor.getInt(0);
-                                                        //userid = cursor.getString(1);
-                                                        //token = cursor.getString(6);
                                                     } while (cursor.moveToNext());
 
                                                     cursor.close();
@@ -165,12 +160,12 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
                                                     values.put("token", token);
 
                                                     database.update("userinfo", values, "id=?", new String[]{String.valueOf(finalId)});
-                                                    //finish();
                                                 }
                                             }
 
                                         } else if(code<0) {
-                                            Toast.makeText(getActivity(),jsonObj.optString("msg","未知错误"),Toast.LENGTH_LONG).show();
+                                            //Toast.makeText(getActivity(),jsonObj.optString("msg","未知错误"),Toast.LENGTH_LONG).show();
+                                            Log.d("Board",jsonObj.optString("msg","未知错误"));
                                         }
 
                                     } catch (JSONException e) {
@@ -229,16 +224,7 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
 
         } else if(requestCode==1&&resultCode==Activity.RESULT_OK){
             bitmap = BitmapFactory.decodeFile(temp_portrait.getPath());
-            Log.d("Board","URI: "+temp_portrait.toString());
-
-            //            Bundle bundle = data.getExtras();
-//
-//            if (bundle != null) {
-//                //在这里获得了剪裁后的Bitmap对象，可以用于上传
-//                Bitmap image = bundle.getParcelable("data");
-//            }
-//
-
+            //Log.d("Board","URI: "+temp_portrait.toString());
             img_portrait.setImageBitmap(bitmap);
         } else {
             Log.d("Board","requestCode: "+requestCode+" resultCode: "+resultCode);
@@ -264,8 +250,6 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
         intent.putExtra("outputX", 256);
         intent.putExtra("outputY", 256);
 
-//        intent.putExtra("return-data", true);
-
         intent.putExtra("return-data", false);
         IMAGE_FILE_LOCATION_DIR = getActivity().getExternalCacheDir()+ "/xyz.qscftyjm.board/";
         File temp_dir=new File(IMAGE_FILE_LOCATION_DIR);
@@ -282,15 +266,6 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
             e.printStackTrace();
         }
 
-//        imageUri = getImageContentUri(getActivity(),temp_portrait);
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            imageUri = FileProvider.getUriForFile(getActivity(),
-//                    "xyz.qscftyjm.board", temp_portrait);
-//        } else {
-//            imageUri = Uri.fromFile(temp_portrait);
-//        }
-
         imageUri=Uri.parse("file://"+IMAGE_FILE_LOCATION_DIR+"temp_portrait.jpg");
         Log.d("Board","PICURI: "+imageUri.toString());
 
@@ -301,29 +276,6 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
         startActivityForResult(intent, 1);
     }
 
-//    public static Uri getImageContentUri(Context context, File imageFile) {
-//        String filePath = imageFile.getAbsolutePath();
-//        Cursor cursor = context.getContentResolver().query(
-//                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-//                new String[]{MediaStore.Images.Media._ID},
-//                MediaStore.Images.Media.DATA + "=? ",
-//                new String[]{filePath}, null);
-//        if (cursor != null && cursor.moveToFirst()) {
-//            int id = cursor.getInt(cursor
-//                    .getColumnIndex(MediaStore.MediaColumns._ID));
-//            Uri baseUri = Uri.parse("content://media/external/images/media");
-//            return Uri.withAppendedPath(baseUri, "" + id);
-//        } else {
-//            if (imageFile.exists()) {
-//                ContentValues values = new ContentValues();
-//                values.put(MediaStore.Images.Media.DATA, filePath);
-//                return context.getContentResolver().insert(
-//                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-//            } else {
-//                return null;
-//            }
-//        }
-//    }
 
     private void getPermission() {
         if (EasyPermissions.hasPermissions(getActivity(), permissions)) {

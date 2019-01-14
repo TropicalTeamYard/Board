@@ -3,6 +3,7 @@ package tools;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,8 +28,7 @@ public class UserUtil {
                     userInfo.put("userid",cursor.getString(0));
                     userInfo.put("nickname",cursor.getString(1));
 
-                    byte[] byte_portrait=cursor.getBlob(2);
-                    userInfo.put("portrait",BitMapUtil.getBitmap(context,byte_portrait));
+                    userInfo.put("portrait",BitMapUtil.getHexBitmap(context,new String(cursor.getBlob(2))));
 
                     userInfo.put("email",cursor.getString(3));
                 }while (cursor.moveToNext());

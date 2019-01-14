@@ -76,9 +76,10 @@ public class MoreInfoActivity extends AppCompatActivity {
                     this.nickname=cursor.getString(1);
                     tv_nickname.setText(nickname);
 
-                    byte[] byte_portrait=cursor.getBlob(2);
+                    byte[] bytes=cursor.getBlob(2);
+                    //String hex_portrait=new String(BitmapIOUtils.hexStringToByteArray(new String(bytes)));
                     //this.bitmap_portrait = BitmapFactory.decodeByteArray(byte_portrait, 0, byte_portrait.length);
-                    img_portrait.setImageBitmap(BitMapUtil.getBitmap(MoreInfoActivity.this,byte_portrait));
+                    img_portrait.setImageBitmap(BitMapUtil.getHexBitmap(MoreInfoActivity.this,new String(bytes)));
 
                     this.email=cursor.getString(3);
                     tv_email.setText(this.email);
@@ -104,5 +105,11 @@ public class MoreInfoActivity extends AppCompatActivity {
 //            c.close();
 //        }
 //    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setUserInfo(tv_userid, tv_nickname,tv_email, img_portrait);
+    }
 
 }

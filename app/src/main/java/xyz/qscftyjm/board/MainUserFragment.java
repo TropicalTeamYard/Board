@@ -1,12 +1,10 @@
 package xyz.qscftyjm.board;
 
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -16,14 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import postutil.AsynTaskUtil;
-import tools.ParamToString;
-import tools.StringCollector;
 
 
 /**
@@ -110,7 +100,7 @@ public class MainUserFragment extends Fragment implements View.OnClickListener {
 
                     byte[] byte_portrait=cursor.getBlob(2);
 //                    this.bitmap_portrait = BitmapFactory.decodeByteArray(byte_portrait, 0, byte_portrait.length);
-                    img_portrait.setImageBitmap(BitMapUtil.getBitmap(getActivity(),byte_portrait));
+                    img_portrait.setImageBitmap(BitMapUtil.getHexBitmap(getActivity(),new String(byte_portrait)));
 
 
                     this.email=cursor.getString(3);
