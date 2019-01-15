@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements MsgReceiver.Messa
                                     msgReceiver=new MsgReceiver();
                                     IntentFilter intentFilter = new IntentFilter();
                                     intentFilter.addAction("xyz.qscftyjm.board.HAS_NEW_MSG");
-                                    registerReceiver(msgReceiver, intentFilter);
+                                    getApplicationContext().registerReceiver(msgReceiver, intentFilter);
                                     msgReceiver.setMessage(MainActivity.this);
 
                                     Intent startMsgSyncService=new Intent(MainActivity.this, MsgSyncService.class);
@@ -268,7 +268,10 @@ public class MainActivity extends AppCompatActivity implements MsgReceiver.Messa
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(msgReceiver);
+        if(msgReceiver!=null){
+            getApplicationContext().unregisterReceiver(msgReceiver);
+        }
+
         //stopService(new Intent(MainActivity.this, MsgSyncService.class));
     }
 

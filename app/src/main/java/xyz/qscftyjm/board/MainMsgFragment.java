@@ -81,6 +81,8 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener,Ms
     public void onDestroy() {
         super.onDestroy();
         getContext().unregisterReceiver(msgReceiver);
+
+
     }
 
     @Override

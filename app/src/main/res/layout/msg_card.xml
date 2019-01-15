@@ -27,7 +27,7 @@
                     android:gravity="center_vertical"
                     android:maxLines="1"
                     android:layout_weight="1"
-                    android:text="wcf"
+                    android:text="UNDEFINED"
                     android:textColor="#000000"
                     android:textIsSelectable="true"
                     android:textSize="20sp" />
@@ -40,7 +40,7 @@
             </LinearLayout>
             <TextView android:id="@+id/msg_time"
                 android:layout_width="match_parent" android:textIsSelectable="true" android:textSize="12sp" android:gravity="center_vertical"
-                android:layout_height="20dp" android:layout_marginTop="0dp" android:text="2019/01/11 19:37" android:maxLines="1" android:ellipsize="end" />
+                android:layout_height="20dp" android:layout_marginTop="0dp" android:text="1970/01/01 08:00" android:maxLines="1" android:ellipsize="end" />
             <View
                 android:layout_width="match_parent" android:layout_marginRight="4dp"
                 android:layout_height="1dp" android:layout_marginTop="4dp" android:background="#99aaaaaa"/>
@@ -56,7 +56,7 @@
             android:layout_width="0dp" android:paddingLeft="6dp"
             android:layout_height="wrap_content" android:id="@+id/msg_content"
             android:layout_weight="1" android:textSize="20sp" android:textIsSelectable="true"
-            android:maxHeight="96dp" android:text="123456\n17215387959159\n13183751351" />
+            android:maxHeight="96dp" android:text="UNDEFINED" />
 
         <ImageView android:id="@+id/msg_picture" android:visibility="gone" android:padding="8dp"
             android:layout_width="96dp" android:src="@drawable/msg" android:scaleType="centerInside"

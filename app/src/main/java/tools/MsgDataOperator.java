@@ -34,6 +34,8 @@ public class MsgDataOperator {
 
     public static ArrayList<Msg> getMsgData(Context context,ArrayList<Msg> msgData, Map<String,PublicUserInfo> userInfoMap){
         SQLiteDatabase database=BoardDBHelper.getMsgDBHelper(context).getWritableDatabase();
+        Cursor cursor;
+        PublicUserInfo userInfo;
         int lastId=0;
         if(msgData==null){
             msgData=new ArrayList<>();
@@ -45,15 +47,30 @@ public class MsgDataOperator {
             }
         }
 
-        ArrayList<String> userids=new ArrayList<>();
+        cursor=database.query("publicinfo",new String[]{"userid","nickname","portrait"},null,null,null,null,null);
 
-        Cursor cursor = database.query("msg",new String[]{"id","userid","time","content","haspic","picture","comment"}, "id>?", new String[]{String.valueOf(lastId)}, null, null, "id", null);
+        if(cursor.moveToFirst()&&cursor.getCount()>0){
+            do{
+                userInfo=new PublicUserInfo();
+                userInfo.userid=cursor.getString(0);
+                userInfo.portrait=BitMapUtil.getHexBitmap(context,new String(cursor.getBlob(2)));
+                userInfo.nickname=cursor.getString(1);
+            }while (cursor.moveToNext());
+            userInfoMap.put(userInfo.userid,userInfo);
+            cursor.close();
+        }
+//        ArrayList<String> userids=new ArrayList<>();
+
+        cursor = database.query("msg",new String[]{"id","userid","time","content","haspic","picture","comment"}, "id>?", new String[]{String.valueOf(lastId)}, null, null, "id", null);
         if(cursor.moveToFirst()){
             do{
                 Msg msg;
                 int id=cursor.getInt(0);
                 String userid=cursor.getString(1);
-                userids.add(userid);
+//                if (!userids.contains(userid)){
+//                    userids.add(userid);
+//                }
+
                 String time = cursor.getString(2);
                 String content = cursor.getString(3);
                 int haspic=cursor.getInt(4);
@@ -87,7 +104,6 @@ public class MsgDataOperator {
                 msgData.add(0,msg);
             }while (cursor.moveToNext());
 
-            //getUserInfo(userids,context);
         }
 
         cursor.close();
@@ -174,7 +190,145 @@ public class MsgDataOperator {
     }
 
     public static Map<String,PublicUserInfo> getUserInfo(int i, final Context context,ArrayList<Msg> msgs, final Map<String,PublicUserInfo> userInfoMap){
-        return null;
+        ArrayList<String> userids=new ArrayList<>();
+        PublicUserInfo userInfo;
+        final SQLiteDatabase database=BoardDBHelper.getMsgDBHelper(context).getWritableDatabase();
+        for (Msg msg:msgs) {
+            if(userInfoMap.containsKey(msg.getUserid())&&userInfoMap.get(msg.getUserid()).nickname!=null&&userInfoMap.get(msg.getUserid()).portrait!=null){
+                Log.d("MDO","Have "+msg.getUserid());
+                continue;
+            } else {
+                Cursor cursor=database.query("publicinfo",new String[]{"userid","nickname","portrait"},null,null,null,null,null);
+                if(cursor.moveToFirst()){
+                    if(cursor.getCount()>0){
+                        do{
+                            userInfo=new PublicUserInfo();
+                            userInfo.userid=cursor.getString(0);
+                            userInfo.nickname=cursor.getString(2);
+                            userInfo.portrait=BitMapUtil.getHexBitmap(context,new String(cursor.getBlob(2)));
+                            userInfoMap.put(userInfo.userid,userInfo);
+                        }while (cursor.moveToNext());
+                    } else {
+                        if(!userids.contains(msg.getUserid())){
+                            userids.add(msg.getUserid());
+                            Log.d("MDO","Need "+msg.getUserid());
+                        }
+                    }
+                } else {
+                    if (!userids.contains(msg.getUserid())) {
+                        userids.add(msg.getUserid());
+                        Log.d("MDO", "Need " + msg.getUserid());
+                    }
+                }
+                cursor.close();
+            }
+        }
+        if(userids.size()>0){
+            JSONArray jsonArrNeeded=new JSONArray(userids);
+            AsynTaskUtil.AsynNetUtils.post(StringCollector.getUserServer(), ParamToString.formGetPublicInfo(jsonArrNeeded.toString()), new AsynTaskUtil.AsynNetUtils.Callback() {
+                @Override
+                public void onResponse(String response) {
+                    JSONObject jsonObj;
+                    if(response!=null){
+                        Log.d("MDO",response);
+                        try {
+                            jsonObj=new JSONObject(response);
+                            if(jsonObj.optInt("code",-1)==0){
+                                JSONArray users=jsonObj.optJSONArray("users");
+                                if(users!=null&&users.length()>0){
+                                    for (int i=0;i<users.length();i++){
+                                        PublicUserInfo userInfo=new PublicUserInfo();
+                                        if(users.optJSONObject(i)!=null){
+                                            userInfo.userid=users.optJSONObject(i).optString("userid");
+                                            userInfo.nickname=users.optJSONObject(i).optString("nickname");
+                                            userInfo.portrait=BitMapUtil.getHexBitmap(context,users.optJSONObject(i).optString("portrait","00000000"));
+                                        } else {
+                                            userInfo.userid="UNDEFINED";
+                                            userInfo.nickname="UNDEFINED";
+                                            userInfo.portrait=BitMapUtil.getHexBitmap(context,"00000000");
+                                        }
+
+                                        ContentValues values=new ContentValues();
+                                        values.put("userid",userInfo.userid);
+                                        values.put("nickname",userInfo.nickname);
+                                        values.put("portrait", BitmapIOUtils.bytesToHexString(BitMapUtil.Bitmap2Bytes(userInfo.portrait)));
+
+                                        userInfoMap.put(userInfo.userid,userInfo);
+                                        database.insertWithOnConflict("publicinfo",null,values,SQLiteDatabase.CONFLICT_REPLACE);
+                                    }
+                                }
+                            } else {
+                                Log.d("MDO",jsonObj.optString("msg","未知错误"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+            });
+        }
+        return userInfoMap;
+    }
+
+    public static PublicUserInfo getUserInfo(final Context context, String userid, final Map<String,PublicUserInfo> userInfoMap){
+        PublicUserInfo userInfo=new PublicUserInfo();
+        final SQLiteDatabase database=BoardDBHelper.getMsgDBHelper(context).getWritableDatabase();
+        Cursor cursor=database.query("publicinfo",new String[]{"userid","nickname","portrait"},"userid=?",new String[]{userid},null,null,null);
+
+        if(cursor.moveToFirst()&&cursor.getCount()>0){
+            do{
+                userInfo.userid=userid;
+                userInfo.portrait=BitMapUtil.getHexBitmap(context,new String(cursor.getBlob(2)));
+                userInfo.nickname=cursor.getString(1);
+            }while (cursor.moveToNext());
+            userInfoMap.put(userid,userInfo);
+            cursor.close();
+        } else {
+
+            AsynTaskUtil.AsynNetUtils.post(StringCollector.getUserServer(), ParamToString.formGetPublicInfo("['"+userid+"']"), new AsynTaskUtil.AsynNetUtils.Callback() {
+                @Override
+                public void onResponse(String response) {
+                    JSONObject jsonObj;
+                    if(response!=null){
+                        Log.d("MDO",response);
+                        try {
+                            jsonObj=new JSONObject(response);
+                            if(jsonObj.optInt("code",-1)==0){
+                                JSONArray users=jsonObj.optJSONArray("users");
+                                if(users!=null&&users.length()>0){
+                                    PublicUserInfo userInfo=new PublicUserInfo();
+                                    if(users.optJSONObject(0)!=null){
+                                        userInfo.userid=users.optJSONObject(0).optString("userid");
+                                        userInfo.nickname=users.optJSONObject(0).optString("nickname");
+                                        userInfo.portrait=BitMapUtil.getHexBitmap(context,users.optJSONObject(0).optString("portrait","00000000"));
+                                    } else {
+                                        userInfo.userid="UNDEFINED";
+                                        userInfo.nickname="UNDEFINED";
+                                        userInfo.portrait=BitMapUtil.getHexBitmap(context,"00000000");
+                                    }
+
+                                    ContentValues values=new ContentValues();
+                                    values.put("userid",userInfo.userid);
+                                    values.put("nickname",userInfo.nickname);
+                                    values.put("portrait", BitmapIOUtils.bytesToHexString(BitMapUtil.Bitmap2Bytes(userInfo.portrait)));
+
+                                    userInfoMap.put(userInfo.userid,userInfo);
+                                    database.insertWithOnConflict("publicinfo",null,values,SQLiteDatabase.CONFLICT_REPLACE);
+                                }
+                            } else {
+                                Log.d("MDO",jsonObj.optString("msg","未知错误"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+            });
+        }
+
+        return userInfo;
     }
 
 }
