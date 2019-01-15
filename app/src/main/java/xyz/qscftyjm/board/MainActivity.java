@@ -203,8 +203,15 @@ public class MainActivity extends AppCompatActivity implements MsgReceiver.Messa
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        if(id==R.id.item_add_msg){
+            AddMsgFragment fragment=new AddMsgFragment();
+            fragment.show(this.getSupportFragmentManager(),"添加留言");
+            return true;
+        }
+
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.item_code) {
+
             return true;
         }
 
