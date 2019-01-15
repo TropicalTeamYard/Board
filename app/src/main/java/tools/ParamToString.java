@@ -79,4 +79,14 @@ public class ParamToString {
         return result;
     }
 
+    public static String formDelMsg(String userid, String token, String msgid) {
+        String result="method=deletemsg&userid="+userid+"&token="+token+"&msgid="+msgid;
+        return result;
+    }
+
+    public static String formDelMsg(String userid, String token, int msgid) {
+        String result="method=deletemsg&userid="+userid+"&token="+token+"&msgid="+msgid;
+        return result;
+    }
+
 }

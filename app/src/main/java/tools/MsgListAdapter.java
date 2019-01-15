@@ -79,8 +79,6 @@ public class MsgListAdapter extends BaseAdapter {
         if(userInfoMap.containsKey(msgList.get(position).getUserid())){
             viewHolder.portrait.setImageBitmap(userInfoMap.get(msgList.get(position).getUserid()).portrait);
             viewHolder.nickname.setText(userInfoMap.get(msgList.get(position).getUserid()).nickname);
-        } else {
-            MsgDataOperator.getUserInfo(context,msgList.get(position).getUserid(),userInfoMap);
         }
 
         viewHolder.time.setText(msgList.get(position).getTime());
@@ -108,9 +106,4 @@ public class MsgListAdapter extends BaseAdapter {
         }
     }
 
-    @Override
-    public void notifyDataSetChanged() {
-        super.notifyDataSetChanged();
-
-    }
 }

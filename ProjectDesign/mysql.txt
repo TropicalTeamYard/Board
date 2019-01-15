@@ -22,8 +22,8 @@ create table msg(
    time text not null,
    haspics int not null,
    pics MediumBlob,
-   comment mediumblob not null;
-   isdel int not null default 0;
+   comment mediumblob not null,
+   isdel int not null default 0,
    PRIMARY KEY (_id)
 );
 
