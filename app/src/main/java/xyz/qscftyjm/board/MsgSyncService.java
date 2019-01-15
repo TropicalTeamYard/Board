@@ -71,7 +71,6 @@ public class MsgSyncService extends Service {
                     userid=cursor.getString(0);
                     token=cursor.getString(1);
                 } else {
-                    Toast.makeText(MsgSyncService.this,"请登录账号",Toast.LENGTH_LONG).show();
                     return;
                 }
                 cursor.close();
@@ -80,17 +79,13 @@ public class MsgSyncService extends Service {
                     @Override
                     public void onResponse(String response) {
                         if(response!=null) {
-                            Log.d("Service Msg",response);
                             try {
                                 JSONObject jsonObj=new JSONObject(response);
                                 if(jsonObj.optInt("code", -1)==0) {
-
                                     JSONArray delArr=jsonObj.optJSONArray("delete");
-                                    //Log.d("Service","length="+delArr.length());
                                     if(delArr!=null&&delArr.length()>0){
                                         for (int i=0;i<delArr.length();i++){
                                             int num=database.delete("msg","id=?",new String[]{String.valueOf(delArr.optInt(i,-1))});
-                                            //Log.d("Service","num: "+num+" "+delArr.optInt(i,-1));
                                         }
                                     }
                                     JSONArray msgArr=jsonObj.optJSONArray("msgs");
@@ -146,9 +141,7 @@ public class MsgSyncService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
         runnable.run();
-
         return super.onStartCommand(intent, flags, startId);
     }
 

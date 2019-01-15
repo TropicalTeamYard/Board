@@ -39,25 +39,18 @@ import tools.StringCollector;
 public class MainMsgFragment extends Fragment implements View.OnClickListener,MsgReceiver.Message {
 
     final static String TAG = "Board";
-
-    private View view;
     private ListView lv_msg;
     MsgListAdapter adapter;
-
     MsgReceiver msgReceiver;
-
     ArrayList<Msg> msgData;
     Map<String, PublicUserInfo> userInfoMap;
     SQLiteDatabase database;
     public MainMsgFragment() {
-        // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        view=inflater.inflate(R.layout.fragment_main_msg, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_main_msg, container, false);
 
         msgData=new ArrayList<>();
         userInfoMap=new HashMap<>();
@@ -69,34 +62,31 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener,Ms
         getContext().registerReceiver(msgReceiver, intentFilter);
         msgReceiver.setMessage(this);
 
-        lv_msg=view.findViewById(R.id.msg_list);
+        lv_msg= view.findViewById(R.id.msg_list);
         MsgDataOperator.getMsgData(getActivity(),msgData,userInfoMap);
         adapter=new MsgListAdapter(msgData,userInfoMap,getActivity());
         lv_msg.setAdapter(adapter);
-
-
-//        Handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                adapter.notifyDataSetChanged();
-//            }
-//        }, 500);
-
 
         lv_msg.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Logd("ItemClick: "+position);
-
+                Intent intent0=new Intent(getActivity(),MsgDetailActivity.class);
+                Bundle bundle0=new Bundle();
+                bundle0.putInt("msgid",msgData.get(position).getId());
+                bundle0.putString("content",msgData.get(position).getContent());
+                bundle0.putString("nickname",msgData.get(position).getNickname());
+                bundle0.putString("time",msgData.get(position).getTime());
+                bundle0.putInt("haspic",msgData.get(position).getHasPic());
+                intent0.putExtras(bundle0);
+                startActivity(intent0);
             }
         });
 
         lv_msg.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
 
             @Override
-            public void onCreateContextMenu(ContextMenu menu, View v,
-                                            ContextMenu.ContextMenuInfo menuInfo) {
-                // TODO 自动生成的方法存根
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
                 menu.setHeaderTitle("更多操作");
                 menu.add(0, 0, 0, "查看详细内容");
                 menu.add(0, 1, 0, "复制内容到剪切板");
@@ -106,7 +96,7 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener,Ms
             }
         });
 
-        return  view;
+        return view;
     }
 
     @Override
@@ -220,7 +210,12 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener,Ms
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getContext().unregisterReceiver(msgReceiver);
+        try {
+            getContext().unregisterReceiver(msgReceiver);
+            Log.d("MMF","Broadcast closed successfully");
+        } catch (IllegalArgumentException e) {
+            Log.d("MMF","Broadcast closed failed");
+        }
 
 
     }

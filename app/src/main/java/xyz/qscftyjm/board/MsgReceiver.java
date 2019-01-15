@@ -17,7 +17,6 @@ public class MsgReceiver extends BroadcastReceiver {
         Toast.makeText(context, "有新的留言", Toast.LENGTH_SHORT).show();
         String json=intent.getStringExtra("msg");
         message.getMsg(json);
-
     }
 
     interface Message {

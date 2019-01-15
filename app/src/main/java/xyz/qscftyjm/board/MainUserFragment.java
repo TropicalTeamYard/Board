@@ -19,9 +19,6 @@ import tools.BitMapUtil;
 import tools.BoardDBHelper;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class MainUserFragment extends Fragment implements View.OnClickListener {
 
     private final static String TAG = "Board";
@@ -31,21 +28,18 @@ public class MainUserFragment extends Fragment implements View.OnClickListener {
     private Bitmap bitmap_portrait;
     SQLiteDatabase database;
     private View view;
-
     private Button bt_login_info,bt_user_info;
     private TextView tv_nickname,tv_userid;
     private ImageView img_head_portrait;
 
 
     public MainUserFragment() {
-        // Required empty public constructor
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_main_user, container, false);
 
         database= BoardDBHelper.getMsgDBHelper(getActivity()).getWritableDatabase();
@@ -91,26 +85,21 @@ public class MainUserFragment extends Fragment implements View.OnClickListener {
 
     public void setUserInfo(TextView tv_userid, TextView tv_nickname, ImageView img_portrait, Button login_info, SQLiteDatabase db){
         Cursor cursor=db.query("userinfo",new String[]{"userid","nickname","portrait","email","priority","token"},null,null,null,null,"id desc","0,1");
-        if(cursor.moveToFirst()){
-            if(cursor.getCount()>0){
+        if(cursor.moveToFirst()&&cursor.getCount()>0){
+            do{
+                this.userid=cursor.getString(0);
+                tv_userid.setText("ID : "+this.userid);
+                this.nickname=cursor.getString(1);
+                tv_nickname.setText("Hi, "+this.nickname);
 
-                do{
-                    this.userid=cursor.getString(0);
-                    tv_userid.setText("ID : "+this.userid);
-                    this.nickname=cursor.getString(1);
-                    tv_nickname.setText("Hi, "+this.nickname);
+                img_portrait.setImageBitmap(BitMapUtil.getHexBitmap(getActivity(),new String(cursor.getBlob(2))));
 
-                    img_portrait.setImageBitmap(BitMapUtil.getHexBitmap(getActivity(),new String(cursor.getBlob(2))));
+                this.email=cursor.getString(3);
+                this.priority=cursor.getInt(4);
 
-                    this.email=cursor.getString(3);
-                    this.priority=cursor.getInt(4);
-
-                }while (cursor.moveToNext());
-
-                cursor.close();
-
-            }
+            }while (cursor.moveToNext());
         }
+        cursor.close();
     }
     
 }

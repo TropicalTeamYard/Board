@@ -57,7 +57,6 @@ public class MoreInfoActivity extends AppCompatActivity {
         if(cursor.moveToFirst()){
             count=cursor.getCount();
             if(count>0){
-
                 do{
                     this.userid=cursor.getString(0);
                     tv_userid.setText(this.userid);
@@ -70,11 +69,9 @@ public class MoreInfoActivity extends AppCompatActivity {
                     tv_email.setText(this.email);
                     token=cursor.getString(5);
                 }while (cursor.moveToNext());
-
-                cursor.close();
-
             }
         }
+        cursor.close();
         return count;
     }
 

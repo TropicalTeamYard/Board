@@ -132,6 +132,7 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
                             changeInfo.put("portrait",BitmapIOUtils.bytesToHexString(baos.toByteArray()));
                         }
 
+                        final String finalUserid = userid;
                         AsynTaskUtil.AsynNetUtils.post(StringCollector.getUserServer(), ParamToString.formChangeUserInfo(userid, token, changeInfo), new AsynTaskUtil.AsynNetUtils.Callback() {
                             @Override
                             public void onResponse(String response) {
@@ -145,30 +146,39 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
                                         if(code==0) {
 
                                             Log.d("Board","用户数据修改成功");
+                                            //("用户数据修改成功");
 
                                             Cursor cursor = database.query("userinfo", new String[]{"id", "userid", "nickname", "portrait", "email", "priority", "token"}, null, null, null, null, "id desc", "0,1");
                                             String token = null;
                                             int id = 0;
-                                            if (cursor.moveToFirst()) {
-                                                if (cursor.getCount() > 0) {
-                                                    Map<String, String> changeInfo = new HashMap<>();
-                                                    do {
-                                                        id = cursor.getInt(0);
-                                                    } while (cursor.moveToNext());
+                                            if (cursor.moveToFirst()&&cursor.getCount() > 0) {
+                                                Map<String, String> changeInfo = new HashMap<>();
+                                                do {
+                                                    id = cursor.getInt(0);
+                                                } while (cursor.moveToNext());
 
-                                                    cursor.close();
-                                                    final int finalId = id;
-                                                    ContentValues values = new ContentValues();
-                                                    token = jsonObj.optString("token", "00000000000000000000000000000000");
-                                                    values.put("token", token);
+                                                cursor.close();
+                                                final int finalId = id;
+                                                ContentValues values = new ContentValues();
+                                                token = jsonObj.optString("token", "00000000000000000000000000000000");
+                                                values.put("token", token);
 
-                                                    database.update("userinfo", values, "id=?", new String[]{String.valueOf(finalId)});
-                                                }
+                                                database.update("userinfo", values, "id=?", new String[]{String.valueOf(finalId)});
                                             }
 
-                                        } else if(code<0) {
-                                            //Toast.makeText(getActivity(),jsonObj.optString("msg","未知错误"),Toast.LENGTH_LONG).show();
-                                            // TODO 验证失败时的处理
+                                        } else if(code!=-1) {
+                                            if(code==-104){
+                                                try {
+                                                    Intent intent=new Intent(getActivity(),LoginActivity.class);
+                                                    Bundle bundle=new Bundle();
+                                                    bundle.putString("userid", finalUserid);
+                                                    intent.putExtras(bundle);
+                                                    startActivity(intent);
+                                                    Log.d("Intent","Start LoginActivity");
+                                                } catch (NullPointerException e){
+                                                    Log.d("Intent","java.lang.NullPointerException");
+                                                }
+                                            }
                                             Log.d("Board",jsonObj.optString("msg","未知错误"));
                                         }
 
@@ -310,4 +320,5 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
         super.dismiss();
         startActivity(new Intent(getActivity(),MoreInfoActivity.class));
     }
+
 }

@@ -85,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                         Intent intent=new Intent(LoginActivity.this, MainActivity.class);
                                         startActivity(intent);
+
                                         finish();
                                     }else if(code<0) {
                                         Toast.makeText(LoginActivity.this,jsonObj.optString("msg","未知错误"),Toast.LENGTH_LONG).show();

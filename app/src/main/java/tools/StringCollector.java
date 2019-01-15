@@ -8,11 +8,11 @@ public class StringCollector {
     public static String SERVER_MSG = "http://101.132.122.143:8080/board/msg";
 
     public static String getUserServer(){
-        return SERVER_USER;
+        return LOCAL_USER;
     }
 
     public static String getMsgServer(){
-        return SERVER_MSG;
+        return LOCAL_MSG;
     }
 
 }

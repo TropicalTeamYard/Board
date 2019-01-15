@@ -122,6 +122,7 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
                     });
                 } else {
                     // TODO 有图片
+
                 }
             }
         });
@@ -147,8 +148,7 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
     }
 
     private void getPermission() {
-        if (EasyPermissions.hasPermissions(getActivity(), permissions)) {
-        } else {
+        if (!EasyPermissions.hasPermissions(getActivity(), permissions)) {
             EasyPermissions.requestPermissions(this, "我们需要获取您的相册使用权限", 1, permissions);
         }
     }
