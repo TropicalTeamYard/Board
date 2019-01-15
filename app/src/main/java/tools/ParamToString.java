@@ -57,7 +57,7 @@ public class ParamToString {
 
     public static String formGetPublicInfo(String userids) {
         //method=getpublicinfo&userids=['10001','10041','100']
-        Log.d("Board","userids: "+userids);
+        //Log.d("Board","userids: "+userids);
         String result="method=getpublicinfo&userids="+userids;
         return result;
     }
@@ -70,7 +70,7 @@ public class ParamToString {
 
     public static String formGetMsg(String userid, String token,String id) {
         String result="method=checknew&userid="+userid+"&token="+token+"&msgid="+id;
-        Log.d("Board",result);
+        //Log.d("Board",result);
         return result;
     }
 

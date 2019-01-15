@@ -1,6 +1,8 @@
 package xyz.qscftyjm.board;
 
+import android.app.ActivityManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
@@ -22,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import postutil.AsynTaskUtil;
 import tools.BoardDBHelper;
@@ -149,10 +152,15 @@ public class MainActivity extends AppCompatActivity implements MsgReceiver.Messa
                                     msgReceiver.setMessage(MainActivity.this);
 
                                     Intent startMsgSyncService=new Intent(MainActivity.this, MsgSyncService.class);
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                        startForegroundService(startMsgSyncService);
-                                    }else{
-                                        startService(startMsgSyncService);
+                                    if(!isServiceRunning("xyz.qscftyjm.board.MsgSyncService")){
+                                        Log.d("MA","StartService");
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                            startForegroundService(startMsgSyncService);
+                                        }else{
+                                            startService(startMsgSyncService);
+                                        }
+                                    } else {
+                                        Log.d("MA","Serviec is running");
                                     }
 
                                 } else if (code < 0) {
@@ -258,7 +266,27 @@ public class MainActivity extends AppCompatActivity implements MsgReceiver.Messa
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(msgReceiver);
+        //stopService(new Intent(MainActivity.this, MsgSyncService.class));
+    }
+
+    @Override
     public void getMsg(String str) {
         Log.d("MainA","get broadcast");
+    }
+
+    /**
+     * 判断服务是否运行
+     */
+    private boolean isServiceRunning(final String className) {
+        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> info = activityManager.getRunningServices(Integer.MAX_VALUE);
+        if (info == null || info.size() == 0) return false;
+        for (ActivityManager.RunningServiceInfo aInfo : info) {
+            if (className.equals(aInfo.service.getClassName())) return true;
+        }
+        return false;
     }
 }

@@ -86,7 +86,7 @@ public class MsgSyncService extends Service {
                                 if(jsonObj.optInt("code", -1)==0) {
 
                                     JSONArray delArr=jsonObj.optJSONArray("delete");
-                                    Log.d("Service","length="+delArr.length());
+                                    //Log.d("Service","length="+delArr.length());
                                     if(delArr!=null&&delArr.length()>0){
                                         for (int i=0;i<delArr.length();i++){
                                             int num=database.delete("msg","id=?",new String[]{String.valueOf(delArr.optInt(i,-1))});
@@ -146,8 +146,9 @@ public class MsgSyncService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        // TODO Auto-generated method stub
+
         runnable.run();
+
         return super.onStartCommand(intent, flags, startId);
     }
 

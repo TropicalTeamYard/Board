@@ -80,7 +80,7 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener,Ms
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //msgReceiver.abortBroadcast();
+        getContext().unregisterReceiver(msgReceiver);
     }
 
     @Override
