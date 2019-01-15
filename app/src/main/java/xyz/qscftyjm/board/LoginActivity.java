@@ -32,17 +32,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Bundle bundle=this.getIntent().getExtras();
-
-        setContentView(R.layout.activity_login);
         login_btn=findViewById(R.id.login_btn);
         register_btn=findViewById(R.id.register_btn);
         forget_password_btn=findViewById(R.id.forget_password_btn);
         userid_et=findViewById(R.id.login_account);
         password_et=findViewById(R.id.login_password);
-
-        if(bundle!=null&&bundle.containsKey("userid")) {
+        Bundle bundle=this.getIntent().getExtras();
+        if(bundle!=null&&bundle.containsKey("userid")){
             userid_et.setText(bundle.getString("userid"));
+            Toast.makeText(LoginActivity.this,"请重新登录您的账号",Toast.LENGTH_LONG).show();
         }
 
         login_btn.setOnClickListener(new View.OnClickListener() {

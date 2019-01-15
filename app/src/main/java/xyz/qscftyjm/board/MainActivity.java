@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements MsgReceiver.Messa
         }
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.item_code) {
+        if (id == R.id.item_huaji) {
 
             return true;
         }
