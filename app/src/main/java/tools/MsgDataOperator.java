@@ -95,8 +95,7 @@ public class MsgDataOperator {
         return msgData;
     }
 
-    public static Map<String,PublicUserInfo> getUserInfo(ArrayList<String> userids, final Context context){
-        final Map<String,PublicUserInfo> data=new HashMap<>();
+    public static Map<String,PublicUserInfo> getUserInfo(final Context context, ArrayList<String> userids, final Map<String,PublicUserInfo> userInfoMap){
         PublicUserInfo userInfo;
         final SQLiteDatabase database=BoardDBHelper.getMsgDBHelper(context).getWritableDatabase();
         final Cursor cursor=database.query("publicinfo",new String[]{"userid","nickname","portrait"},null,null,null,null,null);
@@ -107,8 +106,8 @@ public class MsgDataOperator {
                     userInfo.userid=cursor.getString(0);
                     userInfo.nickname=cursor.getString(2);
                     userInfo.portrait=BitMapUtil.getHexBitmap(context,new String(cursor.getBlob(2)));
-                    if(!data.containsKey(userInfo.userid)){
-                        data.put(userInfo.userid,userInfo);
+                    if(!userInfoMap.containsKey(userInfo.userid)){
+                        userInfoMap.put(userInfo.userid,userInfo);
                     }
 
                 }while (cursor.moveToNext());
@@ -118,7 +117,7 @@ public class MsgDataOperator {
         for (int i=0;i<userids.size();i++){
             ArrayList<String> needed=new ArrayList<>();
 
-            if(!data.containsKey(userids.get(i))){
+            if(!userInfoMap.containsKey(userids.get(i))){
                 needed.add(userids.get(i));
             }
 
@@ -153,7 +152,7 @@ public class MsgDataOperator {
                                             values.put("nickname",userInfo.nickname);
                                             values.put("portrait", BitmapIOUtils.bytesToHexString(BitMapUtil.Bitmap2Bytes(userInfo.portrait)));
 
-                                            data.put(userInfo.userid,userInfo);
+                                            userInfoMap.put(userInfo.userid,userInfo);
                                             database.insertWithOnConflict("publicinfo",null,values,SQLiteDatabase.CONFLICT_REPLACE);
                                         }
                                     }
@@ -171,7 +170,11 @@ public class MsgDataOperator {
 
         }
 
-        return data;
+        return userInfoMap;
+    }
+
+    public static Map<String,PublicUserInfo> getUserInfo(int i, final Context context,ArrayList<Msg> msgs, final Map<String,PublicUserInfo> userInfoMap){
+        return null;
     }
 
 }
