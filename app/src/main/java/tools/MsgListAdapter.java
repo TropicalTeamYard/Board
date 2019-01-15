@@ -1,6 +1,8 @@
 package tools;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +21,25 @@ public class MsgListAdapter extends BaseAdapter {
     Map<String, PublicUserInfo> userInfoMap;
     Context context;
     ViewHolder viewHolder;
+    SQLiteDatabase database;
 
     public MsgListAdapter(ArrayList<Msg> msgList,Map<String, PublicUserInfo> userInfoMap, Context context){
         this.context=context;this.msgList=msgList;this.userInfoMap=userInfoMap;
+        // TODO init data
+        PublicUserInfo userInfo;
+        database=BoardDBHelper.getMsgDBHelper(context).getWritableDatabase();
+        Cursor cursor=database.query("publicinfo",new String[]{"userid","nickname","portrait"},null,null,null,null,null);
+
+        if(cursor.moveToFirst()&&cursor.getCount()>0){
+            do{
+                userInfo=new PublicUserInfo();
+                userInfo.userid=cursor.getString(0);
+                userInfo.portrait=BitMapUtil.getHexBitmap(context,new String(cursor.getBlob(2)));
+                userInfo.nickname=cursor.getString(1);
+            }while (cursor.moveToNext());
+            userInfoMap.put(userInfo.userid,userInfo);
+            cursor.close();
+        }
     }
 
     @Override
@@ -58,6 +76,13 @@ public class MsgListAdapter extends BaseAdapter {
             MsgDataOperator.getUserInfo(context,msgList.get(position).getUserid(),userInfoMap);
         }
 
+        if(userInfoMap.containsKey(msgList.get(position).getUserid())){
+            viewHolder.portrait.setImageBitmap(userInfoMap.get(msgList.get(position).getUserid()).portrait);
+            viewHolder.nickname.setText(userInfoMap.get(msgList.get(position).getUserid()).nickname);
+        } else {
+            MsgDataOperator.getUserInfo(context,msgList.get(position).getUserid(),userInfoMap);
+        }
+
         viewHolder.time.setText(msgList.get(position).getTime());
 
         viewHolder.content.setText(msgList.get(position).getContent());
@@ -83,5 +108,9 @@ public class MsgListAdapter extends BaseAdapter {
         }
     }
 
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
 
+    }
 }

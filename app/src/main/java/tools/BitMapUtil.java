@@ -46,7 +46,7 @@ public class BitMapUtil {
         if(hexStr.length()<128){
             bitmap = getDefaultPortrait(context);
         } else {
-            Log.d("Board","PicByte: "+hexStr);
+            //Log.d("Board","PicByte: "+hexStr);
 
             byte[] b=BitmapIOUtils.hexStringToByteArray(hexStr);
 

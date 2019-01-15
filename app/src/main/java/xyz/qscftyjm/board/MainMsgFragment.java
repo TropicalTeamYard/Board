@@ -2,8 +2,8 @@ package xyz.qscftyjm.board;
 
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,6 +57,15 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener,Ms
         adapter=new MsgListAdapter(msgData,userInfoMap,getActivity());
         lv_msg.setAdapter(adapter);
 
+
+//        Handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                adapter.notifyDataSetChanged();
+//            }
+//        }, 500);
+
+
         lv_msg.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -89,6 +98,8 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener,Ms
     public void getMsg(String str) {
         MsgDataOperator.getMsgData(getActivity(),msgData,userInfoMap);
         Logd("get broadcast: "+str);
+        lv_msg.invalidate();
         adapter.notifyDataSetChanged();
+        lv_msg.invalidate();
     }
 }
