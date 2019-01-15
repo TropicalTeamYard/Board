@@ -13,7 +13,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import postutil.AsynTaskUtil;
@@ -23,8 +22,6 @@ public class MsgDataOperator {
 
     public static ArrayList<Msg> getTestMsgData(Context context){
         ArrayList<Msg> msgs=new ArrayList<>();
-
-        // public Msg(int id, String userid, String nickname, String time, String content, Bitmap portrait, boolean hasPic, Bitmap[] picture) {
         for(int i=0;i<10;i++){
             msgs.add(new Msg(i,"10001"+i,"wcf","2019-01-01 19:0"+i,"3132165136513213"+i, BitMapUtil.getDefaultPortrait(context),1,BitMapUtil.getDefaultPics(context)));
         }
@@ -59,7 +56,6 @@ public class MsgDataOperator {
             userInfoMap.put(userInfo.userid,userInfo);
             cursor.close();
         }
-//        ArrayList<String> userids=new ArrayList<>();
 
         cursor = database.query("msg",new String[]{"id","userid","time","content","haspic","picture","comment"}, "id>?", new String[]{String.valueOf(lastId)}, null, null, "id", null);
         if(cursor.moveToFirst()){
@@ -67,9 +63,6 @@ public class MsgDataOperator {
                 Msg msg;
                 int id=cursor.getInt(0);
                 String userid=cursor.getString(1);
-//                if (!userids.contains(userid)){
-//                    userids.add(userid);
-//                }
 
                 String time = cursor.getString(2);
                 String content = cursor.getString(3);
@@ -93,21 +86,15 @@ public class MsgDataOperator {
                     }
                 }
 
-
-
                 if (b_pics!=null&&b_pics.length>0){
                     msg=new Msg(id,userid,null,time,content,null,haspic,b_pics);
                 } else {
                     msg=new Msg(id,userid,null,time,content,null);
                 }
-
                 msgData.add(0,msg);
             }while (cursor.moveToNext());
-
         }
-
         cursor.close();
-
         return msgData;
     }
 
