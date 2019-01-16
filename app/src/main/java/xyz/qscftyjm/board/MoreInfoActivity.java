@@ -20,7 +20,7 @@ public class MoreInfoActivity extends AppCompatActivity {
 
     private TextView tv_userid,tv_nickname,tv_email;
     private ImageView img_portrait;
-    private Button bt_change_info;
+    private Button bt_change_info,bt_change_password;
     String userid,nickname,email;
 
     @Override
@@ -32,9 +32,25 @@ public class MoreInfoActivity extends AppCompatActivity {
         tv_email=findViewById(R.id.user_info_email);
         img_portrait=findViewById(R.id.user_info_portrait);
         bt_change_info=findViewById(R.id.user_info_change_info);
-
+        bt_change_password=findViewById(R.id.user_info_change_password);
 
         final int count=setUserInfo(tv_userid,tv_nickname,tv_email,img_portrait);
+
+
+        bt_change_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG,"Change Info");
+                // TODO 弹出窗口更改信息
+                if(count>0){
+                    ChangePasswordFragment fragment=new ChangePasswordFragment();
+                    fragment.show(getSupportFragmentManager(),"changepassword");
+                } else {
+                    Toast.makeText(MoreInfoActivity.this,"请登录账号",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
         bt_change_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

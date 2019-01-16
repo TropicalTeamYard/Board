@@ -56,7 +56,8 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
     Bitmap bitmap;
     private String IMAGE_FILE_LOCATION_DIR;
     String imagePath;
-    private Uri imageUri; File temp_portrait;
+    private Uri imageUri;
+    File temp_portrait;
     private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
     SQLiteDatabase database;
 
@@ -69,7 +70,7 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
         super.onStart();
         DisplayMetrics dm = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics( dm );
-        getDialog().getWindow().setLayout( dm.widthPixels,  getDialog().getWindow().getAttributes().height );
+        getDialog().getWindow().setLayout(dm.widthPixels, getDialog().getWindow().getAttributes().height);
     }
 
     @Override

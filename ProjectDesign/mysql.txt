@@ -32,8 +32,8 @@ select userid,token,nickname from user;
 
 select * from msg;
 
-insert into user (userid,nickname,priority,password,email,registertime) values (10001,'wcf',2,'E10ADC3949BA59ABBE56E057F20F883E','1533144693@qq.com','2019-01-05 10:49');
-insert into user (userid,nickname,priority,password,email,registertime) values (10002,'cht',2,'E10ADC3949BA59ABBE56E057F20F883E','t1542462994@outlook.com','2019-01-05 10:53');
+insert into user (userid,nickname,priority,password,email,registertime) values (10000,'wcf',2,'E10ADC3949BA59ABBE56E057F20F883E','1533144693@qq.com','2019-01-05 10:49');
+insert into user (userid,nickname,priority,password,email,registertime,token,portrait) values (10001,'cht',2,'E10ADC3949BA59ABBE56E057F20F883E','t1542462994@outlook.com','2019-01-15 10:53','00000000','00000000');
 
 insert into msg (userid,content,time,haspics) values (10001,'helloworld','2019-01-05 10:53',0);
 insert into msg (userid,content,time,haspics,comment) values (10001,'helloworld','2019-01-05 10:53',0,'{''comment'':''null''}');

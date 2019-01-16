@@ -112,7 +112,7 @@ public class MsgSyncService extends Service {
                                                 values.put("pics",jsonArray.toString());
                                             }
                                             values.put("comment",newObj.optString("comment","{'comment':null}"));
-                                            database.insert("msg", null, values);
+                                            database.insertWithOnConflict("msg", null, values, SQLiteDatabase.CONFLICT_REPLACE);
                                         }
                                         Intent intent = new Intent();
                                         intent.setAction("xyz.qscftyjm.board.HAS_NEW_MSG");
