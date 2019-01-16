@@ -104,7 +104,7 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener,Ms
 
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
         String index=String.valueOf(info.id);
-        Toast.makeText(getActivity(), "长按点击了第"+index+"条的第"+menuItem.getItemId()+"项", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "长按点击了第"+index+"条的第"+menuItem.getItemId()+"项", Toast.LENGTH_SHORT).show();
         switch (menuItem.getItemId()) {
             case 0:
                 Intent intent0=new Intent(getActivity(),MsgDetailActivity.class);
@@ -152,7 +152,7 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener,Ms
                                     jsonObj=new JSONObject(response);
                                     int code=jsonObj.optInt("code",-1);
                                     if(code==0){
-                                        makeToast("删除成功");
+                                        makeToast("删除成功，下一次刷新后会消失");
                                     } else if(code==-104){
                                         Logd("delete failed, userid and token not match");
                                         makeToast("删除失败，请重新登录");
