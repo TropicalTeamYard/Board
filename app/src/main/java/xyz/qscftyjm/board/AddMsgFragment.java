@@ -110,6 +110,8 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
                                             intent.putExtras(bundle);
                                             startActivity(intent);
                                             dismiss();
+                                        } else if(code==-99){
+                                            makeToast("留言发生错误");
                                         }
                                     } else {
                                         Logd("sever error");
@@ -131,10 +133,10 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
     }
 
     private void Logd(String log) {
-        if(log==null){
-            return;
-        }
-        Log.d("AMF",log);
+        try {
+            Log.d("AMF",log);
+        } catch (Exception ignored){}
+
     }
 
     @Override
@@ -168,6 +170,10 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
         Toast.makeText(getActivity(), "请同意相关权限，否则无法选择图片", Toast.LENGTH_SHORT).show();
     }
 
+    public void makeToast(String str){
+        try {
+            Toast.makeText(getActivity(),str,Toast.LENGTH_SHORT).show();
+        } catch (Exception ignored){ }
 
-
+    }
 }

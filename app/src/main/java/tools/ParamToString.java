@@ -3,9 +3,11 @@ package tools;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class ParamToString {
@@ -89,4 +91,10 @@ public class ParamToString {
         return result;
     }
 
+    public static String formUpdateUserInfo(ArrayList<Map<String, String>> userInfoMd5Array) {
+        JSONArray jsonArray=new JSONArray(userInfoMd5Array);
+        String result="method=updatepublicinfo&usermap="+jsonArray.toString();
+        Log.d("UUI",result);
+        return result;
+    }
 }

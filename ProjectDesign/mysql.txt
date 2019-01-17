@@ -53,5 +53,9 @@ alter table user drop isdel;
 select * from user order by _id DESC limit 1；
 //删除记录
 delete from user where password='21435423';
+//修改字符集
+ALTER DATABASE board CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+ALTER TABLE msg CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE user CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 
