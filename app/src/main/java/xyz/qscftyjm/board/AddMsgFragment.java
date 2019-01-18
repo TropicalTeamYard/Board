@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -104,11 +105,11 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
             @Override
             public void onClick(View v) {
                 String content=et_content.getText().toString();
+                if(content.length()<=0){ Toast.makeText(getActivity(),"留言不能为空！",Toast.LENGTH_LONG).show(); return; }
 
                 isHasPic=(haspics[0]||haspics[1]||haspics[2]);
                 if(!isHasPic){
                     // TODO 没有图片
-                    if(content.length()<=0){ Toast.makeText(getActivity(),"留言不能为空！",Toast.LENGTH_LONG).show(); return; }
                     AsynTaskUtil.AsynNetUtils.post(StringCollector.getMsgServer(), ParamToString.formSendMsg(userid, token, content, 0, null), new AsynTaskUtil.AsynNetUtils.Callback() {
                         @Override
                         public void onResponse(String response) {
@@ -143,17 +144,87 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
                     });
                 } else {
                     // TODO 有图片
+                    Log.d("Pics","HasPic");
                     ArrayList<Bitmap> sendPicArray=new ArrayList<>();
                     ArrayList<String> hexPic=new ArrayList<>();
                     for (int i=0;i<2;i++){
                         if(haspics[i]&&bitmaps[i]!=null){
                             sendPicArray.add(bitmaps[i]);
-                            File file=new File(imagePath[i]);
-                            if(file.exists()){
-                                // TODO ......
+                            try {
+                                hexPic.add(BitmapIOUtil.bytesToHexString(BitmapIOUtil.ReadImage(imagePath[i])));
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-
                         }
+                    }
+
+                    if (hexPic.size()>0){
+                        JSONArray jsonArray=new JSONArray(hexPic);
+                        AsynTaskUtil.AsynNetUtils.post(StringCollector.getMsgServer(), ParamToString.formSendMsg(userid, token, content, hexPic.size(), jsonArray.toString()), new AsynTaskUtil.AsynNetUtils.Callback() {
+                            @Override
+                            public void onResponse(String response) {
+                                JSONObject jsonObj;
+                                int code;
+                                if(response!=null){
+                                    try {
+                                        jsonObj=new JSONObject(response);
+                                        code=jsonObj.optInt("code",-1);
+                                        Logd(jsonObj.optString("msg","unknown error"));
+                                        if(code==0){
+                                            dismiss();
+                                        } else if(code!=-1) {
+                                            if(code==-101){
+                                                Intent intent=new Intent(getActivity(),LoginActivity.class);
+                                                Bundle bundle=new Bundle();
+                                                bundle.putString("userid",userid);
+                                                intent.putExtras(bundle);
+                                                startActivity(intent);
+                                                dismiss();
+                                            } else if(code==-99){
+                                                makeToast("留言发生错误");
+                                            }
+                                        } else {
+                                            Logd("sever error");
+                                        }
+                                    } catch (JSONException e) {
+                                        Logd("服务器返回数据错误");
+                                    }
+                                }
+                            }
+                        });
+                    } else {
+                        AsynTaskUtil.AsynNetUtils.post(StringCollector.getMsgServer(), ParamToString.formSendMsg(userid, token, content, 0, null), new AsynTaskUtil.AsynNetUtils.Callback() {
+                            @Override
+                            public void onResponse(String response) {
+                                JSONObject jsonObj;
+                                int code;
+                                if(response!=null){
+                                    try {
+                                        jsonObj=new JSONObject(response);
+                                        code=jsonObj.optInt("code",-1);
+                                        Logd(jsonObj.optString("msg","unknown error"));
+                                        if(code==0){
+                                            dismiss();
+                                        } else if(code!=-1) {
+                                            if(code==-101){
+                                                Intent intent=new Intent(getActivity(),LoginActivity.class);
+                                                Bundle bundle=new Bundle();
+                                                bundle.putString("userid",userid);
+                                                intent.putExtras(bundle);
+                                                startActivity(intent);
+                                                dismiss();
+                                            } else if(code==-99){
+                                                makeToast("留言发生错误");
+                                            }
+                                        } else {
+                                            Logd("sever error");
+                                        }
+                                    } catch (JSONException e) {
+                                        Logd("服务器返回数据错误");
+                                    }
+                                }
+                            }
+                        });
                     }
                 }
             }
@@ -255,6 +326,7 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
             imagePath[requestCode-10] = c.getString(columnIndex);
             Bitmap bitmap= BitmapFactory.decodeFile(imagePath[requestCode-10]);
             pics[requestCode-10].setImageBitmap(bitmap);
+            bitmaps[requestCode-10]=bitmap;
             haspics[requestCode-10]=true;
             if(requestCode<12){
                 pics[requestCode-9].setVisibility(View.VISIBLE);

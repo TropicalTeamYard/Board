@@ -76,8 +76,9 @@ public class ParamToString {
         return result;
     }
 
-    public static String formSendMsg(String userid, String token, String content, int haspics, Bitmap pics) {
-        String result="method=add&userid="+userid+"&content="+content+"&token="+token+"&haspics="+haspics+"&pic="+pics;
+    public static String formSendMsg(String userid, String token, String content, int haspics, String pics) {
+        String result="method=add&userid="+userid+"&content="+content+"&token="+token+"&haspics="+haspics+"&pics="+pics;
+        Log.d("SendMsg",result);
         return result;
     }
 

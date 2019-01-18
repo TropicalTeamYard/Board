@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,6 +66,19 @@ public class BitmapIOUtil {
             //Log.d("hex", "Argument(s) for hexStringToByteArray(String s)"+ "was not a hex string");
         }
         return data;
+    }
+
+    public static byte[] ReadImage(String imagepath) throws Exception {
+        FileInputStream fs = new FileInputStream(imagepath);
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len = 0;
+        while (-1 != (len = fs.read(buffer))) {
+            outStream.write(buffer, 0, len);
+        }
+        outStream.close();
+        fs.close();
+        return outStream.toByteArray();
     }
 
     public void savePic(Bitmap[] bitmaps){

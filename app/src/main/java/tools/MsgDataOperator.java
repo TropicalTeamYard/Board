@@ -71,15 +71,16 @@ public class MsgDataOperator {
 
                 Bitmap[] b_pics=null;
                 if(haspic>0){
-                    String t_pics=new String(cursor.getBlob(5));
+
                     try {
+                        String t_pics=new String(cursor.getBlob(5));
                         JSONArray arrPic=new JSONArray(t_pics);
                         b_pics=new Bitmap[arrPic.length()];
                         for (int i=0;i<arrPic.length();i++){
                             b_pics[i]= BitmapUtil.getHexBitmap(context,arrPic.getString(i));
                         }
                         haspic=b_pics.length;
-                    } catch (JSONException e) {
+                    } catch (JSONException | NullPointerException e) {
                         b_pics=null;
                         haspic=0;
                         e.printStackTrace();

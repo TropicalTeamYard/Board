@@ -87,6 +87,8 @@ public class MsgListAdapter extends BaseAdapter {
         if(msgList.get(position).getHasPic()>0){
             viewHolder.picture.setVisibility(View.VISIBLE);
             viewHolder.picture.setImageBitmap(msgList.get(position).getPicture()[0]);
+        } else {
+            viewHolder.picture.setVisibility(View.GONE);
         }
 
 

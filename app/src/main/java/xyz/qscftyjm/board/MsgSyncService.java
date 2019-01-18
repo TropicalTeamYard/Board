@@ -106,17 +106,19 @@ public class MsgSyncService extends Service {
                                             values.put("userid", newObj.optString("userid","error"));
                                             values.put("time", newObj.optString("time","error"));
                                             values.put("content", newObj.optString("content","error"));
-                                            values.put("haspic",newObj.optInt("haspic",0));
-                                            if(newObj.optInt("haspic",0)>0){
+                                            if(newObj.optInt("hasPics",0)>0&&newObj.optJSONArray("pics")!=null){
+                                                values.put("haspic",newObj.optInt("hasPics",0));
                                                 JSONArray jsonArray=newObj.optJSONArray("pics");
-                                                values.put("pics",jsonArray.toString());
+                                                values.put("picture",jsonArray.toString());
+                                            } else {
+                                                values.put("haspic",0);
                                             }
                                             values.put("comment",newObj.optString("comment","{'comment':null}"));
                                             database.insertWithOnConflict("msg", null, values, SQLiteDatabase.CONFLICT_REPLACE);
                                         }
                                         Intent intent = new Intent();
                                         intent.setAction("xyz.qscftyjm.board.HAS_NEW_MSG");
-                                        intent.putExtra("msg", msgArr.toString());
+                                        intent.putExtra("msg", String.valueOf(msgArr.length()));
                                         sendBroadcast(intent);
                                     } else {
                                         Log.d("Service Msg","No new msg");
