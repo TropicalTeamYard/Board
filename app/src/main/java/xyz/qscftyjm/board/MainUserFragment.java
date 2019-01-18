@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import tools.BitMapUtil;
+import tools.BitmapUtil;
 import tools.BoardDBHelper;
 
 
@@ -92,7 +92,7 @@ public class MainUserFragment extends Fragment implements View.OnClickListener {
                 this.nickname=cursor.getString(1);
                 tv_nickname.setText("Hi, "+this.nickname);
 
-                img_portrait.setImageBitmap(BitMapUtil.getHexBitmap(getActivity(),new String(cursor.getBlob(2))));
+                img_portrait.setImageBitmap(BitmapUtil.getHexBitmap(getActivity(),new String(cursor.getBlob(2))));
 
                 this.email=cursor.getString(3);
                 this.priority=cursor.getInt(4);

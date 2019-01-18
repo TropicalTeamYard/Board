@@ -7,7 +7,7 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BitmapIOUtils {
+public class BitmapIOUtil {
 
     public Map<String, Object> getPortrait(String[] userid){
         Map<String, Object> picMap=new HashMap<>();

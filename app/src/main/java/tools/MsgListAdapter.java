@@ -34,7 +34,7 @@ public class MsgListAdapter extends BaseAdapter {
             do{
                 userInfo=new PublicUserInfo();
                 userInfo.userid=cursor.getString(0);
-                userInfo.portrait=BitMapUtil.getHexBitmap(context,new String(cursor.getBlob(2)));
+                userInfo.portrait= BitmapUtil.getHexBitmap(context,new String(cursor.getBlob(2)));
                 userInfo.nickname=cursor.getString(1);
             }while (cursor.moveToNext());
             userInfoMap.put(userInfo.userid,userInfo);

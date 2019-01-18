@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import tools.BitMapUtil;
+import tools.BitmapUtil;
 import tools.BoardDBHelper;
 
 public class MoreInfoActivity extends AppCompatActivity {
@@ -79,7 +79,7 @@ public class MoreInfoActivity extends AppCompatActivity {
                     this.nickname=cursor.getString(1);
                     tv_nickname.setText(nickname);
 
-                    img_portrait.setImageBitmap(BitMapUtil.getHexBitmap(MoreInfoActivity.this,new String(cursor.getBlob(2))));
+                    img_portrait.setImageBitmap(BitmapUtil.getHexBitmap(MoreInfoActivity.this,new String(cursor.getBlob(2))));
 
                     this.email=cursor.getString(3);
                     tv_email.setText(this.email);

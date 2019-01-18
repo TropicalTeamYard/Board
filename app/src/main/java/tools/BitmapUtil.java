@@ -4,13 +4,12 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 
 import xyz.qscftyjm.board.R;
 
-public class BitMapUtil {
+public class BitmapUtil {
     static Resources res;
 
     public static Bitmap getDefaultPortrait(Context context){
@@ -48,7 +47,7 @@ public class BitMapUtil {
         } else {
             //Log.d("Board","PicByte: "+hexStr);
 
-            byte[] b=BitmapIOUtils.hexStringToByteArray(hexStr);
+            byte[] b= BitmapIOUtil.hexStringToByteArray(hexStr);
 
             bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
         }

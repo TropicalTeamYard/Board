@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -11,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,8 +38,11 @@ public class PublicUserInfoUpdater {
                         userid=cursor.getString(0);
                         nickname=cursor.getString(1);
                         portrait=new String(cursor.getBlob(2));
+                        Bitmap bitmap= BitmapUtil.getHexBitmap(context,portrait);
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
                         userInfoMd5.put("userid",userid);
-                        userInfoMd5.put("md5",getUserMd5(userid,nickname,portrait));
+                        userInfoMd5.put("md5",getUserMd5(userid,nickname,portrait));//BitmapIOUtil.bytesToHexString(baos.toByteArray())
                         userInfoMd5Array.add(userInfoMd5);
                     }while(cursor.moveToNext());
                     Log.d("PUIU","size: "+userInfoMd5Array.size());

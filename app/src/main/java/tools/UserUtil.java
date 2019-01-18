@@ -21,7 +21,7 @@ public class UserUtil {
                     userInfo.put("userid",cursor.getString(0));
                     userInfo.put("nickname",cursor.getString(1));
 
-                    userInfo.put("portrait",BitMapUtil.getHexBitmap(context,new String(cursor.getBlob(2))));
+                    userInfo.put("portrait", BitmapUtil.getHexBitmap(context,new String(cursor.getBlob(2))));
 
                     userInfo.put("email",cursor.getString(3));
                 }while (cursor.moveToNext());

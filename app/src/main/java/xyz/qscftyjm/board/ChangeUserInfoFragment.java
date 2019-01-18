@@ -38,8 +38,8 @@ import java.util.Map;
 
 import postutil.AsynTaskUtil;
 import pub.devrel.easypermissions.EasyPermissions;
-import tools.BitMapUtil;
-import tools.BitmapIOUtils;
+import tools.BitmapUtil;
+import tools.BitmapIOUtil;
 import tools.BoardDBHelper;
 import tools.ParamToString;
 import tools.StringCollector;
@@ -127,10 +127,10 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
 
 
                         if(bitmap!=null){
-                            values.put("portrait", BitmapIOUtils.bytesToHexString(BitMapUtil.Bitmap2Bytes(bitmap)));
+                            values.put("portrait", BitmapIOUtil.bytesToHexString(BitmapUtil.Bitmap2Bytes(bitmap)));
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                            changeInfo.put("portrait",BitmapIOUtils.bytesToHexString(baos.toByteArray()));
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                            changeInfo.put("portrait", BitmapIOUtil.bytesToHexString(baos.toByteArray()));
                         }
 
                         final String finalUserid = userid;
@@ -147,7 +147,7 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
                                         if(code==0) {
 
                                             Log.d("Board","用户数据修改成功");
-                                            //("用户数据修改成功");
+                                            //("用户数据修改成功")
 
                                             Cursor cursor = database.query("userinfo", new String[]{"id", "userid", "nickname", "portrait", "email", "priority", "token"}, null, null, null, null, "id desc", "0,1");
                                             String token = null;

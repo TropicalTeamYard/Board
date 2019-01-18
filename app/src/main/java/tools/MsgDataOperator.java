@@ -23,7 +23,7 @@ public class MsgDataOperator {
     public static ArrayList<Msg> getTestMsgData(Context context){
         ArrayList<Msg> msgs=new ArrayList<>();
         for(int i=0;i<10;i++){
-            msgs.add(new Msg(i,"10001"+i,"wcf","2019-01-01 19:0"+i,"3132165136513213"+i, BitMapUtil.getDefaultPortrait(context),1,BitMapUtil.getDefaultPics(context)));
+            msgs.add(new Msg(i,"10001"+i,"wcf","2019-01-01 19:0"+i,"3132165136513213"+i, BitmapUtil.getDefaultPortrait(context),1, BitmapUtil.getDefaultPics(context)));
         }
 
         return msgs;
@@ -50,7 +50,7 @@ public class MsgDataOperator {
             do{
                 userInfo=new PublicUserInfo();
                 userInfo.userid=cursor.getString(0);
-                userInfo.portrait=BitMapUtil.getHexBitmap(context,new String(cursor.getBlob(2)));
+                userInfo.portrait= BitmapUtil.getHexBitmap(context,new String(cursor.getBlob(2)));
                 userInfo.nickname=cursor.getString(1);
             }while (cursor.moveToNext());
             userInfoMap.put(userInfo.userid,userInfo);
@@ -76,7 +76,7 @@ public class MsgDataOperator {
                         JSONArray arrPic=new JSONArray(t_pics);
                         b_pics=new Bitmap[arrPic.length()];
                         for (int i=0;i<arrPic.length();i++){
-                            b_pics[i]=BitMapUtil.getHexBitmap(context,arrPic.getString(i));
+                            b_pics[i]= BitmapUtil.getHexBitmap(context,arrPic.getString(i));
                         }
                         haspic=b_pics.length;
                     } catch (JSONException e) {
@@ -108,7 +108,7 @@ public class MsgDataOperator {
                     userInfo=new PublicUserInfo();
                     userInfo.userid=cursor.getString(0);
                     userInfo.nickname=cursor.getString(2);
-                    userInfo.portrait=BitMapUtil.getHexBitmap(context,new String(cursor.getBlob(2)));
+                    userInfo.portrait= BitmapUtil.getHexBitmap(context,new String(cursor.getBlob(2)));
                     if(!userInfoMap.containsKey(userInfo.userid)){
                         userInfoMap.put(userInfo.userid,userInfo);
                     }
@@ -143,17 +143,17 @@ public class MsgDataOperator {
                                             if(users.optJSONObject(i)!=null){
                                                 userInfo.userid=users.optJSONObject(i).optString("userid");
                                                 userInfo.nickname=users.optJSONObject(i).optString("nickname");
-                                                userInfo.portrait=BitMapUtil.getHexBitmap(context,users.optJSONObject(i).optString("portrait","00000000"));
+                                                userInfo.portrait= BitmapUtil.getHexBitmap(context,users.optJSONObject(i).optString("portrait","00000000"));
                                             } else {
                                                 userInfo.userid="UNDEFINED";
                                                 userInfo.nickname="UNDEFINED";
-                                                userInfo.portrait=BitMapUtil.getHexBitmap(context,"00000000");
+                                                userInfo.portrait= BitmapUtil.getHexBitmap(context,"00000000");
                                             }
 
                                             ContentValues values=new ContentValues();
                                             values.put("userid",userInfo.userid);
                                             values.put("nickname",userInfo.nickname);
-                                            values.put("portrait", BitmapIOUtils.bytesToHexString(BitMapUtil.Bitmap2Bytes(userInfo.portrait)));
+                                            values.put("portrait", BitmapIOUtil.bytesToHexString(BitmapUtil.Bitmap2Bytes(userInfo.portrait)));
 
                                             userInfoMap.put(userInfo.userid,userInfo);
                                             database.insertWithOnConflict("publicinfo",null,values,SQLiteDatabase.CONFLICT_REPLACE);
@@ -192,7 +192,7 @@ public class MsgDataOperator {
                             userInfo=new PublicUserInfo();
                             userInfo.userid=cursor.getString(0);
                             userInfo.nickname=cursor.getString(2);
-                            userInfo.portrait=BitMapUtil.getHexBitmap(context,new String(cursor.getBlob(2)));
+                            userInfo.portrait= BitmapUtil.getHexBitmap(context,new String(cursor.getBlob(2)));
                             userInfoMap.put(userInfo.userid,userInfo);
                         }while (cursor.moveToNext());
                     } else {
@@ -228,17 +228,17 @@ public class MsgDataOperator {
                                         if(users.optJSONObject(i)!=null){
                                             userInfo.userid=users.optJSONObject(i).optString("userid");
                                             userInfo.nickname=users.optJSONObject(i).optString("nickname");
-                                            userInfo.portrait=BitMapUtil.getHexBitmap(context,users.optJSONObject(i).optString("portrait","00000000"));
+                                            userInfo.portrait= BitmapUtil.getHexBitmap(context,users.optJSONObject(i).optString("portrait","00000000"));
                                         } else {
                                             userInfo.userid="UNDEFINED";
                                             userInfo.nickname="UNDEFINED";
-                                            userInfo.portrait=BitMapUtil.getHexBitmap(context,"00000000");
+                                            userInfo.portrait= BitmapUtil.getHexBitmap(context,"00000000");
                                         }
 
                                         ContentValues values=new ContentValues();
                                         values.put("userid",userInfo.userid);
                                         values.put("nickname",userInfo.nickname);
-                                        values.put("portrait", BitmapIOUtils.bytesToHexString(BitMapUtil.Bitmap2Bytes(userInfo.portrait)));
+                                        values.put("portrait", BitmapIOUtil.bytesToHexString(BitmapUtil.Bitmap2Bytes(userInfo.portrait)));
 
                                         userInfoMap.put(userInfo.userid,userInfo);
                                         database.insertWithOnConflict("publicinfo",null,values,SQLiteDatabase.CONFLICT_REPLACE);
@@ -266,7 +266,7 @@ public class MsgDataOperator {
         if(cursor.moveToFirst()&&cursor.getCount()>0){
             do{
                 userInfo.userid=userid;
-                userInfo.portrait=BitMapUtil.getHexBitmap(context,new String(cursor.getBlob(2)));
+                userInfo.portrait= BitmapUtil.getHexBitmap(context,new String(cursor.getBlob(2)));
                 userInfo.nickname=cursor.getString(1);
             }while (cursor.moveToNext());
             userInfoMap.put(userid,userInfo);
@@ -288,17 +288,17 @@ public class MsgDataOperator {
                                     if(users.optJSONObject(0)!=null){
                                         userInfo.userid=users.optJSONObject(0).optString("userid");
                                         userInfo.nickname=users.optJSONObject(0).optString("nickname");
-                                        userInfo.portrait=BitMapUtil.getHexBitmap(context,users.optJSONObject(0).optString("portrait","00000000"));
+                                        userInfo.portrait= BitmapUtil.getHexBitmap(context,users.optJSONObject(0).optString("portrait","00000000"));
                                     } else {
                                         userInfo.userid="UNDEFINED";
                                         userInfo.nickname="UNDEFINED";
-                                        userInfo.portrait=BitMapUtil.getHexBitmap(context,"00000000");
+                                        userInfo.portrait= BitmapUtil.getHexBitmap(context,"00000000");
                                     }
 
                                     ContentValues values=new ContentValues();
                                     values.put("userid",userInfo.userid);
                                     values.put("nickname",userInfo.nickname);
-                                    values.put("portrait", BitmapIOUtils.bytesToHexString(BitMapUtil.Bitmap2Bytes(userInfo.portrait)));
+                                    values.put("portrait", BitmapIOUtil.bytesToHexString(BitmapUtil.Bitmap2Bytes(userInfo.portrait)));
 
                                     userInfoMap.put(userInfo.userid,userInfo);
                                     database.insertWithOnConflict("publicinfo",null,values,SQLiteDatabase.CONFLICT_REPLACE);
