@@ -129,7 +129,7 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
                         if(bitmap!=null){
                             values.put("portrait", BitmapIOUtil.bytesToHexString(BitmapUtil.Bitmap2Bytes(bitmap)));
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                             changeInfo.put("portrait", BitmapIOUtil.bytesToHexString(baos.toByteArray()));
                         }
 

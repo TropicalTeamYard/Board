@@ -60,7 +60,7 @@ public class MsgSyncService extends Service {
                 Cursor cursor=database.query("msg", new String[] { "id" }, null, null, null, null, "id desc", "0,1");
                 if(cursor.moveToFirst()) {
                     lastId=cursor.getInt(0);
-                    Log.d("Service","lsatId: "+lastId);
+                    Log.v("Service","lsatId: "+lastId);
                 }
                 cursor.close();
 
@@ -90,7 +90,7 @@ public class MsgSyncService extends Service {
                                     }
                                     JSONArray msgArr=jsonObj.optJSONArray("msgs");
                                     if(jsonObj.optInt("msgct",0)==0){
-                                        Log.d("Service Msg","No new msg");
+                                        Log.v("Service Msg","No new msg");
                                         return;
                                     }
                                     int msgCt=msgArr.length();
