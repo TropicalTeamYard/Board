@@ -232,14 +232,13 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
             c.moveToFirst();
             int columnIndex = c.getColumnIndex(filePathColumns[0]);
             imagePath = c.getString(columnIndex);
-            bitmap= BitmapFactory.decodeFile(imagePath);
-            img_portrait.setImageBitmap(bitmap);
+            //bitmap= BitmapFactory.decodeFile(imagePath);
+            //img_portrait.setImageBitmap(bitmap);
             getCropImage(data.getData());
             c.close();
 
         } else if(requestCode==1&&resultCode==Activity.RESULT_OK){
             bitmap = BitmapFactory.decodeFile(temp_portrait.getPath());
-            //Log.d("Board","URI: "+temp_portrait.toString());
             img_portrait.setImageBitmap(bitmap);
         } else {
             Log.d("Board","requestCode: "+requestCode+" resultCode: "+resultCode);

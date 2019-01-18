@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -34,6 +35,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +62,9 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
     private String[] imagePath=new String[]{null,null,null};
     private Bitmap[] bitmaps=new Bitmap[]{null,null,null};
     private boolean[] haspics=new boolean[]{false,false,false};
+    private String IMAGE_FILE_LOCATION_DIR;
+    private Uri[] imageUri=new Uri[]{null,null,null};
+    File temp_picture[]=new File[]{null,null,null};
 
     SQLiteDatabase database;
 
@@ -151,7 +156,9 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
                         if(haspics[i]&&bitmaps[i]!=null){
                             sendPicArray.add(bitmaps[i]);
                             try {
-                                hexPic.add(BitmapIOUtil.bytesToHexString(BitmapIOUtil.ReadImage(imagePath[i])));
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                bitmaps[i].compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                                hexPic.add(BitmapIOUtil.bytesToHexString(baos.toByteArray()));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -315,8 +322,6 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        // TODO 打开存储权限
         if (requestCode <= RESULT_LOAD_IMAGE+2 && requestCode >= RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
             Uri selectedImage = data.getData();
             String[] filePathColumns = {MediaStore.Images.Media.DATA};
@@ -324,24 +329,64 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
             c.moveToFirst();
             int columnIndex = c.getColumnIndex(filePathColumns[0]);
             imagePath[requestCode-10] = c.getString(columnIndex);
-            Bitmap bitmap= BitmapFactory.decodeFile(imagePath[requestCode-10]);
-            pics[requestCode-10].setImageBitmap(bitmap);
-            bitmaps[requestCode-10]=bitmap;
-            haspics[requestCode-10]=true;
-            if(requestCode<12){
-                pics[requestCode-9].setVisibility(View.VISIBLE);
-            }
-
+            getCropImage(data.getData(),requestCode-10);
             c.close();
 
-        } else if(requestCode==RESULT_CROP_IMAGE&&resultCode==Activity.RESULT_OK){
-//            bitmap = BitmapFactory.decodeFile(temp_portrait.getPath());
-//            //Log.d("Board","URI: "+temp_portrait.toString());
-//            img_portrait.setImageBitmap(bitmap);
+        } else if(requestCode>=RESULT_CROP_IMAGE && requestCode<=RESULT_CROP_IMAGE+2 && resultCode==Activity.RESULT_OK){
+            Bitmap bitmap= BitmapFactory.decodeFile(temp_picture[requestCode-20].getPath());
+            pics[requestCode-20].setImageBitmap(bitmap);
+            bitmaps[requestCode-20]=bitmap;
+            haspics[requestCode-20]=true;
+            if(requestCode<22){
+                pics[requestCode-19].setVisibility(View.VISIBLE);
+            }
         } else {
             Log.d("AMF","requestCode: "+requestCode+" resultCode: "+resultCode);
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void getCropImage(Uri uri,int i){
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+
+        intent.putExtra("crop", "true");
+        intent.putExtra("scale", true);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+
+        intent.putExtra("outputX", 720);
+        intent.putExtra("outputY", 720);
+
+        intent.putExtra("return-data", false);
+        IMAGE_FILE_LOCATION_DIR = getActivity().getExternalCacheDir()+ "/xyz.qscftyjm.board/";
+        File temp_dir=new File(IMAGE_FILE_LOCATION_DIR);
+        if(!temp_dir.exists()){
+            temp_dir.mkdir();
+        }
+        temp_picture[i]=new File(temp_dir,"temp_picture"+i+".jpg");
+        try {
+            if (temp_picture[i].exists()) {
+                temp_picture[i].delete();
+            }
+            temp_picture[i].createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        imageUri[i]=Uri.parse("file://"+IMAGE_FILE_LOCATION_DIR+"temp_picture"+i+".jpg");
+        Log.d("AMF","PICURI "+i+" : "+imageUri[i].toString());
+
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri[i]);
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        intent.putExtra("noFaceDetection", true);
+
+        startActivityForResult(intent, RESULT_CROP_IMAGE+i);
     }
 
 }
