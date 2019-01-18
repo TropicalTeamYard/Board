@@ -143,6 +143,7 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
                                     }
                                 } catch (JSONException e) {
                                     Logd("服务器返回数据错误");
+                                    makeToast("服务器返回数据错误");
                                 }
                             }
                         }
@@ -152,12 +153,12 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
                     Log.d("Pics","HasPic");
                     ArrayList<Bitmap> sendPicArray=new ArrayList<>();
                     ArrayList<String> hexPic=new ArrayList<>();
-                    for (int i=0;i<2;i++){
+                    for (int i=0;i<3;i++){
                         if(haspics[i]&&bitmaps[i]!=null){
                             sendPicArray.add(bitmaps[i]);
                             try {
                                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                bitmaps[i].compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                                bitmaps[i].compress(Bitmap.CompressFormat.JPEG, 50, baos);
                                 hexPic.add(BitmapIOUtil.bytesToHexString(baos.toByteArray()));
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -195,6 +196,7 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
                                         }
                                     } catch (JSONException e) {
                                         Logd("服务器返回数据错误");
+                                        makeToast("服务器返回数据错误");
                                     }
                                 }
                             }
@@ -228,6 +230,7 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
                                         }
                                     } catch (JSONException e) {
                                         Logd("服务器返回数据错误");
+                                        makeToast("服务器返回数据错误");
                                     }
                                 }
                             }
@@ -360,8 +363,8 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
 
-        intent.putExtra("outputX", 720);
-        intent.putExtra("outputY", 720);
+        intent.putExtra("outputX", 512);
+        intent.putExtra("outputY", 512);
 
         intent.putExtra("return-data", false);
         IMAGE_FILE_LOCATION_DIR = getActivity().getExternalCacheDir()+ "/xyz.qscftyjm.board/";

@@ -19,7 +19,7 @@ public class NetUtils {
             conn = (HttpURLConnection) mURL.openConnection();
 
             conn.setRequestMethod("POST");// 设置请求方法为post
-            conn.setReadTimeout(5000);// 设置读取超时为5秒
+            conn.setReadTimeout(10000);// 设置读取超时为5秒
             conn.setConnectTimeout(10000);// 设置连接网络超时为10秒
             conn.setDoOutput(true);// 设置此方法,允许向服务器输出内容
 
@@ -60,7 +60,7 @@ public class NetUtils {
             conn = (HttpURLConnection) mURL.openConnection();
 
             conn.setRequestMethod("GET");
-            conn.setReadTimeout(5000);
+            conn.setReadTimeout(10000);
             conn.setConnectTimeout(10000);
 
             int responseCode = conn.getResponseCode();

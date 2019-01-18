@@ -166,6 +166,7 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener,Ms
                                         Logd("delete msg failed, permission not allowed");
                                         makeToast("删除失败，权限不足");
                                     } else {
+                                        makeToast(jsonObj.optString("msg","未知错误"));
                                         Logd(jsonObj.optString("msg","未知错误"));
                                     }
                                 } catch (JSONException e) {
@@ -194,7 +195,10 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener,Ms
     }
 
     private void makeToast(String msg) {
-        Toast.makeText(getActivity(),msg,Toast.LENGTH_LONG).show();
+        try {
+            Toast.makeText(getActivity(),msg,Toast.LENGTH_LONG).show();
+        } catch (Exception ignore){}
+
     }
 
 
@@ -213,7 +217,7 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener,Ms
         try {
             getContext().unregisterReceiver(msgReceiver);
             Log.d("MMF","Broadcast closed successfully");
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | NullPointerException e) {
             Log.d("MMF","Broadcast closed failed");
         }
 
