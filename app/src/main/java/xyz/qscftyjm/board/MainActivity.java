@@ -30,6 +30,7 @@ import postutil.AsynTaskUtil;
 import tools.BoardDBHelper;
 import tools.MainFragmentpagerAdapter;
 import tools.ParamToString;
+import tools.PublicUserInfoUpdater;
 import tools.StringCollector;
 
 public class MainActivity extends AppCompatActivity implements MsgReceiver.Message {
@@ -139,10 +140,8 @@ public class MainActivity extends AppCompatActivity implements MsgReceiver.Messa
             Toast.makeText(this,"请登录您的账号",Toast.LENGTH_SHORT).show();
         }
 
-        
-
-
-
+        //检查公开信息的更新
+        PublicUserInfoUpdater.CheckPublicUserInfoUpdate(this);
     }
 
     @Override

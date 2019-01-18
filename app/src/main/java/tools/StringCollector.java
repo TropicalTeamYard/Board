@@ -8,7 +8,7 @@ public class StringCollector {
     private static String SERVER_MSG = "http://101.132.122.143:8080/board/msg";
 
     private static String getSeverMode(){
-        return "SERVER";
+        return "LOCAL";
     }
 
     public static String getUserServer(){

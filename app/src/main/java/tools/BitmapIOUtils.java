@@ -61,7 +61,7 @@ public class BitmapIOUtils {
                         + Character.digit(str.charAt(i+1), 16));
             }
         } catch (Exception e) {
-            Log.d("", "Argument(s) for hexStringToByteArray(String s)"+ "was not a hex string");
+            //Log.d("hex", "Argument(s) for hexStringToByteArray(String s)"+ "was not a hex string");
         }
         return data;
     }

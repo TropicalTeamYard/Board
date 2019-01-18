@@ -91,10 +91,10 @@ public class ParamToString {
         return result;
     }
 
-    public static String formUpdateUserInfo(ArrayList<Map<String, String>> userInfoMd5Array) {
+    public static String formUpdatePublicUserInfo(ArrayList<Map<String, String>> userInfoMd5Array) {
         JSONArray jsonArray=new JSONArray(userInfoMd5Array);
         String result="method=updatepublicinfo&usermap="+jsonArray.toString();
-        Log.d("UUI",result);
+        //Log.d("UUI",result);
         return result;
     }
 }
