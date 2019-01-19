@@ -8,11 +8,11 @@ import java.util.List;
 
 public class MainFragmentpagerAdapter extends FragmentPagerAdapter {
 
-    List<Fragment> fragList;
+    private List<Fragment> fragList;
 
     public MainFragmentpagerAdapter(FragmentManager fm, List<Fragment> fragList) {
         super(fm);
-        this.fragList=fragList;
+        this.fragList = fragList;
     }
 
     @Override

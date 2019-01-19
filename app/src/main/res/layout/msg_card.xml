@@ -7,59 +7,97 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp" android:orientation="horizontal">
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+
         <ImageView
-            android:layout_width="60dp" android:id="@+id/msg_head_portrait"
-            android:layout_height="60dp" android:padding="8dp" android:src="@drawable/user" />
-        <LinearLayout android:paddingLeft="8dp"
-            android:layout_width="0dp" android:layout_weight="1" android:layout_marginLeft="0dp" android:layout_marginRight="4dp"
-            android:layout_height="match_parent" android:orientation="vertical">
+            android:id="@+id/msg_head_portrait"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:padding="8dp"
+            android:src="@drawable/user" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingLeft="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:orientation="horizontal">
 
-                <TextView android:id="@+id/msg_nickname"
+                <TextView
+                    android:id="@+id/msg_nickname"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
+                    android:layout_weight="1"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
                     android:maxLines="1"
-                    android:layout_weight="1"
                     android:text=""
                     android:textColor="#000000"
                     android:textSize="20sp" />
 
-                <ImageView android:id="@+id/msg_more"
+                <ImageView
+                    android:id="@+id/msg_more"
                     android:layout_width="40dp"
                     android:layout_height="30dp"
                     android:padding="4dp"
                     android:src="@drawable/ic_more" />
             </LinearLayout>
-            <TextView android:id="@+id/msg_time"
-                android:layout_width="match_parent" android:textSize="12sp" android:gravity="center_vertical"
-                android:layout_height="20dp" android:layout_marginTop="0dp" android:text="" android:maxLines="1" android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/msg_time"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_marginTop="0dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text=""
+                android:textSize="12sp" />
+
             <View
-                android:layout_width="match_parent" android:layout_marginRight="4dp"
-                android:layout_height="1dp" android:layout_marginTop="4dp" android:background="#99aaaaaa"/>
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="4dp"
+                android:background="#99aaaaaa" />
         </LinearLayout>
 
 
     </LinearLayout>
+
     <LinearLayout
-        android:layout_width="match_parent" android:layout_marginTop="2dp" android:layout_marginBottom="16dp"
-        android:layout_height="wrap_content" android:orientation="horizontal">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal">
 
         <TextView
-            android:layout_width="0dp" android:paddingLeft="6dp"
-            android:layout_height="wrap_content" android:id="@+id/msg_content"
-            android:layout_weight="1" android:textSize="20sp"
-            android:maxHeight="96dp" android:text="" />
+            android:id="@+id/msg_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:maxHeight="96dp"
+            android:paddingLeft="6dp"
+            android:text=""
+            android:textSize="20sp" />
 
-        <ImageView android:id="@+id/msg_picture" android:visibility="gone" android:padding="8dp"
-            android:layout_width="96dp" android:src="@drawable/msg" android:scaleType="centerInside"
-            android:layout_height="96dp" />
+        <ImageView
+            android:id="@+id/msg_picture"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:padding="8dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/msg"
+            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>

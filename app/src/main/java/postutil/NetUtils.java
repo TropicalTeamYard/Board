@@ -1,13 +1,13 @@
 package postutil;
 
+import android.accounts.NetworkErrorException;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import android.accounts.NetworkErrorException;
 
 public class NetUtils {
     public static String post(String url, String content) {
@@ -35,10 +35,9 @@ public class NetUtils {
             if (responseCode == 200) {
 
                 InputStream is = conn.getInputStream();
-                String response = getStringFromInputStream(is);
-                return response;
+                return getStringFromInputStream(is);
             } else {
-                throw new NetworkErrorException("response status is "+responseCode);
+                throw new NetworkErrorException("response status is " + responseCode);
             }
 
         } catch (Exception e) {
@@ -67,10 +66,9 @@ public class NetUtils {
             if (responseCode == 200) {
 
                 InputStream is = conn.getInputStream();
-                String response = getStringFromInputStream(is);
-                return response;
+                return getStringFromInputStream(is);
             } else {
-                throw new NetworkErrorException("response status is "+responseCode);
+                throw new NetworkErrorException("response status is " + responseCode);
             }
 
         } catch (Exception e) {

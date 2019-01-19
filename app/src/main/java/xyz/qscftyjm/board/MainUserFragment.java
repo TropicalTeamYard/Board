@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.jetbrains.annotations.NotNull;
+
 import tools.BitmapUtil;
 import tools.BoardDBHelper;
 
@@ -23,13 +25,13 @@ public class MainUserFragment extends Fragment implements View.OnClickListener {
 
     private final static String TAG = "Board";
 
-    private int priority,id;
-    private String userid="",nickname="",email="";
+    private int priority, id;
+    private String userid = "", nickname = "", email = "";
     private Bitmap bitmap_portrait;
-    SQLiteDatabase database;
+    private SQLiteDatabase database;
     private View view;
-    private Button bt_login_info,bt_user_info;
-    private TextView tv_nickname,tv_userid;
+    private Button bt_login_info, bt_user_info;
+    private TextView tv_nickname, tv_userid;
     private ImageView img_head_portrait;
 
 
@@ -38,41 +40,41 @@ public class MainUserFragment extends Fragment implements View.OnClickListener {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main_user, container, false);
 
-        database= BoardDBHelper.getMsgDBHelper(getActivity()).getWritableDatabase();
+        database = BoardDBHelper.getMsgDBHelper(getActivity()).getWritableDatabase();
 
-        bt_login_info=view.findViewById(R.id.user_bt_login_info);
-        bt_user_info=view.findViewById(R.id.user_bt_more);
-        tv_nickname=view.findViewById(R.id.user_nickname);
-        tv_userid=view.findViewById(R.id.user_userid);
-        img_head_portrait=view.findViewById(R.id.user_img_portrait);
+        bt_login_info = view.findViewById(R.id.user_bt_login_info);
+        bt_user_info = view.findViewById(R.id.user_bt_more);
+        tv_nickname = view.findViewById(R.id.user_nickname);
+        tv_userid = view.findViewById(R.id.user_userid);
+        img_head_portrait = view.findViewById(R.id.user_img_portrait);
         bt_login_info.setOnClickListener(this);
         bt_user_info.setOnClickListener(this);
 
-        setUserInfo(tv_userid,tv_nickname,img_head_portrait,bt_login_info,database);
+        setUserInfo(tv_userid, tv_nickname, img_head_portrait, database);
 
-        Log.d(TAG, "userid "+userid+" nickname "+nickname+" email "+email+" priority "+priority);
-        Log.d(TAG,tv_userid.getText().toString());
+        Log.d(TAG, "userid " + userid + " nickname " + nickname + " email " + email + " priority " + priority);
+        Log.d(TAG, tv_userid.getText().toString());
 
         return view;
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.user_bt_login_info:
-                startActivity(new Intent(this.getActivity(),LoginActivity.class));
+                startActivity(new Intent(this.getActivity(), LoginActivity.class));
                 break;
             case R.id.user_bt_more:
-                Log.d(TAG,"MORE");
-                Intent intent=new Intent(getActivity(),MoreInfoActivity.class);
+                Log.d(TAG, "MORE");
+                Intent intent = new Intent(getActivity(), MoreInfoActivity.class);
                 startActivity(intent);
                 break;
-                default:
-                    Log.d(TAG,"Button Not Defined");
+            default:
+                Log.d(TAG, "Button Not Defined");
         }
 
     }
@@ -80,26 +82,26 @@ public class MainUserFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        setUserInfo(tv_userid,tv_nickname,img_head_portrait,bt_login_info,database);
+        setUserInfo(tv_userid, tv_nickname, img_head_portrait, database);
     }
 
-    public void setUserInfo(TextView tv_userid, TextView tv_nickname, ImageView img_portrait, Button login_info, SQLiteDatabase db){
-        Cursor cursor=db.query("userinfo",new String[]{"userid","nickname","portrait","email","priority","token"},null,null,null,null,"id desc","0,1");
-        if(cursor.moveToFirst()&&cursor.getCount()>0){
-            do{
-                this.userid=cursor.getString(0);
-                tv_userid.setText("ID : "+this.userid);
-                this.nickname=cursor.getString(1);
-                tv_nickname.setText("Hi, "+this.nickname);
+    private void setUserInfo(TextView tv_userid, TextView tv_nickname, ImageView img_portrait, SQLiteDatabase db) {
+        Cursor cursor = db.query("userinfo", new String[]{"userid", "nickname", "portrait", "email", "priority", "token"}, null, null, null, null, "id desc", "0,1");
+        if (cursor.moveToFirst() && cursor.getCount() > 0) {
+            do {
+                this.userid = cursor.getString(0);
+                tv_userid.setText("ID : " + this.userid);
+                this.nickname = cursor.getString(1);
+                tv_nickname.setText("Hi, " + this.nickname);
 
-                img_portrait.setImageBitmap(BitmapUtil.getHexBitmap(getActivity(),new String(cursor.getBlob(2))));
+                img_portrait.setImageBitmap(BitmapUtil.getHexBitmap(getActivity(), new String(cursor.getBlob(2))));
 
-                this.email=cursor.getString(3);
-                this.priority=cursor.getInt(4);
+                this.email = cursor.getString(3);
+                this.priority = cursor.getInt(4);
 
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         cursor.close();
     }
-    
+
 }

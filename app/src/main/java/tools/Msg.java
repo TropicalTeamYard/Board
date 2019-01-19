@@ -2,8 +2,6 @@ package tools;
 
 import android.graphics.Bitmap;
 
-import xyz.qscftyjm.board.R;
-
 public class Msg {
 
     private int id;
@@ -13,17 +11,15 @@ public class Msg {
     private String content;
     private Bitmap portrait;
     private int hasPic;
-    private Bitmap[] picture=null;
+    private Bitmap[] picture = null;
 
-    final static int DEFAULT_PORTRAIT = R.drawable.user;
-
-    public Msg(){
-        this.hasPic=0;
+    public Msg() {
+        this.hasPic = 0;
     }
 
     public Msg(int id, String userid, String nickname, String time, String content, Bitmap portrait, int hasPic, Bitmap[] picture) {
         this.id = id;
-        this.userid=userid;
+        this.userid = userid;
         this.nickname = nickname;
         this.time = time;
         this.content = content;
@@ -34,7 +30,7 @@ public class Msg {
 
     public Msg(int id, String userid, String nickname, String time, String content, Bitmap portrait) {
         this.id = id;
-        this.userid=userid;
+        this.userid = userid;
         this.nickname = nickname;
         this.time = time;
         this.content = content;
@@ -43,7 +39,7 @@ public class Msg {
     }
 
     public Msg(String userid, String nickname, String time, String content, Bitmap portrait) {
-        this.userid=userid;
+        this.userid = userid;
         this.nickname = nickname;
         this.time = time;
         this.content = content;
@@ -52,7 +48,7 @@ public class Msg {
     }
 
     public Msg(String userid, String nickname, String time, String content) {
-        this.userid=userid;
+        this.userid = userid;
         this.nickname = nickname;
         this.time = time;
         this.content = content;
@@ -113,7 +109,7 @@ public class Msg {
 
     public void setPicture(Bitmap[] picture) {
         this.picture = picture;
-        this.hasPic = (picture!=null)?picture.length:0;
+        this.hasPic = (picture != null) ? picture.length : 0;
     }
 
     public String getUserid() {

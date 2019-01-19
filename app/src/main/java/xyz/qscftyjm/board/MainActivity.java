@@ -35,20 +35,16 @@ import tools.StringCollector;
 
 public class MainActivity extends AppCompatActivity implements MsgReceiver.Message {
 
+    private static final String TAG = "Board";
     private BottomNavigationView bottomNavigationView;
-    MainMsgFragment mainMsgFragment;
-    MainChatFragment mainChatFragment;
-    MainUserFragment mainUserFragment;
-
-    ArrayList<Fragment> mainFragList;
-    ViewPager mainViewPager;
-
-    BoardDBHelper boardDBHelper;
-    SQLiteDatabase database;
-    MsgSyncService msgSyncService;
-    MsgReceiver msgReceiver;
-
-    private static String TAG = "Board";
+    private MainMsgFragment mainMsgFragment;
+    private MainChatFragment mainChatFragment;
+    private MainUserFragment mainUserFragment;
+    private ArrayList<Fragment> mainFragList;
+    private ViewPager mainViewPager;
+    private BoardDBHelper boardDBHelper;
+    private SQLiteDatabase database;
+    private MsgReceiver msgReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,15 +53,15 @@ public class MainActivity extends AppCompatActivity implements MsgReceiver.Messa
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        boardDBHelper=BoardDBHelper.getMsgDBHelper(this);
-        database=boardDBHelper.getWritableDatabase();
+        boardDBHelper = BoardDBHelper.getMsgDBHelper(this);
+        database = boardDBHelper.getWritableDatabase();
 
-        bottomNavigationView=findViewById(R.id.main_bottom_navigation);
-        mainViewPager=findViewById(R.id.main_parent_frag);
+        bottomNavigationView = findViewById(R.id.main_bottom_navigation);
+        mainViewPager = findViewById(R.id.main_parent_frag);
 
-        mainMsgFragment=new MainMsgFragment();
-        mainChatFragment=new MainChatFragment();
-        mainUserFragment=new MainUserFragment();
+        mainMsgFragment = new MainMsgFragment();
+        mainChatFragment = new MainChatFragment();
+        mainUserFragment = new MainUserFragment();
         mainFragList = new ArrayList<>();
         mainFragList.add(mainMsgFragment);
         mainFragList.add(mainChatFragment);
@@ -76,14 +72,15 @@ public class MainActivity extends AppCompatActivity implements MsgReceiver.Messa
         mainViewPager.setCurrentItem(0);
         setListener();
 
-        Cursor cursor=database.query("userinfo",new String[]{"id","userid","nickname","portrait","email","priority","token"},null,null,null,null,"id desc","0,1");
-        String token=null,userid=null;int id=0;
-        if(cursor.moveToFirst()&&cursor.getCount()>0){
-            do{
-                id=cursor.getInt(0);
-                userid=cursor.getString(1);
-                token=cursor.getString(6);
-            }while (cursor.moveToNext());
+        Cursor cursor = database.query("userinfo", new String[]{"id", "userid", "nickname", "portrait", "email", "priority", "token"}, null, null, null, null, "id desc", "0,1");
+        String token, userid;
+        int id;
+        if (cursor.moveToFirst() && cursor.getCount() > 0) {
+            do {
+                id = cursor.getInt(0);
+                userid = cursor.getString(1);
+                token = cursor.getString(6);
+            } while (cursor.moveToNext());
 
             cursor.close();
             final int finalId = id;
@@ -92,38 +89,37 @@ public class MainActivity extends AppCompatActivity implements MsgReceiver.Messa
                 public void onResponse(String response) {
                     JSONObject jsonObj;
                     if (response != null) {
-                        String result = response;
-                        Log.d(TAG, result);
+                        Log.d(TAG, response);
                         try {
                             jsonObj = new JSONObject(response);
                             int code = jsonObj.optInt("code", -1);
                             if (code == 0) {
-                                String newToken=jsonObj.optString("token","00000000000000000000000000000000");
-                                Log.d("Board","newToken: "+newToken);
-                                ContentValues values=new ContentValues();
-                                values.put("token",newToken);
-                                database.update("userinfo",values,"id=?",new String[]{String.valueOf(finalId)});
+                                String newToken = jsonObj.optString("token", "00000000000000000000000000000000");
+                                Log.d("Board", "newToken: " + newToken);
+                                ContentValues values = new ContentValues();
+                                values.put("token", newToken);
+                                database.update("userinfo", values, "id=?", new String[]{String.valueOf(finalId)});
                                 //Toast.makeText(MainActivity.this,"自动登录成功",Toast.LENGTH_SHORT).show();
-                                msgReceiver=new MsgReceiver();
+                                msgReceiver = new MsgReceiver();
                                 IntentFilter intentFilter = new IntentFilter();
                                 intentFilter.addAction("xyz.qscftyjm.board.HAS_NEW_MSG");
                                 getApplicationContext().registerReceiver(msgReceiver, intentFilter);
                                 msgReceiver.setMessage(MainActivity.this);
 
-                                Intent startMsgSyncService=new Intent(MainActivity.this, MsgSyncService.class);
-                                if(!isServiceRunning("xyz.qscftyjm.board.MsgSyncService")){
-                                    Log.d("MA","StartService");
+                                Intent startMsgSyncService = new Intent(MainActivity.this, MsgSyncService.class);
+                                if (!isServiceRunning("xyz.qscftyjm.board.MsgSyncService")) {
+                                    Log.d("MA", "StartService");
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                         startForegroundService(startMsgSyncService);
-                                    }else{
+                                    } else {
                                         startService(startMsgSyncService);
                                     }
                                 } else {
-                                    Log.d("MA","Serviec is running");
+                                    Log.d("MA", "Serviec is running");
                                 }
 
                             } else if (code < 0) {
-                                Toast.makeText(MainActivity.this,jsonObj.optString("msg","未知错误"),Toast.LENGTH_LONG).show();
+                                Toast.makeText(MainActivity.this, jsonObj.optString("msg", "未知错误"), Toast.LENGTH_LONG).show();
                                 // TODO 不同error code的处理
                             }
                         } catch (JSONException e) {
@@ -131,13 +127,13 @@ public class MainActivity extends AppCompatActivity implements MsgReceiver.Messa
                         }
 
                     } else {
-                        Toast.makeText(MainActivity.this,"服务器或网络异常",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "服务器或网络异常", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
 
         } else {
-            Toast.makeText(this,"请登录您的账号",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "请登录您的账号", Toast.LENGTH_SHORT).show();
         }
 
         //检查公开信息的更新
@@ -158,9 +154,9 @@ public class MainActivity extends AppCompatActivity implements MsgReceiver.Messa
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if(id==R.id.item_add_msg){
-            AddMsgFragment fragment=new AddMsgFragment();
-            fragment.show(this.getSupportFragmentManager(),"添加留言");
+        if (id == R.id.item_add_msg) {
+            AddMsgFragment fragment = new AddMsgFragment();
+            fragment.show(this.getSupportFragmentManager(), "添加留言");
             return true;
         }
 
@@ -232,14 +228,14 @@ public class MainActivity extends AppCompatActivity implements MsgReceiver.Messa
         super.onDestroy();
         try {
             getApplicationContext().unregisterReceiver(msgReceiver);
-            Log.d("MA","Broadcast closed successfully");
+            Log.d("MA", "Broadcast closed successfully");
         } catch (IllegalArgumentException e) {
-            Log.d("MA","Broadcast closed failed");
+            Log.d("MA", "Broadcast closed failed");
             e.printStackTrace();
         }
 
-        if(isServiceRunning("xyz.qscftyjm.board.MsgSyncService")){
-            Intent intent=new Intent(MainActivity.this,MsgSyncService.class);
+        if (isServiceRunning("xyz.qscftyjm.board.MsgSyncService")) {
+            Intent intent = new Intent(MainActivity.this, MsgSyncService.class);
             stopService(intent);
             //Log.d("MA","Service Stop");
         }
@@ -248,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements MsgReceiver.Messa
 
     @Override
     public void getMsg(String str) {
-        Log.d("MA","get broadcast");
+        Log.d("MA", "get broadcast");
     }
 
     private boolean isServiceRunning(final String className) {
@@ -264,23 +260,23 @@ public class MainActivity extends AppCompatActivity implements MsgReceiver.Messa
     @Override
     protected void onResume() {
         super.onResume();
-        if(msgReceiver==null){
-            msgReceiver=new MsgReceiver();
+        if (msgReceiver == null) {
+            msgReceiver = new MsgReceiver();
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("xyz.qscftyjm.board.HAS_NEW_MSG");
             getApplicationContext().registerReceiver(msgReceiver, intentFilter);
             msgReceiver.setMessage(MainActivity.this);
 
-            Intent startMsgSyncService=new Intent(MainActivity.this, MsgSyncService.class);
-            if(!isServiceRunning("xyz.qscftyjm.board.MsgSyncService")){
-                Log.d("MA","StartService");
+            Intent startMsgSyncService = new Intent(MainActivity.this, MsgSyncService.class);
+            if (!isServiceRunning("xyz.qscftyjm.board.MsgSyncService")) {
+                Log.d("MA", "StartService");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     startForegroundService(startMsgSyncService);
-                }else{
+                } else {
                     startService(startMsgSyncService);
                 }
             } else {
-                Log.d("MA","Service is running");
+                Log.d("MA", "Service is running");
             }
         }
     }

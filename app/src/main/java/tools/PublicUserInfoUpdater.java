@@ -22,32 +22,32 @@ import postutil.NetUtils;
 public class PublicUserInfoUpdater {
     private static SQLiteDatabase database;
 
-    public static void CheckPublicUserInfoUpdate(@NonNull final Context context){
-        new Thread(){
+    public static void CheckPublicUserInfoUpdate(@NonNull final Context context) {
+        new Thread() {
             @Override
             public void run() {
                 super.run();
-                database=BoardDBHelper.getMsgDBHelper(context).getWritableDatabase();
-                String userid,nickname,portrait;
-                ArrayList<Map<String,String>> userInfoMd5Array=new ArrayList<>();
+                database = BoardDBHelper.getMsgDBHelper(context).getWritableDatabase();
+                String userid, nickname, portrait;
+                ArrayList<Map<String, String>> userInfoMd5Array = new ArrayList<>();
                 Map<String, String> userInfoMd5;
-                Cursor cursor=database.query("publicinfo",new String[]{"userid","nickname","portrait"},null,null,null,null,null);
-                if(cursor.moveToFirst()&&cursor.getCount()>0) {
-                    do{
-                        userInfoMd5=new HashMap<>();
-                        userid=cursor.getString(0);
-                        nickname=cursor.getString(1);
-                        portrait=new String(cursor.getBlob(2));
-                        Bitmap bitmap= BitmapUtil.getHexBitmap(context,portrait);
+                Cursor cursor = database.query("publicinfo", new String[]{"userid", "nickname", "portrait"}, null, null, null, null, null);
+                if (cursor.moveToFirst() && cursor.getCount() > 0) {
+                    do {
+                        userInfoMd5 = new HashMap<>();
+                        userid = cursor.getString(0);
+                        nickname = cursor.getString(1);
+                        portrait = new String(cursor.getBlob(2));
+                        Bitmap bitmap = BitmapUtil.getHexBitmap(context, portrait);
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
-                        userInfoMd5.put("userid",userid);
-                        userInfoMd5.put("md5",getUserMd5(userid,nickname,portrait));//BitmapIOUtil.bytesToHexString(baos.toByteArray())
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                        userInfoMd5.put("userid", userid);
+                        userInfoMd5.put("md5", getUserMd5(userid, nickname, portrait));//BitmapIOUtil.bytesToHexString(baos.toByteArray())
                         userInfoMd5Array.add(userInfoMd5);
-                    }while(cursor.moveToNext());
-                    Log.d("PUIU","size: "+userInfoMd5Array.size());
-                    String response=NetUtils.post(StringCollector.getUserServer(), ParamToString.formUpdatePublicUserInfo(userInfoMd5Array));
-                    if(response!=null) {
+                    } while (cursor.moveToNext());
+                    Log.d("PUIU", "size: " + userInfoMd5Array.size());
+                    String response = NetUtils.post(StringCollector.getUserServer(), ParamToString.formUpdatePublicUserInfo(userInfoMd5Array));
+                    if (response != null) {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             if (jsonObject.optInt("code", -1) == 0) {
@@ -63,12 +63,13 @@ public class PublicUserInfoUpdater {
                                             ContentValues values = new ContentValues();
                                             values.put("nickname", _nickname);
                                             values.put("portrait", _portrait);
-                                            database.update("publicinfo",values,"userid=?",new String[]{_userid});
+                                            database.update("publicinfo", values, "userid=?", new String[]{_userid});
                                         }
                                     }
                                 }
                             }
-                        } catch(JSONException ignored){ }
+                        } catch (JSONException ignored) {
+                        }
                     }
                 }
                 cursor.close();
@@ -78,11 +79,11 @@ public class PublicUserInfoUpdater {
 
     }
 
-    private static String getUserMd5(String userid,String nickname,String portrait){
-        if(userid==null||nickname==null||portrait==null){
+    private static String getUserMd5(String userid, String nickname, String portrait) {
+        if (userid == null || nickname == null || portrait == null) {
             return null;
         } else {
-            return MD5Util.getMd5(userid+nickname+portrait);
+            return MD5Util.getMd5(userid + nickname + portrait);
         }
     }
 

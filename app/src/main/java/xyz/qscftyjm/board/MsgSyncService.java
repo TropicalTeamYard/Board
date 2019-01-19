@@ -12,7 +12,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,11 +23,11 @@ import tools.ParamToString;
 import tools.StringCollector;
 
 public class MsgSyncService extends Service {
-    Handler handler=new Handler();
-    Runnable runnable;
-    SQLiteDatabase database;
-    Thread thread;
-    int flag=0;
+    private Handler handler = new Handler();
+    private Runnable runnable;
+    private SQLiteDatabase database;
+    private Thread thread;
+    private int flag = 0;
 
     public MsgSyncService() {
 
@@ -44,7 +43,7 @@ public class MsgSyncService extends Service {
         super.onCreate();
 
         NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationChannel mChannel = null;
+        NotificationChannel mChannel;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             mChannel = new NotificationChannel("Msg001", "GetMsg", NotificationManager.IMPORTANCE_HIGH);
             notificationManager.createNotificationChannel(mChannel);
@@ -52,72 +51,74 @@ public class MsgSyncService extends Service {
             startForeground(1, notification);
         }
 
-        database= BoardDBHelper.getMsgDBHelper(this).getWritableDatabase();
-        runnable=new Runnable() {
+        database = BoardDBHelper.getMsgDBHelper(this).getWritableDatabase();
+        runnable = new Runnable() {
 
             @Override
             public void run() {
-                Log.d("MSS","flag: "+flag);
-                if(flag==0){return;}
-                int lastId=0;
+                Log.d("MSS", "flag: " + flag);
+                if (flag == 0) {
+                    return;
+                }
+                int lastId = 0;
                 handler.postDelayed(this, 1000);
-                Cursor cursor=database.query("msg", new String[] { "id" }, null, null, null, null, "id desc", "0,1");
-                if(cursor.moveToFirst()) {
-                    lastId=cursor.getInt(0);
-                    Log.v("Service","lsatId: "+lastId);
+                Cursor cursor = database.query("msg", new String[]{"id"}, null, null, null, null, "id desc", "0,1");
+                if (cursor.moveToFirst()) {
+                    lastId = cursor.getInt(0);
+                    Log.v("Service", "lsatId: " + lastId);
                 }
                 cursor.close();
 
-                String userid,token;
+                String userid, token;
 
-                cursor=database.query("userinfo", new String[] { "userid","token" }, null, null, null, null, "id desc", "0,1");
-                if(cursor.moveToFirst()) {
-                    userid=cursor.getString(0);
-                    token=cursor.getString(1);
+                cursor = database.query("userinfo", new String[]{"userid", "token"}, null, null, null, null, "id desc", "0,1");
+                if (cursor.moveToFirst()) {
+                    userid = cursor.getString(0);
+                    token = cursor.getString(1);
                 } else {
                     return;
                 }
                 cursor.close();
-                AsynTaskUtil.AsynNetUtils.post(StringCollector.getMsgServer(), ParamToString.formGetMsg(userid,token,String.valueOf(lastId)), new AsynTaskUtil.AsynNetUtils.Callback() {
+                AsynTaskUtil.AsynNetUtils.post(StringCollector.getMsgServer(), ParamToString.formGetMsg(userid, token, String.valueOf(lastId)), new AsynTaskUtil.AsynNetUtils.Callback() {
 
                     @Override
                     public void onResponse(String response) {
-                        if(response!=null) {
+                        if (response != null) {
                             try {
-                                JSONObject jsonObj=new JSONObject(response);
-                                if(jsonObj.optInt("code", -1)==0) {
-                                    JSONArray delArr=jsonObj.optJSONArray("delete");
-                                    if(delArr!=null&&delArr.length()>0){
-                                        for (int i=0;i<delArr.length();i++){
-                                            int num=database.delete("msg","id=?",new String[]{String.valueOf(delArr.optInt(i,-1))});
+                                JSONObject jsonObj = new JSONObject(response);
+                                if (jsonObj.optInt("code", -1) == 0) {
+                                    JSONArray delArr = jsonObj.optJSONArray("delete");
+                                    if (delArr != null && delArr.length() > 0) {
+                                        for (int i = 0; i < delArr.length(); i++) {
+                                            int num = database.delete("msg", "id=?", new String[]{String.valueOf(delArr.optInt(i, -1))});
                                         }
                                     }
-                                    JSONArray msgArr=jsonObj.optJSONArray("msgs");
-                                    if(jsonObj.optInt("msgct",0)==0){
-                                        Log.v("Service Msg","No new msg");
+                                    JSONArray msgArr = jsonObj.optJSONArray("msgs");
+                                    if (jsonObj.optInt("msgct", 0) == 0) {
+                                        Log.v("Service Msg", "No new msg");
                                         return;
                                     }
-                                    int msgCt=msgArr.length();
+                                    int msgCt = msgArr.length();
 
-                                    if(msgCt>0) {
-                                        for(int i=0;i<msgCt;i++) {
-                                            JSONObject newObj=msgArr.getJSONObject(i);
-                                            ContentValues values=new ContentValues();
-                                            if(newObj.optInt("id",-1)==-1){
+                                    if (msgCt > 0) {
+                                        for (int i = 0; i < msgCt; i++) {
+                                            JSONObject newObj = msgArr.getJSONObject(i);
+                                            ContentValues values = new ContentValues();
+                                            if (newObj.optInt("id", -1) == -1) {
                                                 continue;
                                             }
-                                            values.put("id", newObj.optInt("id",-1));
-                                            values.put("userid", newObj.optString("userid","error"));
-                                            values.put("time", newObj.optString("time","error"));
-                                            values.put("content", newObj.optString("content","error"));
-                                            if(newObj.optInt("hasPics",0)>0&&newObj.optJSONArray("pics")!=null){
-                                                values.put("haspic",newObj.optInt("hasPics",0));
-                                                JSONArray jsonArray=newObj.optJSONArray("pics");
-                                                values.put("picture",jsonArray.toString());
+                                            values.put("id", newObj.optInt("id", -1));
+                                            values.put("userid", newObj.optString("userid", "error"));
+                                            values.put("time", newObj.optString("time", "error"));
+                                            values.put("content", newObj.optString("content", "error"));
+                                            if (newObj.optInt("hasPics", 0) > 0 && newObj.optJSONArray("pics") != null) {
+                                                values.put("haspic", newObj.optInt("hasPics", 0));
+                                                JSONArray jsonArray = newObj.optJSONArray("pics");
+                                                values.put("picture", jsonArray.toString());
                                             } else {
-                                                values.put("haspic",0);
+                                                values.put("haspic", 0);
                                             }
-                                            values.put("comment",newObj.optString("comment","{'comment':null}"));
+                                            values.put("comment", newObj.optString("comment", "{'comment':null}"));
                                             database.insertWithOnConflict("msg", null, values, SQLiteDatabase.CONFLICT_REPLACE);
                                         }
                                         Intent intent = new Intent();
@@ -125,11 +126,11 @@ public class MsgSyncService extends Service {
                                         intent.putExtra("msg", String.valueOf(msgArr.length()));
                                         sendBroadcast(intent);
                                     } else {
-                                        Log.d("Service Msg","No new msg");
+                                        Log.d("Service Msg", "No new msg");
                                     }
 
                                 } else {
-                                    Log.d("Service",jsonObj.optString("msg","未知错误"));
+                                    Log.d("Service", jsonObj.optString("msg", "未知错误"));
                                 }
                             } catch (JSONException | NullPointerException e) {
                                 e.printStackTrace();
@@ -142,14 +143,13 @@ public class MsgSyncService extends Service {
         };
 
 
-
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        flag=1;
-        if(thread==null||!thread.isAlive()){
-            thread=new Thread(runnable);
+        flag = 1;
+        if (thread == null || !thread.isAlive()) {
+            thread = new Thread(runnable);
             thread.run();
         }
 
@@ -159,8 +159,8 @@ public class MsgSyncService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        flag=0;
-        Log.d("MSS","Service Stop");
+        flag = 0;
+        Log.d("MSS", "Service Stop");
     }
 
 }

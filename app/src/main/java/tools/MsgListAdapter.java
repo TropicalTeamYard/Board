@@ -12,32 +12,35 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 
 import xyz.qscftyjm.board.R;
 
 public class MsgListAdapter extends BaseAdapter {
 
-    ArrayList<Msg> msgList;
-    Map<String, PublicUserInfo> userInfoMap;
-    Context context;
-    ViewHolder viewHolder;
-    SQLiteDatabase database;
+    private ArrayList<Msg> msgList;
+    private Map<String, PublicUserInfo> userInfoMap;
+    private Context context;
+    private ViewHolder viewHolder;
+    private SQLiteDatabase database;
 
-    public MsgListAdapter(ArrayList<Msg> msgList,Map<String, PublicUserInfo> userInfoMap, Context context){
-        this.context=context;this.msgList=msgList;this.userInfoMap=userInfoMap;
+    public MsgListAdapter(ArrayList<Msg> msgList, Map<String, PublicUserInfo> userInfoMap, Context context) {
+        this.context = context;
+        this.msgList = msgList;
+        this.userInfoMap = userInfoMap;
         // TODO init data
         PublicUserInfo userInfo;
-        database=BoardDBHelper.getMsgDBHelper(context).getWritableDatabase();
-        Cursor cursor=database.query("publicinfo",new String[]{"userid","nickname","portrait"},null,null,null,null,null);
+        database = BoardDBHelper.getMsgDBHelper(context).getWritableDatabase();
+        Cursor cursor = database.query("publicinfo", new String[]{"userid", "nickname", "portrait"}, null, null, null, null, null);
 
-        if(cursor.moveToFirst()&&cursor.getCount()>0){
-            do{
-                userInfo=new PublicUserInfo();
-                userInfo.userid=cursor.getString(0);
-                userInfo.portrait= BitmapUtil.getHexBitmap(context,new String(cursor.getBlob(2)));
-                userInfo.nickname=cursor.getString(1);
-            }while (cursor.moveToNext());
-            userInfoMap.put(userInfo.userid,userInfo);
+        if (cursor.moveToFirst() && cursor.getCount() > 0) {
+            do {
+                userInfo = new PublicUserInfo();
+                userInfo.userid = cursor.getString(0);
+                userInfo.portrait = BitmapUtil.getHexBitmap(context, new String(cursor.getBlob(2)));
+                userInfo.nickname = cursor.getString(1);
+            } while (cursor.moveToNext());
+            userInfoMap.put(userInfo.userid, userInfo);
             cursor.close();
         }
     }
@@ -69,22 +72,22 @@ public class MsgListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        if(userInfoMap.containsKey(msgList.get(position).getUserid())){
-            viewHolder.portrait.setImageBitmap(userInfoMap.get(msgList.get(position).getUserid()).portrait);
-            viewHolder.nickname.setText(userInfoMap.get(msgList.get(position).getUserid()).nickname);
+        if (userInfoMap.containsKey(msgList.get(position).getUserid())) {
+            viewHolder.portrait.setImageBitmap(Objects.requireNonNull(userInfoMap.get(msgList.get(position).getUserid())).portrait);
+            viewHolder.nickname.setText(Objects.requireNonNull(userInfoMap.get(msgList.get(position).getUserid())).nickname);
         } else {
-            MsgDataOperator.getUserInfo(context,msgList.get(position).getUserid(),userInfoMap);
+            MsgDataOperator.getUserInfo(context, msgList.get(position).getUserid(), userInfoMap);
         }
 
-        if(userInfoMap.containsKey(msgList.get(position).getUserid())){
-            viewHolder.portrait.setImageBitmap(userInfoMap.get(msgList.get(position).getUserid()).portrait);
-            viewHolder.nickname.setText(userInfoMap.get(msgList.get(position).getUserid()).nickname);
+        if (userInfoMap.containsKey(msgList.get(position).getUserid())) {
+            viewHolder.portrait.setImageBitmap(Objects.requireNonNull(userInfoMap.get(msgList.get(position).getUserid())).portrait);
+            viewHolder.nickname.setText(Objects.requireNonNull(userInfoMap.get(msgList.get(position).getUserid())).nickname);
         }
 
         viewHolder.time.setText(msgList.get(position).getTime());
 
         viewHolder.content.setText(msgList.get(position).getContent());
-        if(msgList.get(position).getHasPic()>0){
+        if (msgList.get(position).getHasPic() > 0) {
             viewHolder.picture.setVisibility(View.VISIBLE);
             viewHolder.picture.setImageBitmap(msgList.get(position).getPicture()[0]);
         } else {
@@ -95,16 +98,16 @@ public class MsgListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    class ViewHolder{
+    class ViewHolder {
         ImageView portrait, picture;
         TextView time, nickname, content;
 
-        public ViewHolder(View view) {
-            portrait=view.findViewById(R.id.msg_head_portrait);
-            picture=view.findViewById(R.id.msg_picture);
-            time=view.findViewById(R.id.msg_time);
-            nickname=view.findViewById(R.id.msg_nickname);
-            content=view.findViewById(R.id.msg_content);
+        ViewHolder(View view) {
+            portrait = view.findViewById(R.id.msg_head_portrait);
+            picture = view.findViewById(R.id.msg_picture);
+            time = view.findViewById(R.id.msg_time);
+            nickname = view.findViewById(R.id.msg_nickname);
+            content = view.findViewById(R.id.msg_content);
         }
     }
 
