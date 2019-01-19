@@ -27,7 +27,7 @@ public class MsgDetailActivity extends AppCompatActivity implements View.OnClick
     private TextView tv_time,tv_nickname,tv_content;
     private Cursor cursor;
     private ImageView[] pics=new ImageView[]{null,null,null};
-    private ImageView portrait;
+    private ImageView portrait,big_pic;
     private ArrayList<Bitmap> pictures;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +38,15 @@ public class MsgDetailActivity extends AppCompatActivity implements View.OnClick
         pics[0]=findViewById(R.id.msg_detail_pic_0);
         pics[1]=findViewById(R.id.msg_detail_pic_1);
         pics[2]=findViewById(R.id.msg_detail_pic_2);
+        big_pic=findViewById(R.id.msg_detail_big_pic);
         portrait=findViewById(R.id.msg_detail_head_portrait);
         tv_nickname=findViewById(R.id.msg_detail_nickname);
         tv_time=findViewById(R.id.msg_detail_time);
         tv_content=findViewById(R.id.msg_detail_content);
+
+        for(int i=0;i<3;i++){
+            pics[i].setOnClickListener(this);
+        }
 
         pictures=new ArrayList<>();
         if(bundle!=null&&bundle.containsKey("msgid")){
@@ -80,6 +85,24 @@ public class MsgDetailActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()){
+            case R.id.msg_detail_pic_0:
+                if(big_pic.getVisibility()!=View.VISIBLE){big_pic.setVisibility(View.VISIBLE);}
+                if(haspic<1&&pics[0].getDrawable()==null){break;}
+                big_pic.setImageDrawable(pics[0].getDrawable());
+                break;
+            case R.id.msg_detail_pic_1:
+                if(big_pic.getVisibility()!=View.VISIBLE){big_pic.setVisibility(View.VISIBLE);}
+                if(haspic<2&&pics[1].getDrawable()==null){break;}
+                big_pic.setImageDrawable(pics[1].getDrawable());
+                break;
+            case R.id.msg_detail_pic_2:
+                if(big_pic.getVisibility()!=View.VISIBLE){big_pic.setVisibility(View.VISIBLE);}
+                if(haspic<3&&pics[2].getDrawable()==null){break;}
+                big_pic.setImageDrawable(pics[2].getDrawable());
+                break;
+                default:
+                    Log.d("MDA","NOT DEFINED CLICK");
+        }
     }
 }

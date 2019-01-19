@@ -15,12 +15,12 @@ public class MsgReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Toast.makeText(context, "有新的留言", Toast.LENGTH_SHORT).show();
-        String json=intent.getStringExtra("msg");
-        message.getMsg(json);
+        String len=intent.getStringExtra("msg");
+        message.getMsg(len);
     }
 
     interface Message {
-        public void getMsg(String str);
+        void getMsg(String str);
     }
 
     public void setMessage(Message message) {

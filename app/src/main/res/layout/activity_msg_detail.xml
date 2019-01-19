@@ -113,6 +113,9 @@
                         android:layout_height="128dp" />
                 </LinearLayout>
             </LinearLayout>
+            <ImageView android:id="@+id/msg_detail_big_pic" android:visibility="gone" android:layout_marginTop="16dp"
+                android:layout_width="328dp" android:layout_gravity="center_horizontal" android:background="@drawable/border" android:padding="4dp"
+                android:layout_height="328dp" />
         </LinearLayout>
     </ScrollView>
 

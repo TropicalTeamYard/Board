@@ -27,6 +27,8 @@ public class MsgSyncService extends Service {
     Handler handler=new Handler();
     Runnable runnable;
     SQLiteDatabase database;
+    Thread thread;
+    int flag=0;
 
     public MsgSyncService() {
 
@@ -55,6 +57,8 @@ public class MsgSyncService extends Service {
 
             @Override
             public void run() {
+                Log.d("MSS","flag: "+flag);
+                if(flag==0){return;}
                 int lastId=0;
                 handler.postDelayed(this, 1000);
                 Cursor cursor=database.query("msg", new String[] { "id" }, null, null, null, null, "id desc", "0,1");
@@ -143,14 +147,20 @@ public class MsgSyncService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        runnable.run();
+        flag=1;
+        if(thread==null||!thread.isAlive()){
+            thread=new Thread(runnable);
+            thread.run();
+        }
+
         return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
+        flag=0;
+        Log.d("MSS","Service Stop");
     }
 
 }

@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,7 +50,7 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener,Ms
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_msg, container, false);
 
         msgData=new ArrayList<>();
@@ -59,7 +60,10 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener,Ms
         database= BoardDBHelper.getMsgDBHelper(getActivity()).getWritableDatabase();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("xyz.qscftyjm.board.HAS_NEW_MSG");
-        getContext().registerReceiver(msgReceiver, intentFilter);
+        try{
+            getContext().getApplicationContext().registerReceiver(msgReceiver, intentFilter);
+        } catch (NullPointerException e){ e.printStackTrace(); }
+
         msgReceiver.setMessage(this);
 
         lv_msg= view.findViewById(R.id.msg_list);
@@ -90,8 +94,8 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener,Ms
                 menu.setHeaderTitle("更多操作");
                 menu.add(0, 0, 0, "查看详细内容");
                 menu.add(0, 1, 0, "复制内容到剪切板");
-                menu.add(0, 2, 0, "查看TA的所有留言");
-                menu.add(0, 3, 0, "回复这条留言");
+                menu.add(0, 2, 0, "查看TA的所有留言(敬请期待)");
+                menu.add(0, 3, 0, "回复这条留言(敬请期待)");
                 menu.add(0, 4, 0, "删除这条留言");
             }
         });
@@ -208,19 +212,19 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener,Ms
     }
 
     void Logd(String msg){
-        Log.d("MsgFt",msg);
+        Log.d("MMF",msg);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         try {
-            getContext().unregisterReceiver(msgReceiver);
+            getContext().getApplicationContext().unregisterReceiver(msgReceiver);
             Log.d("MMF","Broadcast closed successfully");
         } catch (IllegalArgumentException | NullPointerException e) {
+            e.printStackTrace();
             Log.d("MMF","Broadcast closed failed");
         }
-
 
     }
 
@@ -228,7 +232,6 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener,Ms
     public void getMsg(String str) {
         MsgDataOperator.getMsgData(getActivity(),msgData,userInfoMap);
         Logd("get broadcast: "+str);
-        lv_msg.invalidate();
         adapter.notifyDataSetChanged();
         lv_msg.invalidate();
     }

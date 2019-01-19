@@ -231,17 +231,24 @@ public class MainActivity extends AppCompatActivity implements MsgReceiver.Messa
     protected void onDestroy() {
         super.onDestroy();
         try {
-            unregisterReceiver(msgReceiver);
+            getApplicationContext().unregisterReceiver(msgReceiver);
             Log.d("MA","Broadcast closed successfully");
         } catch (IllegalArgumentException e) {
             Log.d("MA","Broadcast closed failed");
+            e.printStackTrace();
+        }
+
+        if(isServiceRunning("xyz.qscftyjm.board.MsgSyncService")){
+            Intent intent=new Intent(MainActivity.this,MsgSyncService.class);
+            stopService(intent);
+            //Log.d("MA","Service Stop");
         }
 
     }
 
     @Override
     public void getMsg(String str) {
-        Log.d("MainA","get broadcast");
+        Log.d("MA","get broadcast");
     }
 
     private boolean isServiceRunning(final String className) {
@@ -273,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements MsgReceiver.Messa
                     startService(startMsgSyncService);
                 }
             } else {
-                Log.d("MA","Serviec is running");
+                Log.d("MA","Service is running");
             }
         }
     }

@@ -96,6 +96,7 @@ public class MsgDataOperator {
             }while (cursor.moveToNext());
         }
         cursor.close();
+        if(database.isOpen()){database.close();}
         return msgData;
     }
 
@@ -259,7 +260,7 @@ public class MsgDataOperator {
         return userInfoMap;
     }
 
-    public static PublicUserInfo getUserInfo(final Context context, String userid, final Map<String,PublicUserInfo> userInfoMap){
+    static PublicUserInfo getUserInfo(final Context context, String userid, final Map<String, PublicUserInfo> userInfoMap){
         PublicUserInfo userInfo=new PublicUserInfo();
         final SQLiteDatabase database=BoardDBHelper.getMsgDBHelper(context).getWritableDatabase();
         Cursor cursor=database.query("publicinfo",new String[]{"userid","nickname","portrait"},"userid=?",new String[]{userid},null,null,null);
@@ -312,6 +313,7 @@ public class MsgDataOperator {
                         }
 
                     }
+                    if(database.isOpen()){database.close();}
                 }
             });
         }
