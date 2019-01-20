@@ -159,7 +159,7 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
                             sendPicArray.add(bitmaps[i]);
                             try {
                                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                bitmaps[i].compress(Bitmap.CompressFormat.JPEG, 50, baos);
+                                bitmaps[i].compress(Bitmap.CompressFormat.JPEG, 66, baos);
                                 hexPic.add(BitmapIOUtil.bytesToHexString(baos.toByteArray()));
                             } catch (Exception e) {
                                 e.printStackTrace();

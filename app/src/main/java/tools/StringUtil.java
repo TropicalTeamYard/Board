@@ -3,7 +3,8 @@ package tools;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLDecoder;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -25,16 +26,15 @@ class StringUtil {
     }
 
 
-    public static String toURLDecoded(String paramString) {
-        if (paramString == null || paramString.equals("")) {
-            return "";
-        }
+    public static String toURLEncoded(String paramString) {
+        String str=paramString;
+        if(paramString==null||paramString.equals("")){ return "";}
         try {
-            String str = new String(paramString.getBytes(), StandardCharsets.UTF_8);
-            str = URLDecoder.decode(str, "UTF-8");
+            str = URLEncoder.encode(str, "UTF-8");
             return str;
-        } catch (Exception ignored) { }
-
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         return "";
     }
 }

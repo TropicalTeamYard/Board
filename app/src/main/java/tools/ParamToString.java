@@ -11,30 +11,31 @@ import java.util.Map;
 public class ParamToString {
 
     public static String formLogin(String userid, String password) {
-        userid=StringUtil.toURLDecoded(userid);
+        userid=StringUtil.toURLEncoded(userid);
         return "method=login" + "&userid=" + userid + "&password=" + MD5Util.getMd5(password);
 
     }
 
     public static String formAutoLogin(String userid, String token) {
+        userid=StringUtil.toURLEncoded(userid);
         return "method=autologin&userid=" + userid + "&token=" + token;
     }
 
     public static String formRegister(String nickname, String password) {
-        nickname=StringUtil.toURLDecoded(nickname);
+        nickname=StringUtil.toURLEncoded(nickname);
         return "method=register" + "&nickname=" + nickname + "&password=" + MD5Util.getMd5(password);
 
     }
 
     public static String formChangePassword(String userid, String password, String newpassword) {
-        userid=StringUtil.toURLDecoded(userid);
+        userid=StringUtil.toURLEncoded(userid);
         return "method=changepassword&userid=" + userid + "&password=" + password + "&newpassword=" + newpassword;
     }
 
     public static String formChangeUserInfo(String userid, String token, Map<String, String> updateInfo) {
-        StringBuilder result = new StringBuilder("method=changeinfo&userid=" + StringUtil.toURLDecoded(userid) + "&token=" + token);
+        StringBuilder result = new StringBuilder("method=changeinfo&userid=" + StringUtil.toURLEncoded(userid) + "&token=" + token);
         for (String key : updateInfo.keySet()) {
-            result.append("&").append(key).append("=").append(StringUtil.toURLDecoded(updateInfo.get(key)));
+            result.append("&").append(key).append("=").append(StringUtil.toURLEncoded(updateInfo.get(key)));
         }
         return result.toString();
     }
@@ -52,8 +53,8 @@ public class ParamToString {
     }
 
     public static String formSendMsg(String userid, String token, String content, int haspics, String pics) {
-        userid=StringUtil.toURLDecoded(userid);
-        content=StringUtil.toURLDecoded(content);
+        userid=StringUtil.toURLEncoded(userid);
+        content=StringUtil.toURLEncoded(content);
         return "method=add&userid=" + userid + "&content=" + content + "&token=" + token + "&haspics=" + haspics + "&pics=" + pics;
     }
 
