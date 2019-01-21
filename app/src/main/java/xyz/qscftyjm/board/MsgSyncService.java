@@ -56,7 +56,7 @@ public class MsgSyncService extends Service {
 
             @Override
             public void run() {
-                Log.d("MSS", "flag: " + flag);
+                Log.v("MSS", "flag: " + flag);
                 if (flag == 0) {
                     return;
                 }
