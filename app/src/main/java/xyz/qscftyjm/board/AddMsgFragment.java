@@ -115,7 +115,7 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
 
                 isHasPic = (haspics[0] || haspics[1] || haspics[2]);
                 if (!isHasPic) {
-                    // TODO 没有图片
+                    // 没有图片
                     AsynTaskUtil.AsynNetUtils.post(StringCollector.getMsgServer(), ParamToString.formSendMsg(userid, token, content, 0, null), new AsynTaskUtil.AsynNetUtils.Callback() {
                         @Override
                         public void onResponse(String response) {
@@ -150,7 +150,7 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
                         }
                     });
                 } else {
-                    // TODO 有图片
+                    // 有图片
                     Log.d("Pics", "HasPic");
                     ArrayList<Bitmap> sendPicArray = new ArrayList<>();
                     ArrayList<String> hexPic = new ArrayList<>();

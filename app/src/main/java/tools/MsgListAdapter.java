@@ -28,7 +28,6 @@ public class MsgListAdapter extends BaseAdapter {
         this.context = context;
         this.msgList = msgList;
         this.userInfoMap = userInfoMap;
-        // TODO init data
         PublicUserInfo userInfo;
         database = BoardDBHelper.getMsgDBHelper(context).getWritableDatabase();
         Cursor cursor = database.query("publicinfo", new String[]{"userid", "nickname", "portrait"}, null, null, null, null, null);

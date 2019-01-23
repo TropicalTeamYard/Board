@@ -225,7 +225,7 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        // TODO 打开存储权限
+        // 打开存储权限
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
             Uri selectedImage = data.getData();
             String[] filePathColumns = {MediaStore.Images.Media.DATA};

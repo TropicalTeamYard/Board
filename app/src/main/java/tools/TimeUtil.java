@@ -19,7 +19,6 @@ public class TimeUtil {
     }
 
     public static boolean checkIsOverTime(String lastchecketime) {
-        // TODO Auto-generated method stub
         boolean flag = true;
 
         try {
@@ -33,7 +32,6 @@ public class TimeUtil {
                 flag = false;
             }
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

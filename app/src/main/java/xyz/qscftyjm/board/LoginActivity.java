@@ -118,7 +118,6 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 Toast.makeText(LoginActivity.this, "忘记密码 该功能将在后续推出，敬请期待", Toast.LENGTH_SHORT).show();
 
             }
