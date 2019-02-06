@@ -14,7 +14,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import postutil.AsynTaskUtil;
+import postutil.AsyncTaskUtil;
 import tools.BoardDBHelper;
 import tools.ParamToString;
 import tools.StringCollector;
@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
                     final String account = input_account;
 
 
-                    AsynTaskUtil.AsynNetUtils.post(StringCollector.getUserServer(), ParamToString.formLogin(account, input_password), new AsynTaskUtil.AsynNetUtils.Callback() {
+                    AsyncTaskUtil.AsyncNetUtils.post(StringCollector.getUserServer(), ParamToString.formLogin(account, input_password), new AsyncTaskUtil.AsyncNetUtils.Callback() {
 
                         @Override
                         public void onResponse(String response) {

@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import postutil.AsynTaskUtil;
+import postutil.AsyncTaskUtil;
 import tools.BoardDBHelper;
 import tools.Msg;
 import tools.MsgDataOperator;
@@ -155,7 +155,7 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener, M
                 if (cursor.moveToFirst() && cursor.getCount() > 0) {
                     userid = cursor.getString(0);
                     token = cursor.getString(1);
-                    AsynTaskUtil.AsynNetUtils.post(StringCollector.getMsgServer(), ParamToString.formDelMsg(userid, token, msgData.get(info.position).getId()), new AsynTaskUtil.AsynNetUtils.Callback() {
+                    AsyncTaskUtil.AsyncNetUtils.post(StringCollector.getMsgServer(), ParamToString.formDelMsg(userid, token, msgData.get(info.position).getId()), new AsyncTaskUtil.AsyncNetUtils.Callback() {
                         @Override
                         public void onResponse(String response) {
                             JSONObject jsonObj;

@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import postutil.AsynTaskUtil;
+import postutil.AsyncTaskUtil;
 import pub.devrel.easypermissions.EasyPermissions;
 import tools.BitmapIOUtil;
 import tools.BitmapUtil;
@@ -136,7 +136,7 @@ public class ChangeUserInfoFragment extends DialogFragment implements EasyPermis
                         }
 
                         final String finalUserid = userid;
-                        AsynTaskUtil.AsynNetUtils.post(StringCollector.getUserServer(), ParamToString.formChangeUserInfo(userid, token, changeInfo), new AsynTaskUtil.AsynNetUtils.Callback() {
+                        AsyncTaskUtil.AsyncNetUtils.post(StringCollector.getUserServer(), ParamToString.formChangeUserInfo(userid, token, changeInfo), new AsyncTaskUtil.AsyncNetUtils.Callback() {
                             @Override
                             public void onResponse(String response) {
                                 Log.d("Board", response);

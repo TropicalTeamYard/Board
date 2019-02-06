@@ -2,9 +2,9 @@ package postutil;
 
 import android.os.Handler;
 
-public class AsynTaskUtil {
+public class AsyncTaskUtil {
 
-    public static class AsynNetUtils {
+    public static class AsyncNetUtils {
         public static void get(final String url, final Callback callback) {
             final Handler handler = new Handler();
             new Thread(new Runnable() {

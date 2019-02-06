@@ -20,7 +20,7 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
-import postutil.AsynTaskUtil;
+import postutil.AsyncTaskUtil;
 import tools.MD5Util;
 import tools.ParamToString;
 import tools.StringCollector;
@@ -67,7 +67,7 @@ public class ChangePasswordFragment extends DialogFragment {
                     Toast.makeText(getActivity(), "密码长度应该在6~18位", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                AsynTaskUtil.AsynNetUtils.post(StringCollector.getUserServer(), ParamToString.formChangePassword(userid, MD5Util.getMd5(oldpassword), MD5Util.getMd5(newpassword)), new AsynTaskUtil.AsynNetUtils.Callback() {
+                AsyncTaskUtil.AsyncNetUtils.post(StringCollector.getUserServer(), ParamToString.formChangePassword(userid, MD5Util.getMd5(oldpassword), MD5Util.getMd5(newpassword)), new AsyncTaskUtil.AsyncNetUtils.Callback() {
                     @Override
                     public void onResponse(String response) {
                         Log.d("CPF", response);

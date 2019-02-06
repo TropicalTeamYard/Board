@@ -37,7 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import postutil.AsynTaskUtil;
+import postutil.AsyncTaskUtil;
 import pub.devrel.easypermissions.EasyPermissions;
 import tools.BitmapIOUtil;
 import tools.BoardDBHelper;
@@ -116,7 +116,7 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
                 isHasPic = (haspics[0] || haspics[1] || haspics[2]);
                 if (!isHasPic) {
                     // 没有图片
-                    AsynTaskUtil.AsynNetUtils.post(StringCollector.getMsgServer(), ParamToString.formSendMsg(userid, token, content, 0, null), new AsynTaskUtil.AsynNetUtils.Callback() {
+                    AsyncTaskUtil.AsyncNetUtils.post(StringCollector.getMsgServer(), ParamToString.formSendMsg(userid, token, content, 0, null), new AsyncTaskUtil.AsyncNetUtils.Callback() {
                         @Override
                         public void onResponse(String response) {
                             JSONObject jsonObj;
@@ -159,7 +159,7 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
                             sendPicArray.add(bitmaps[i]);
                             try {
                                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                bitmaps[i].compress(Bitmap.CompressFormat.JPEG, 66, baos);
+                                bitmaps[i].compress(Bitmap.CompressFormat.WEBP, 70, baos);
                                 hexPic.add(BitmapIOUtil.bytesToHexString(baos.toByteArray()));
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -169,7 +169,7 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
 
                     if (hexPic.size() > 0) {
                         JSONArray jsonArray = new JSONArray(hexPic);
-                        AsynTaskUtil.AsynNetUtils.post(StringCollector.getMsgServer(), ParamToString.formSendMsg(userid, token, content, hexPic.size(), jsonArray.toString()), new AsynTaskUtil.AsynNetUtils.Callback() {
+                        AsyncTaskUtil.AsyncNetUtils.post(StringCollector.getMsgServer(), ParamToString.formSendMsg(userid, token, content, hexPic.size(), jsonArray.toString()), new AsyncTaskUtil.AsyncNetUtils.Callback() {
                             @Override
                             public void onResponse(String response) {
                                 JSONObject jsonObj;
@@ -203,7 +203,7 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
                             }
                         });
                     } else {
-                        AsynTaskUtil.AsynNetUtils.post(StringCollector.getMsgServer(), ParamToString.formSendMsg(userid, token, content, 0, null), new AsynTaskUtil.AsynNetUtils.Callback() {
+                        AsyncTaskUtil.AsyncNetUtils.post(StringCollector.getMsgServer(), ParamToString.formSendMsg(userid, token, content, 0, null), new AsyncTaskUtil.AsyncNetUtils.Callback() {
                             @Override
                             public void onResponse(String response) {
                                 JSONObject jsonObj;
@@ -284,8 +284,7 @@ public class AddMsgFragment extends DialogFragment implements EasyPermissions.Pe
     private void makeToast(String str) {
         try {
             Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) { }
 
     }
 

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 
-import postutil.AsynTaskUtil;
+import postutil.AsyncTaskUtil;
 
 public class MsgDataOperator {
 
@@ -123,7 +123,7 @@ public class MsgDataOperator {
             if (userids.size() > 0) {
 
                 JSONArray jsonArrNeeded = new JSONArray(needed);
-                AsynTaskUtil.AsynNetUtils.post(StringCollector.getUserServer(), ParamToString.formGetPublicInfo(jsonArrNeeded.toString()), new AsynTaskUtil.AsynNetUtils.Callback() {
+                AsyncTaskUtil.AsyncNetUtils.post(StringCollector.getUserServer(), ParamToString.formGetPublicInfo(jsonArrNeeded.toString()), new AsyncTaskUtil.AsyncNetUtils.Callback() {
                     @Override
                     public void onResponse(String response) {
                         JSONObject jsonObj;
@@ -207,7 +207,7 @@ public class MsgDataOperator {
         }
         if (userids.size() > 0) {
             JSONArray jsonArrNeeded = new JSONArray(userids);
-            AsynTaskUtil.AsynNetUtils.post(StringCollector.getUserServer(), ParamToString.formGetPublicInfo(jsonArrNeeded.toString()), new AsynTaskUtil.AsynNetUtils.Callback() {
+            AsyncTaskUtil.AsyncNetUtils.post(StringCollector.getUserServer(), ParamToString.formGetPublicInfo(jsonArrNeeded.toString()), new AsyncTaskUtil.AsyncNetUtils.Callback() {
                 @Override
                 public void onResponse(String response) {
                     JSONObject jsonObj;
@@ -268,7 +268,7 @@ public class MsgDataOperator {
             cursor.close();
         } else {
 
-            AsynTaskUtil.AsynNetUtils.post(StringCollector.getUserServer(), ParamToString.formGetPublicInfo("['" + userid + "']"), new AsynTaskUtil.AsynNetUtils.Callback() {
+            AsyncTaskUtil.AsyncNetUtils.post(StringCollector.getUserServer(), ParamToString.formGetPublicInfo("['" + userid + "']"), new AsyncTaskUtil.AsyncNetUtils.Callback() {
                 @Override
                 public void onResponse(String response) {
                     JSONObject jsonObj;

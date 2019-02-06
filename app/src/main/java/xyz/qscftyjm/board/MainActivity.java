@@ -26,7 +26,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import postutil.AsynTaskUtil;
+import postutil.AsyncTaskUtil;
 import tools.BoardDBHelper;
 import tools.MainFragmentpagerAdapter;
 import tools.ParamToString;
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements MsgReceiver.Messa
 
             cursor.close();
             final int finalId = id;
-            AsynTaskUtil.AsynNetUtils.post(StringCollector.getUserServer(), ParamToString.formAutoLogin(userid, token), new AsynTaskUtil.AsynNetUtils.Callback() {
+            AsyncTaskUtil.AsyncNetUtils.post(StringCollector.getUserServer(), ParamToString.formAutoLogin(userid, token), new AsyncTaskUtil.AsyncNetUtils.Callback() {
                 @Override
                 public void onResponse(String response) {
                     JSONObject jsonObj;

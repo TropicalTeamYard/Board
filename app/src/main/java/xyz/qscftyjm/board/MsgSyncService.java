@@ -17,7 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import postutil.AsynTaskUtil;
+import postutil.AsyncTaskUtil;
 import tools.BoardDBHelper;
 import tools.ParamToString;
 import tools.StringCollector;
@@ -79,7 +79,7 @@ public class MsgSyncService extends Service {
                     return;
                 }
                 cursor.close();
-                AsynTaskUtil.AsynNetUtils.post(StringCollector.getMsgServer(), ParamToString.formGetMsg(userid, token, String.valueOf(lastId)), new AsynTaskUtil.AsynNetUtils.Callback() {
+                AsyncTaskUtil.AsyncNetUtils.post(StringCollector.getMsgServer(), ParamToString.formGetMsg(userid, token, String.valueOf(lastId)), new AsyncTaskUtil.AsyncNetUtils.Callback() {
 
                     @Override
                     public void onResponse(String response) {

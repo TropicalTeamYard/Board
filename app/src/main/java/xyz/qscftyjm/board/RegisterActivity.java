@@ -11,7 +11,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import postutil.AsynTaskUtil;
+import postutil.AsyncTaskUtil;
 import tools.AlertDialogUtil;
 import tools.ParamToString;
 import tools.StringCollector;
@@ -56,7 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
                         }
 
                         Toast.makeText(RegisterActivity.this, password, Toast.LENGTH_SHORT).show();
-                        AsynTaskUtil.AsynNetUtils.post(StringCollector.getUserServer(), ParamToString.formRegister(nickname, password), new AsynTaskUtil.AsynNetUtils.Callback() {
+                        AsyncTaskUtil.AsyncNetUtils.post(StringCollector.getUserServer(), ParamToString.formRegister(nickname, password), new AsyncTaskUtil.AsyncNetUtils.Callback() {
 
                             @Override
                             public void onResponse(String response) {
