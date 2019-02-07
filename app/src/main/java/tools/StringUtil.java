@@ -15,7 +15,6 @@ class StringUtil {
 
         String reString;
         InputStream is = blob.getBinaryStream();
-
         ByteArrayInputStream bais = (ByteArrayInputStream) is;
         byte[] byte_data = new byte[bais.available()]; //bais.available()返回此输入流的字节数
         bais.read(byte_data, 0, byte_data.length); //将输入流中的内容读到指定的数组

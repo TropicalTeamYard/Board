@@ -103,7 +103,7 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener, M
                 menu.add(0, 0, 0, "查看详细内容");
                 menu.add(0, 1, 0, "复制内容到剪切板");
                 menu.add(0, 2, 0, "查看TA的所有留言(敬请期待)");
-                menu.add(0, 3, 0, "回复这条留言(敬请期待)");
+                menu.add(0, 3, 0, "评论这条留言");
                 menu.add(0, 4, 0, "删除这条留言");
             }
         });
@@ -143,8 +143,12 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener, M
                 break;
 
             case 3:
-                // TODO 回复留言
-                makeToast("功能暂未开放");
+                // TODO 评论留言
+                CommentFragment fragment=new CommentFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt("msgid", msgData.get(info.position).getId());
+                fragment.setArguments(bundle);
+                fragment.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), "添加留言");
                 break;
 
             case 4:
@@ -195,7 +199,7 @@ public class MainMsgFragment extends Fragment implements View.OnClickListener, M
                 }
                 cursor.close();
 
-                Logd("4");
+                //Logd("4");
                 break;
 
             default:

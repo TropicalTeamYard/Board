@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context=".CommentFragment">
 
     <LinearLayout
@@ -13,14 +14,13 @@
         <EditText
             android:id="@+id/comment_msg_content"
             android:layout_width="match_parent"
-            android:layout_height="240dp"
+            android:layout_height="80dp"
             android:background="@drawable/border"
             android:gravity="top"
-            android:hint="在这里输入回复的内容"
+            android:hint="在这里输入评论的内容"
             android:importantForAutofill="no"
             android:inputType="textMultiLine"
             android:padding="4dp" />
-
 
         <Button
             android:id="@+id/comment_msg_submit"
@@ -28,7 +28,7 @@
             android:layout_height="48dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/border"
-            android:text="回复"
+            android:text="评   论"
             android:textSize="20sp" />
     </LinearLayout>
 

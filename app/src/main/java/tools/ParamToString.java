@@ -1,11 +1,8 @@
 package tools;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
 
 public class ParamToString {
@@ -70,4 +67,18 @@ public class ParamToString {
         JSONArray jsonArray = new JSONArray(userInfoMd5Array);
         return "method=updatepublicinfo&usermap=" + jsonArray.toString();
     }
+
+    public static String formAddComment(String msgid, String userid, String token, String comment){
+        String result="method=comment&targetmsgid="+msgid+"&userid="+StringUtil.toURLEncoded(userid)+"&token="+StringUtil.toURLEncoded(token)+"&comment="+StringUtil.toURLEncoded(comment);
+        return result;
+    }
+
+    public static String formCheckNewComment(){
+        return null;
+    }
+
+    public static String formDelComment(){
+        return null;
+    }
+
 }
