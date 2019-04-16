@@ -7,6 +7,36 @@ http://localhost:8080/board/user?method=getpublicinfo&userids=['10001','10002','
 http://localhost:8080/board/user?method=getuserinfo&userid=10001&token=f0956e4857564917ba13008debcd6432
 
 
+http://localhost:8080/board/msg?method=checknewcomment&targetmsgid=420&userid=10037&token=de476054617e4db09add420b649b8b36&md5=554066543DB4A1AC0A350EFBF935CC18
+
+{"msg":"new comment found","hasnew":1,"code":0,"comment":"{\"comment\":[{\"code\":\"7D2606E121AE681735AE30D0D629AFB4\",\"time\":\"2019/02/06 14:18\",\"userid\":\"10037\",\"content\":\"970\"},{\"code\":\"398E39CD727765098FDF64DCD696650B\",\"time\":\"2019/02/06 14:20\",\"userid\":\"10037\",\"content\":\"970\"},{\"code\":\"7816BA5EE3DDCF9CCA196C90E019B1E5\",\"time\":\"2019/02/06 14:20\",\"userid\":\"10037\",\"content\":\"970\"},{\"code\":\"1872D20E9B5D5924061A35608F37047F\",\"time\":\"2019/02/06 14:20\",\"userid\":\"10037\",\"content\":\"970\"}]}"}
+
+
+http://localhost:8080/board/msg?method=deletecomment&targetmsgid=420&userid=1003&token=de476054617e4db09add420b649b8b36&code=7D2606E121AE681735AE30D0D629AFB4
+
+{"msg":"delete comment failed, comment not found","code":-105}
+
+
+http://localhost:8080/board/msg?method=comment&targetmsgid=421&userid=10037&token=de476054617e4db09add420b649b8b36&comment=gugig
+
+{"msg":"add comment succeed","code":0}
+
+
+http://localhost:8080/board/msg?method=add&userid=10000&content=70370192370912&haspics=12&token=76cdd82b06c3409da603a4ae064a9b2c
+http://localhost:8080/board/msg?method=add&userid=10045&content=3242342352352352352&token=8794e1141f774ae99646dd87aacfe69f
+
+{"msg":"add msg succeed","code":0}
+
+
+http://localhost:8080/board/msg?method=deletemsg&userid=10036&token=6137381bee8f4b1280a9de53dcc45c72&msgid=5
+
+{"msg":"delete msg succeed","code":0}
+
+
+http://localhost:8080/board/msg?method=checknew&userid=10000&token=76cdd82b06c3409da603a4ae064a9b2c&msgid=0
+
+{"msg":"check succeed","msgs":[{"comment":"{'comment':'null'}","content":"helloworld","hasPics":0,"id":2,"pics":[],"time":"2019-01-05 10:53","userid":"10000"},{"comment":"{'comment':'null'}","content":"helloworld","hasPics":0,"id":3,"pics":[],"time":"2019-01-05 10:53","userid":"10000"},{"comment":"{'comment':'null'}","content":"helloworld","hasPics":0,"id":4,"pics":[],"time":"2019-01-05 10:53","userid":"10000"},{"comment":"{'comment':'null'}","content":"helloworld","hasPics":0,"id":5,"pics":[],"time":"2019-01-05 10:53","userid":"10000"},{"comment":"{'comment':null}","content":"70370192370912","hasPics":0,"id":7,"pics":[],"time":"2019/01/14 17:39","userid":"10000"}],"code":0,"delete":[1,6]}
+
 
 http://localhost:8080/user?method=login&userid=10001&password=E10ADC3949BA59ABBE56E057F20F883E
 
@@ -52,6 +82,3 @@ http://localhost:8080/user?method=changeinfo&userid=10036&token=ffe2e588c0d34cce
 
 {"msg":"update failed, userid and token not match","code":-104}
 {"msg":"update succeed","code":0,"nickname":"test10036","portrait":"00000000","email":"123456@gmail.com","token":"aba361ebd5864132b7de11d6c39657c9"}
-
-
-
