@@ -1,7 +1,13 @@
 package xyz.qscftyjm.board;
 
+import android.app.ActivityManager;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -12,25 +18,33 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import postutil.AsynTaskUtil;
+import postutil.AsyncTaskUtil;
+import tools.BoardDBHelper;
+import tools.MainFragmentpagerAdapter;
+import tools.ParamToString;
+import tools.PublicUserInfoUpdater;
 import tools.StringCollector;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MsgReceiver.Message {
 
+    private static final String TAG = "Board";
     private BottomNavigationView bottomNavigationView;
-    MainMsgFragment mainMsgFragment;
-    MainChatFragment mainChatFragment;
-    MainUserFragment mainUserFragment;
-
-    ArrayList<Fragment> mainFragList;
-    ViewPager mainViewPager;
-
-    BoardDBHelper boardDBHelper;
-    SQLiteDatabase database;
-    private static String TAG = "Board";
+    private MainMsgFragment mainMsgFragment;
+    private MainChatFragment mainChatFragment;
+    private MainUserFragment mainUserFragment;
+    private ArrayList<Fragment> mainFragList;
+    private ViewPager mainViewPager;
+    private BoardDBHelper boardDBHelper;
+    private SQLiteDatabase database;
+    private MsgReceiver msgReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +53,15 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        boardDBHelper=BoardDBHelper.getMsgDBHelper(this);
-        database=boardDBHelper.getReadableDatabase();
+        boardDBHelper = BoardDBHelper.getMsgDBHelper(this);
+        database = boardDBHelper.getWritableDatabase();
 
-        bottomNavigationView=findViewById(R.id.main_bottom_navigation);
-        mainViewPager=findViewById(R.id.main_parent_frag);
+        bottomNavigationView = findViewById(R.id.main_bottom_navigation);
+        mainViewPager = findViewById(R.id.main_parent_frag);
 
-        mainMsgFragment=new MainMsgFragment();
-        mainChatFragment=new MainChatFragment();
-        mainUserFragment=new MainUserFragment();
+        mainMsgFragment = new MainMsgFragment();
+        mainChatFragment = new MainChatFragment();
+        mainUserFragment = new MainUserFragment();
         mainFragList = new ArrayList<>();
         mainFragList.add(mainMsgFragment);
         mainFragList.add(mainChatFragment);
@@ -58,34 +72,72 @@ public class MainActivity extends AppCompatActivity {
         mainViewPager.setCurrentItem(0);
         setListener();
 
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        Cursor cursor = database.query("userinfo", new String[]{"id", "userid", "nickname", "portrait", "email", "priority", "token"}, null, null, null, null, "id desc", "0,1");
+        String token, userid;
+        int id;
+        if (cursor.moveToFirst() && cursor.getCount() > 0) {
+            do {
+                id = cursor.getInt(0);
+                userid = cursor.getString(1);
+                token = cursor.getString(6);
+            } while (cursor.moveToNext());
 
-        startActivity(new Intent(MainActivity.this,MsgDetailActivity.class));
+            cursor.close();
+            final int finalId = id;
+            AsyncTaskUtil.AsyncNetUtils.post(StringCollector.getUserServer(), ParamToString.formAutoLogin(userid, token), new AsyncTaskUtil.AsyncNetUtils.Callback() {
+                @Override
+                public void onResponse(String response) {
+                    JSONObject jsonObj;
+                    if (response != null) {
+                        Log.d(TAG, response);
+                        try {
+                            jsonObj = new JSONObject(response);
+                            int code = jsonObj.optInt("code", -1);
+                            if (code == 0) {
+                                String newToken = jsonObj.optString("token", "00000000000000000000000000000000");
+                                Log.d("Board", "newToken: " + newToken);
+                                ContentValues values = new ContentValues();
+                                values.put("token", newToken);
+                                database.update("userinfo", values, "id=?", new String[]{String.valueOf(finalId)});
+                                //Toast.makeText(MainActivity.this,"自动登录成功",Toast.LENGTH_SHORT).show();
+                                msgReceiver = new MsgReceiver();
+                                IntentFilter intentFilter = new IntentFilter();
+                                intentFilter.addAction("xyz.qscftyjm.board.HAS_NEW_MSG");
+                                getApplicationContext().registerReceiver(msgReceiver, intentFilter);
+                                msgReceiver.setMessage(MainActivity.this);
 
-        /**
-         * http://localhost:8080/board/user?method=login&userid=10001&password=E10ADC3949BA59ABBE56E057F20F883E
-         * http://localhost:8080/board/user?method=autologin&userid=10001&token=02bdf3327cd94f2bace333f35e11fd04
-         * http://localhost:8080/board/user?method=register&nickname=10001&password=E10ADC3949BA59ABBE56E057F20F883E
-         * http://localhost:8080/board/user?method=changeinfo&userid=10001&token=270cc92204de4bb48d11e137695e6604&portrait=00000000
-         * http://localhost:8080/board/user?method=changepassword&userid=10003&password=1222211221212121&newpassword=E10ADC3949BA59ABBE56E057F20F883E
-         * http://localhost:8080/board/user?method=getpublicinfo&userids=['10001','10002','100']
-         * http://localhost:8080/board/user?method=getuserinfo&userid=10001&token=f0956e4857564917ba13008debcd6432
-         */
+                                Intent startMsgSyncService = new Intent(MainActivity.this, MsgSyncService.class);
+                                if (!isServiceRunning("xyz.qscftyjm.board.MsgSyncService")) {
+                                    Log.d("MA", "StartService");
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                        startForegroundService(startMsgSyncService);
+                                    } else {
+                                        startService(startMsgSyncService);
+                                    }
+                                } else {
+                                    Log.d("MA", "Serviec is running");
+                                }
 
-        AsynTaskUtil.AsynNetUtils.post(StringCollector.LOCAL_USER, "method=getpublicinfo&userids=['10001','10002','100']", new AsynTaskUtil.AsynNetUtils.Callback() {
-            @Override
-            public void onResponse(String response) {
-                if(response!=null){Log.d(TAG,response);}
-            }
-        });
+                            } else if (code < 0) {
+                                Toast.makeText(MainActivity.this, jsonObj.optString("msg", "未知错误"), Toast.LENGTH_LONG).show();
+                                // TODO 不同error code的处理
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
+                    } else {
+                        Toast.makeText(MainActivity.this, "服务器或网络异常", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+        } else {
+            Toast.makeText(this, "请登录您的账号", Toast.LENGTH_SHORT).show();
+        }
+
+        //检查公开信息的更新
+        PublicUserInfoUpdater.CheckPublicUserInfoUpdate(this);
     }
 
     @Override
@@ -102,8 +154,15 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        if (id == R.id.item_add_msg) {
+            AddMsgFragment fragment = new AddMsgFragment();
+            fragment.show(this.getSupportFragmentManager(), "添加留言");
+            return true;
+        }
+
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.item_huaji) {
+
             return true;
         }
 
@@ -164,4 +223,61 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            getApplicationContext().unregisterReceiver(msgReceiver);
+            Log.d("MA", "Broadcast closed successfully");
+        } catch (IllegalArgumentException e) {
+            Log.d("MA", "Broadcast closed failed");
+            e.printStackTrace();
+        }
+
+        if (isServiceRunning("xyz.qscftyjm.board.MsgSyncService")) {
+            Intent intent = new Intent(MainActivity.this, MsgSyncService.class);
+            stopService(intent);
+            //Log.d("MA","Service Stop");
+        }
+
+    }
+
+    @Override
+    public void getMsg(String str) {
+        Log.d("MA", "get broadcast");
+    }
+
+    private boolean isServiceRunning(final String className) {
+        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> info = activityManager.getRunningServices(Integer.MAX_VALUE);
+        if (info == null || info.size() == 0) return false;
+        for (ActivityManager.RunningServiceInfo aInfo : info) {
+            if (className.equals(aInfo.service.getClassName())) return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (msgReceiver == null) {
+            msgReceiver = new MsgReceiver();
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction("xyz.qscftyjm.board.HAS_NEW_MSG");
+            getApplicationContext().registerReceiver(msgReceiver, intentFilter);
+            msgReceiver.setMessage(MainActivity.this);
+
+            Intent startMsgSyncService = new Intent(MainActivity.this, MsgSyncService.class);
+            if (!isServiceRunning("xyz.qscftyjm.board.MsgSyncService")) {
+                Log.d("MA", "StartService");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(startMsgSyncService);
+                } else {
+                    startService(startMsgSyncService);
+                }
+            } else {
+                Log.d("MA", "Service is running");
+            }
+        }
+    }
 }

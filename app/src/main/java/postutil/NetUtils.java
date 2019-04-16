@@ -1,13 +1,13 @@
 package postutil;
 
+import android.accounts.NetworkErrorException;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import android.accounts.NetworkErrorException;
 
 public class NetUtils {
     public static String post(String url, String content) {
@@ -19,7 +19,7 @@ public class NetUtils {
             conn = (HttpURLConnection) mURL.openConnection();
 
             conn.setRequestMethod("POST");// 设置请求方法为post
-            conn.setReadTimeout(5000);// 设置读取超时为5秒
+            conn.setReadTimeout(10000);// 设置读取超时为10秒
             conn.setConnectTimeout(10000);// 设置连接网络超时为10秒
             conn.setDoOutput(true);// 设置此方法,允许向服务器输出内容
 
@@ -35,10 +35,9 @@ public class NetUtils {
             if (responseCode == 200) {
 
                 InputStream is = conn.getInputStream();
-                String response = getStringFromInputStream(is);
-                return response;
+                return getStringFromInputStream(is);
             } else {
-                throw new NetworkErrorException("response status is "+responseCode);
+                throw new NetworkErrorException("response status is " + responseCode);
             }
 
         } catch (Exception e) {
@@ -60,17 +59,16 @@ public class NetUtils {
             conn = (HttpURLConnection) mURL.openConnection();
 
             conn.setRequestMethod("GET");
-            conn.setReadTimeout(5000);
+            conn.setReadTimeout(10000);
             conn.setConnectTimeout(10000);
 
             int responseCode = conn.getResponseCode();
             if (responseCode == 200) {
 
                 InputStream is = conn.getInputStream();
-                String response = getStringFromInputStream(is);
-                return response;
+                return getStringFromInputStream(is);
             } else {
-                throw new NetworkErrorException("response status is "+responseCode);
+                throw new NetworkErrorException("response status is " + responseCode);
             }
 
         } catch (Exception e) {
